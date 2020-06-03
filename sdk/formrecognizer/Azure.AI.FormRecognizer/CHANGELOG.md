@@ -28,6 +28,10 @@
 - The order of the values for `USReceiptType` have changed so that `Other` has now a value of `1`.
 - Parameter `useTrainingLabels` is now required for `FormTrainingClient.StartTraining`.
 - Protected constructors have been removed from `Operation` types, such as `TrainingOperation` or `RecognizeContentOperation`.
+- An `InvalidOperationException` is now raised if trying to access the `Value` property of a `TrainingOperation` when a trained model is invalid.
+- A `RequestFailedException` is now raised if a model with `status=="invalid"` is returned from the `StartTraining` and `StartTrainingAsync` methods.
+- A `RequestFailedException` is now raised if an operation like `StartRecognizeReceipts`, `StartRecognizeContent`, or `StartRecognizeCustomForms` fails.
+- An `InvalidOperationException` is now raised if trying to access the `Value` property of a `xxOperation` object when a the executed operation failed.
 
 ### New Features
 
