@@ -122,9 +122,9 @@ namespace Azure.AI.FormRecognizer.Models
 
                 if (update.Value.Status == OperationStatus.Succeeded)
                 {
-                    _hasCompleted = true;
-
+                    // we need to first assign a vaue and then mark the operation as completed to avoid race conditions
                     _value = ConvertValue(update.Value.AnalyzeResult.PageResults, update.Value.AnalyzeResult.ReadResults);
+                    _hasCompleted = true;
                 }
                 else if (update.Value.Status == OperationStatus.Failed)
                 {

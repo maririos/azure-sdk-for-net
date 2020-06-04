@@ -62,7 +62,7 @@ namespace Azure.AI.FormRecognizer.Models
         /// </summary>
         /// <param name="operationId">The ID of this operation.</param>
         /// <param name="client">The client used to check for completion.</param>
-        public RecognizeReceiptsOperation(string operationId,FormRecognizerClient client)
+        public RecognizeReceiptsOperation(string operationId, FormRecognizerClient client)
         {
             // TODO: Add argument validation here.
 
@@ -121,13 +121,9 @@ namespace Azure.AI.FormRecognizer.Models
 
                 if (update.Value.Status == OperationStatus.Succeeded)
                 {
-                    _hasCompleted = true;
-
-                    // TODO: When they support extracting more than one receipt, add a pageable method for this.
-                    // https://github.com/Azure/azure-sdk-for-net/issues/10389
-
-                    //_value = ConvertToRecognizedReceipts(update.Value.AnalyzeResult.DocumentResults.ToList(), update.Value.AnalyzeResult.ReadResults.ToList());
+                    // we need to first assign a vaue and then mark the operation as completed to avoid race conditions
                     _value = ConvertToRecognizedReceipts(update.Value.AnalyzeResult);
+                    _hasCompleted = true;
                 }
                 else if (update.Value.Status == OperationStatus.Failed)
                 {
