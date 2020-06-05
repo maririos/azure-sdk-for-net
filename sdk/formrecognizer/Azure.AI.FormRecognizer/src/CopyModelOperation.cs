@@ -172,7 +172,9 @@ namespace Azure.AI.FormRecognizer.Training
                 }
                 else if (update.Value.Status == OperationStatus.Failed)
                 {
-                    _requestFailedException = ClientCommon.CreateExceptionForFailedOperation(_diagnostics, _response, update.Value.CopyResult.Errors);
+                    _requestFailedException = await ClientCommon
+                        .CreateExceptionForFailedOperationAsync(_diagnostics, async, _response, update.Value.CopyResult.Errors)
+                        .ConfigureAwait(false);
                     _hasCompleted = true;
                     throw _requestFailedException;
                 }

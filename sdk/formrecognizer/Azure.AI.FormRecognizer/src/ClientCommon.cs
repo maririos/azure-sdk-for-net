@@ -35,7 +35,7 @@ namespace Azure.AI.FormRecognizer
             return guid;
         }
 
-        public static RequestFailedException CreateExceptionForFailedOperation(ClientDiagnostics diagnostics, Response response, IReadOnlyList<FormRecognizerError> errors, string errorMessage = default)
+        public static async ValueTask<RequestFailedException> CreateExceptionForFailedOperationAsync(ClientDiagnostics diagnostics, bool async, Response response, IReadOnlyList<FormRecognizerError> errors, string errorMessage = default)
         {
             string errorCode = default;
 
@@ -63,7 +63,9 @@ namespace Azure.AI.FormRecognizer
                 index++;
             }
 
-            return diagnostics.CreateRequestFailedException(response, errorMessage, errorCode, errorInfo);
+            return async
+                ? await diagnostics.CreateRequestFailedExceptionAsync(response, errorMessage, errorCode, errorInfo).ConfigureAwait(false)
+                : diagnostics.CreateRequestFailedException(response, errorMessage, errorCode, errorInfo);
         }
     }
 }
