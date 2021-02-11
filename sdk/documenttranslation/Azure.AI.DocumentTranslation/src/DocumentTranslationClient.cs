@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -106,7 +107,7 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="request"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual DocumentTranslationOperation TranslateDocuments(BatchSubmissionRequest request, CancellationToken cancellationToken = default)
+        public virtual DocumentTranslationOperation StartBatchTranslation(BatchSubmissionRequest request, CancellationToken cancellationToken = default)
         {
             var job = _serviceRestClient.SubmitBatchRequest(request, cancellationToken);
             return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
@@ -118,8 +119,54 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="request"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<DocumentTranslationOperation> TranslateDocumentsAsync(BatchSubmissionRequest request, CancellationToken cancellationToken = default)
+        public virtual async Task<DocumentTranslationOperation> StartBatchTranslationAsync(BatchSubmissionRequest request, CancellationToken cancellationToken = default)
         {
+            var job = await _serviceRestClient.SubmitBatchRequestAsync(request, cancellationToken).ConfigureAwait(false);
+            return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
+        }
+
+        /// <summary>
+        /// a.
+        /// </summary>
+        /// <param name="sourceUrl"></param>
+        /// <param name="sourceLanguage"></param>
+        /// <param name="targetUrl"></param>
+        /// <param name="targetLanguage"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual DocumentTranslationOperation StartBatchTranslation(Uri sourceUrl, string sourceLanguage, Uri targetUrl, string targetLanguage, CancellationToken cancellationToken = default)
+        {
+            // TODO: remove sourceLanguage when service supports automatic language detection
+            var request = new BatchSubmissionRequest(new List<BatchRequest>
+                {
+                    new BatchRequest(new SourceInput(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetInput>
+                        {
+                            new TargetInput(targetUrl.AbsoluteUri, targetLanguage)
+                        })
+                });
+            var job = _serviceRestClient.SubmitBatchRequest(request, cancellationToken);
+            return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
+        }
+
+        /// <summary>
+        /// a.
+        /// </summary>
+        /// <param name="sourceUrl"></param>
+        /// <param name="sourceLanguage"></param>
+        /// <param name="targetUrl"></param>
+        /// <param name="targetLanguage"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual async Task<DocumentTranslationOperation> StartBatchTranslationAsync(Uri sourceUrl, string sourceLanguage, Uri targetUrl, string targetLanguage, CancellationToken cancellationToken = default)
+        {
+            // TODO: remove sourceLanguage when service supports automatic language detection
+            var request = new BatchSubmissionRequest(new List<BatchRequest>
+                {
+                    new BatchRequest(new SourceInput(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetInput>
+                        {
+                            new TargetInput(targetUrl.AbsoluteUri, targetLanguage)
+                        })
+                });
             var job = await _serviceRestClient.SubmitBatchRequestAsync(request, cancellationToken).ConfigureAwait(false);
             return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
         }
