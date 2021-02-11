@@ -184,7 +184,7 @@ namespace Azure.AI.DocumentTranslation
                         }
                     }
 
-                    Response<BatchStatusResponse> response = await _serviceRestClient.GetOperationsAsync(skip, top, cancellationToken).ConfigureAwait(false);
+                    Response<BatchStatusResponse> response = await _serviceRestClient.GetOperationsAsync(top, skip, cancellationToken).ConfigureAwait(false);
 
                     var result = response.Value;
                     return Page.FromValues(result.Value, result.NextLink, response.GetRawResponse());
@@ -262,7 +262,7 @@ namespace Azure.AI.DocumentTranslation
                         }
                     }
 
-                    Response<DocumentStatusResponse> response = await _serviceRestClient.GetOperationDocumentsStatusAsync(new Guid(jobId), skip, top, cancellationToken).ConfigureAwait(false);
+                    Response<DocumentStatusResponse> response = await _serviceRestClient.GetOperationDocumentsStatusAsync(new Guid(jobId), top, skip, cancellationToken).ConfigureAwait(false);
 
                     var result = response.Value;
                     return Page.FromValues(result.Value, result.NextLink, response.GetRawResponse());
