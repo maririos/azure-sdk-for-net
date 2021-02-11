@@ -109,8 +109,19 @@ namespace Azure.AI.DocumentTranslation
         /// <returns></returns>
         public virtual DocumentTranslationOperation StartBatchTranslation(BatchSubmissionRequest request, CancellationToken cancellationToken = default)
         {
-            var job = _serviceRestClient.SubmitBatchRequest(request, cancellationToken);
-            return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
+            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartBatchTranslation)}");
+            scope.Start();
+
+            try
+            {
+                var job = _serviceRestClient.SubmitBatchRequest(request, cancellationToken);
+                return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -121,8 +132,19 @@ namespace Azure.AI.DocumentTranslation
         /// <returns></returns>
         public virtual async Task<DocumentTranslationOperation> StartBatchTranslationAsync(BatchSubmissionRequest request, CancellationToken cancellationToken = default)
         {
-            var job = await _serviceRestClient.SubmitBatchRequestAsync(request, cancellationToken).ConfigureAwait(false);
-            return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
+            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartBatchTranslationAsync)}");
+            scope.Start();
+
+            try
+            {
+                var job = await _serviceRestClient.SubmitBatchRequestAsync(request, cancellationToken).ConfigureAwait(false);
+                return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -144,8 +166,20 @@ namespace Azure.AI.DocumentTranslation
                             new TargetInput(targetUrl.AbsoluteUri, targetLanguage)
                         })
                 });
-            var job = _serviceRestClient.SubmitBatchRequest(request, cancellationToken);
-            return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
+
+            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartBatchTranslation)}");
+            scope.Start();
+
+            try
+            {
+                var job = _serviceRestClient.SubmitBatchRequest(request, cancellationToken);
+                return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -167,8 +201,20 @@ namespace Azure.AI.DocumentTranslation
                             new TargetInput(targetUrl.AbsoluteUri, targetLanguage)
                         })
                 });
-            var job = await _serviceRestClient.SubmitBatchRequestAsync(request, cancellationToken).ConfigureAwait(false);
-            return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
+
+            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartBatchTranslationAsync)}");
+            scope.Start();
+
+            try
+            {
+                var job = await _serviceRestClient.SubmitBatchRequestAsync(request, cancellationToken).ConfigureAwait(false);
+                return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -176,11 +222,11 @@ namespace Azure.AI.DocumentTranslation
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Pageable<BatchStatusDetail> GetBatchOperations(CancellationToken cancellationToken = default)
+        public virtual Pageable<BatchStatusDetail> GetBatchOperations(CancellationToken cancellationToken = default)
         {
             Page<BatchStatusDetail> FirstPageFunc(int? pageSizeHint)
             {
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetBatchOperationsAsync)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetBatchOperations)}");
                 scope.Start();
 
                 try
@@ -197,7 +243,7 @@ namespace Azure.AI.DocumentTranslation
 
             Page<BatchStatusDetail> NextPageFunc(string nextLink, int? pageSizeHint)
             {
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetBatchOperationsAsync)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetBatchOperations)}");
                 scope.Start();
 
                 try
@@ -222,7 +268,7 @@ namespace Azure.AI.DocumentTranslation
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public AsyncPageable<BatchStatusDetail> GetBatchOperationsAsync(CancellationToken cancellationToken = default)
+        public virtual AsyncPageable<BatchStatusDetail> GetBatchOperationsAsync(CancellationToken cancellationToken = default)
         {
             async Task<Page<BatchStatusDetail>> FirstPageFunc(int? pageSizeHint)
             {
@@ -269,12 +315,12 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="jobId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Pageable<DocumentStatusDetail> GetOperationDocumentsStatus(string jobId, CancellationToken cancellationToken = default)
+        public virtual Pageable<DocumentStatusDetail> GetOperationDocumentsStatus(string jobId, CancellationToken cancellationToken = default)
         {
             Page<DocumentStatusDetail> FirstPageFunc(int? pageSizeHint)
             {
                 pageSizeHint = 3;
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetOperationDocumentsStatusAsync)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetOperationDocumentsStatus)}");
                 scope.Start();
 
                 try
@@ -292,7 +338,7 @@ namespace Azure.AI.DocumentTranslation
             Page<DocumentStatusDetail> NextPageFunc(string nextLink, int? pageSizeHint)
             {
                 pageSizeHint = 3;
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetBatchOperationsAsync)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetOperationDocumentsStatus)}");
                 scope.Start();
 
                 try
@@ -318,7 +364,7 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="jobId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public AsyncPageable<DocumentStatusDetail> GetOperationDocumentsStatusAsync(string jobId, CancellationToken cancellationToken = default)
+        public virtual AsyncPageable<DocumentStatusDetail> GetOperationDocumentsStatusAsync(string jobId, CancellationToken cancellationToken = default)
         {
             async Task<Page<DocumentStatusDetail>> FirstPageFunc(int? pageSizeHint)
             {
@@ -341,7 +387,7 @@ namespace Azure.AI.DocumentTranslation
             async Task<Page<DocumentStatusDetail>> NextPageFunc(string nextLink, int? pageSizeHint)
             {
                 pageSizeHint = 3;
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetBatchOperationsAsync)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetOperationDocumentsStatusAsync)}");
                 scope.Start();
 
                 try
@@ -362,6 +408,7 @@ namespace Azure.AI.DocumentTranslation
         }
 
         #region Common
+
         private static void ExtractTopAndSkip(string nextLink, out int top, out int skip)
         {
             top = default;
