@@ -201,5 +201,7 @@ namespace Azure.AI.DocumentTranslation.Models
 
             return GetRawResponse();
         }
+
+        // TODO: Should we add extra functions to get the status of the documents in the batch operation?
     }
 }
