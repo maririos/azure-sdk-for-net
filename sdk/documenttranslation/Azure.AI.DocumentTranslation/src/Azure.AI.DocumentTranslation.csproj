@@ -6,8 +6,7 @@
     and solutions. It allows you to add multi-language user experiences in more than 70 languages, and can be used on any
     hardware platform with any operating system for text translation.</Description>
     <AssemblyTitle>Microsoft Azure.AI.DocumentTranslation client library</AssemblyTitle>
-    <Version></Version>
-    <ApiCompatVersion>1.0-preview.1</ApiCompatVersion>
+    <Version>1.0-preview.1</Version>
     <PackageTags>Microsoft Azure Document Translation</PackageTags>
     <TargetFrameworks>$(RequiredTargetFrameworks)</TargetFrameworks>
     <!-- AZC0012 - Single word class names are too generic for Entity.cs class  -->

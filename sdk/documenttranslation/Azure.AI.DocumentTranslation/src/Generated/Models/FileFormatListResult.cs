@@ -11,7 +11,7 @@ using Azure.Core;
 namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary> Base type for List return in our api. </summary>
-    internal partial class FileFormatListResult
+    public partial class FileFormatListResult
     {
         /// <summary> Initializes a new instance of FileFormatListResult. </summary>
         internal FileFormatListResult()

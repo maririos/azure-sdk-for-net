@@ -11,7 +11,7 @@ using Azure.Core;
 namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary> Base type for List return in our api. </summary>
-    internal partial class StorageSourceListResult
+    public partial class StorageSourceListResult
     {
         /// <summary> Initializes a new instance of StorageSourceListResult. </summary>
         internal StorageSourceListResult()

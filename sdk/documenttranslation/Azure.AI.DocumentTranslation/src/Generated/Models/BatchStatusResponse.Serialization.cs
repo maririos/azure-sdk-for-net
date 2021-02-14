@@ -11,7 +11,7 @@ using Azure.Core;
 
 namespace Azure.AI.DocumentTranslation.Models
 {
-    internal partial class BatchStatusResponse
+    public partial class BatchStatusResponse
     {
         internal static BatchStatusResponse DeserializeBatchStatusResponse(JsonElement element)
         {

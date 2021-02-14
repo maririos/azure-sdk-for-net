@@ -11,7 +11,7 @@ using Azure.Core;
 namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary> Document Status Response. </summary>
-    internal partial class BatchStatusResponse
+    public partial class BatchStatusResponse
     {
         /// <summary> Initializes a new instance of BatchStatusResponse. </summary>
         internal BatchStatusResponse()

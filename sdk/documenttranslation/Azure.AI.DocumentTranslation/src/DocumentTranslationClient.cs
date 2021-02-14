@@ -104,11 +104,12 @@ namespace Azure.AI.DocumentTranslation
         /// <summary>
         /// a.
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="inputs"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual DocumentTranslationOperation StartBatchTranslation(BatchSubmissionRequest request, CancellationToken cancellationToken = default)
+        public virtual DocumentTranslationOperation StartBatchTranslation(List<BatchDocumentInput> inputs, CancellationToken cancellationToken = default)
         {
+            var request = new BatchSubmissionRequest(inputs);
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartBatchTranslation)}");
             scope.Start();
 
@@ -127,11 +128,12 @@ namespace Azure.AI.DocumentTranslation
         /// <summary>
         /// a.
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="inputs"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<DocumentTranslationOperation> StartBatchTranslationAsync(BatchSubmissionRequest request, CancellationToken cancellationToken = default)
+        public virtual async Task<DocumentTranslationOperation> StartBatchTranslationAsync(List<BatchDocumentInput> inputs, CancellationToken cancellationToken = default)
         {
+            var request = new BatchSubmissionRequest(inputs);
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartBatchTranslationAsync)}");
             scope.Start();
 
@@ -159,9 +161,9 @@ namespace Azure.AI.DocumentTranslation
         public virtual DocumentTranslationOperation StartBatchTranslation(Uri sourceUrl, string sourceLanguage, Uri targetUrl, string targetLanguage, CancellationToken cancellationToken = default)
         {
             // TODO: remove sourceLanguage when service supports automatic language detection
-            var request = new BatchSubmissionRequest(new List<BatchRequest>
+            var request = new BatchSubmissionRequest(new List<BatchDocumentInput>
                 {
-                    new BatchRequest(new SourceInput(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetInput>
+                    new BatchDocumentInput(new SourceInput(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetInput>
                         {
                             new TargetInput(targetUrl.AbsoluteUri, targetLanguage)
                         })
@@ -194,9 +196,9 @@ namespace Azure.AI.DocumentTranslation
         public virtual async Task<DocumentTranslationOperation> StartBatchTranslationAsync(Uri sourceUrl, string sourceLanguage, Uri targetUrl, string targetLanguage, CancellationToken cancellationToken = default)
         {
             // TODO: remove sourceLanguage when service supports automatic language detection
-            var request = new BatchSubmissionRequest(new List<BatchRequest>
+            var request = new BatchSubmissionRequest(new List<BatchDocumentInput>
                 {
-                    new BatchRequest(new SourceInput(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetInput>
+                    new BatchDocumentInput(new SourceInput(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetInput>
                         {
                             new TargetInput(targetUrl.AbsoluteUri, targetLanguage)
                         })
