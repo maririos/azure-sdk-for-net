@@ -507,14 +507,15 @@ namespace Azure.AI.DocumentTranslation
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual Response<FileFormatListResult> GetSupportedDocumentFormats(CancellationToken cancellationToken = default)
+        public virtual Response<IReadOnlyList<FileFormat>> GetSupportedDocumentFormats(CancellationToken cancellationToken = default)
         {
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSupportedDocumentFormats)}");
             scope.Start();
 
             try
             {
-                return _serviceRestClient.GetDocumentFormats(cancellationToken);
+                var response = _serviceRestClient.GetDocumentFormats(cancellationToken);
+                return Response.FromValue(response.Value.Value, response.GetRawResponse());
             }
             catch (Exception e)
             {
@@ -528,14 +529,15 @@ namespace Azure.AI.DocumentTranslation
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<Response<FileFormatListResult>> GetSupportedDocumentFormatsAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<Response<IReadOnlyList<FileFormat>>> GetSupportedDocumentFormatsAsync(CancellationToken cancellationToken = default)
         {
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSupportedDocumentFormatsAsync)}");
             scope.Start();
 
             try
             {
-                return await _serviceRestClient.GetDocumentFormatsAsync(cancellationToken).ConfigureAwait(false);
+                var response = await _serviceRestClient.GetDocumentFormatsAsync(cancellationToken).ConfigureAwait(false);
+                return Response.FromValue(response.Value.Value, response.GetRawResponse());
             }
             catch (Exception e)
             {
@@ -549,14 +551,15 @@ namespace Azure.AI.DocumentTranslation
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual Response<FileFormatListResult> GetSupportedGlossaryFormats(CancellationToken cancellationToken = default)
+        public virtual Response<IReadOnlyList<FileFormat>> GetSupportedGlossaryFormats(CancellationToken cancellationToken = default)
         {
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSupportedGlossaryFormats)}");
             scope.Start();
 
             try
             {
-                return _serviceRestClient.GetGlossaryFormats(cancellationToken);
+                var response = _serviceRestClient.GetGlossaryFormats(cancellationToken);
+                return Response.FromValue(response.Value.Value, response.GetRawResponse());
             }
             catch (Exception e)
             {
@@ -570,14 +573,15 @@ namespace Azure.AI.DocumentTranslation
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<Response<FileFormatListResult>> GetSupportedGlossaryFormatsAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<Response<IReadOnlyList<FileFormat>>> GetSupportedGlossaryFormatsAsync(CancellationToken cancellationToken = default)
         {
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSupportedGlossaryFormatsAsync)}");
             scope.Start();
 
             try
             {
-                return await _serviceRestClient.GetGlossaryFormatsAsync(cancellationToken).ConfigureAwait(false);
+                var response = await _serviceRestClient.GetGlossaryFormatsAsync(cancellationToken).ConfigureAwait(false);
+                return Response.FromValue(response.Value.Value, response.GetRawResponse());
             }
             catch (Exception e)
             {
@@ -591,14 +595,15 @@ namespace Azure.AI.DocumentTranslation
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual Response<StorageSourceListResult> GetSupportedStorageSources(CancellationToken cancellationToken = default)
+        public virtual Response<IReadOnlyList<string>> GetSupportedStorageSources(CancellationToken cancellationToken = default)
         {
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSupportedStorageSources)}");
             scope.Start();
 
             try
             {
-                return _serviceRestClient.GetDocumentStorageSource(cancellationToken);
+                var response = _serviceRestClient.GetDocumentStorageSource(cancellationToken);
+                return Response.FromValue(response.Value.Value, response.GetRawResponse());
             }
             catch (Exception e)
             {
@@ -612,14 +617,15 @@ namespace Azure.AI.DocumentTranslation
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<Response<StorageSourceListResult>> GetSupportedStorageSourcesAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<Response<IReadOnlyList<string>>> GetSupportedStorageSourcesAsync(CancellationToken cancellationToken = default)
         {
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSupportedStorageSourcesAsync)}");
             scope.Start();
 
             try
             {
-                return await _serviceRestClient.GetDocumentStorageSourceAsync(cancellationToken).ConfigureAwait(false);
+                var response = await _serviceRestClient.GetDocumentStorageSourceAsync(cancellationToken).ConfigureAwait(false);
+                return Response.FromValue(response.Value.Value, response.GetRawResponse());
             }
             catch (Exception e)
             {
