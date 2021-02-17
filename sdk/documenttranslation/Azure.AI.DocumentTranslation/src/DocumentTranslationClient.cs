@@ -218,13 +218,7 @@ namespace Azure.AI.DocumentTranslation
             }
         }
 
-        /// <summary>
-        /// a.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public virtual Response<BatchStatusDetail> GetBatchStatus(Guid id, CancellationToken cancellationToken = default)
+        internal virtual Response<BatchStatusDetail> GetBatchStatus(Guid id, CancellationToken cancellationToken = default)
         {
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetBatchStatus)}");
             scope.Start();
@@ -240,13 +234,7 @@ namespace Azure.AI.DocumentTranslation
             }
         }
 
-        /// <summary>
-        /// a.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public virtual async Task<Response<BatchStatusDetail>> GetBatchStatusAsync(Guid id, CancellationToken cancellationToken = default)
+        internal virtual async Task<Response<BatchStatusDetail>> GetBatchStatusAsync(Guid id, CancellationToken cancellationToken = default)
         {
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetBatchStatusAsync)}");
             scope.Start();
