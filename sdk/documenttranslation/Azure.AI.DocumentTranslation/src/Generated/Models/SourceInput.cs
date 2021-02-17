@@ -38,7 +38,5 @@ namespace Azure.AI.DocumentTranslation.Models
         /// If none is specified, we will perform auto detect on the document.
         /// </summary>
         public string Language { get; set; }
-        /// <summary> Storage Source. </summary>
-        public string StorageSource { get; set; }
     }
 }

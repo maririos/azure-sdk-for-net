@@ -43,7 +43,5 @@ namespace Azure.AI.DocumentTranslation.Models
         public string Language { get; }
         /// <summary> List of Glossary. </summary>
         public IList<Glossary> Glossaries { get; }
-        /// <summary> Storage Source. </summary>
-        public string StorageSource { get; set; }
     }
 }
