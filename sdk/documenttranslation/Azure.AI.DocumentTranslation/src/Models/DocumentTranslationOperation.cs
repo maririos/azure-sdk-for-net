@@ -62,10 +62,6 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <summary>The result of the long-running operation. <c>null</c> until result is received on status update.</summary>
         private BatchStatusDetail _value;
 
-        private int? _top { get; }
-        private int? _skip { get; }
-        private bool? _showStats { get; }
-
         /// <summary>
         /// Returns true if the long-running operation completed successfully and has produced final result (accessible by Value property).
         /// </summary>
@@ -202,6 +198,144 @@ namespace Azure.AI.DocumentTranslation.Models
             return GetRawResponse();
         }
 
-        // TODO: Should we add extra functions to get the status of the documents in the batch operation?
+        /// <summary>
+        /// Get the status of a specific document in the batch.
+        /// </summary>
+        /// <param name="documentId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual Response<DocumentStatusDetail> GetDocumentStatus(Guid documentId, CancellationToken cancellationToken = default)
+        {
+            using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(GetDocumentStatus)}");
+            scope.Start();
+
+            try
+            {
+                return _serviceClient.GetDocumentStatus(new Guid(Id), documentId, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Get the status of a specific document in the batch.
+        /// </summary>
+        /// <param name="documentId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual async Task<Response<DocumentStatusDetail>> GetDocumentStatusAsync(Guid documentId, CancellationToken cancellationToken = default)
+        {
+            using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(GetDocumentStatusAsync)}");
+            scope.Start();
+
+            try
+            {
+                return await _serviceClient.GetDocumentStatusAsync(new Guid(Id), documentId, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Get the status of a all documents in the batch.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual Pageable<DocumentStatusDetail> GetAllDocumentsStatus(CancellationToken cancellationToken = default)
+        {
+            Page<DocumentStatusDetail> FirstPageFunc(int? pageSizeHint)
+            {
+                pageSizeHint = 3;
+                using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(GetAllDocumentsStatus)}");
+                scope.Start();
+
+                try
+                {
+                    var response = _serviceClient.GetOperationDocumentsStatus(new Guid(Id), null, null, cancellationToken);
+                    return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
+                }
+                catch (Exception e)
+                {
+                    scope.Failed(e);
+                    throw;
+                }
+            }
+
+            Page<DocumentStatusDetail> NextPageFunc(string nextLink, int? pageSizeHint)
+            {
+                pageSizeHint = 3;
+                using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(GetAllDocumentsStatus)}");
+                scope.Start();
+
+                try
+                {
+                    DocumentTranslationHelpers.ExtractTopAndSkip(nextLink, out int top, out int skip);
+
+                    Response<DocumentStatusResponse> response = _serviceClient.GetOperationDocumentsStatus(new Guid(Id), top, skip, cancellationToken);
+                    return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
+                }
+                catch (Exception e)
+                {
+                    scope.Failed(e);
+                    throw;
+                }
+            }
+
+            return PageableHelpers.CreateEnumerable(FirstPageFunc, NextPageFunc);
+        }
+
+        /// <summary>
+        /// Get the status of a all documents in the batch.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual AsyncPageable<DocumentStatusDetail> GetAllDocumentsStatusAsync(CancellationToken cancellationToken = default)
+        {
+            async Task<Page<DocumentStatusDetail>> FirstPageFunc(int? pageSizeHint)
+            {
+                pageSizeHint = 3;
+                using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(GetAllDocumentsStatusAsync)}");
+                scope.Start();
+
+                try
+                {
+                    var response = await _serviceClient.GetOperationDocumentsStatusAsync(new Guid(Id), null, null, cancellationToken).ConfigureAwait(false);
+                    return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
+                }
+                catch (Exception e)
+                {
+                    scope.Failed(e);
+                    throw;
+                }
+            }
+
+            async Task<Page<DocumentStatusDetail>> NextPageFunc(string nextLink, int? pageSizeHint)
+            {
+                pageSizeHint = 3;
+                using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(GetAllDocumentsStatusAsync)}");
+                scope.Start();
+
+                try
+                {
+                    DocumentTranslationHelpers.ExtractTopAndSkip(nextLink, out int top, out int skip);
+
+                    Response<DocumentStatusResponse> response = await _serviceClient.GetOperationDocumentsStatusAsync(new Guid(Id), top, skip, cancellationToken).ConfigureAwait(false);
+                    return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
+                }
+                catch (Exception e)
+                {
+                    scope.Failed(e);
+                    throw;
+                }
+            }
+
+            return PageableHelpers.CreateAsyncEnumerable(FirstPageFunc, NextPageFunc);
+        }
     }
 }

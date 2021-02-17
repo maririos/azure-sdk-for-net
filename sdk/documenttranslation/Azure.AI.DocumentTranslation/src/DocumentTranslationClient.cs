@@ -266,52 +266,6 @@ namespace Azure.AI.DocumentTranslation
         /// <summary>
         /// a.
         /// </summary>
-        /// <param name="batchId"></param>
-        /// <param name="documentId"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public virtual Response<DocumentStatusDetail> GetDocumentStatus(Guid batchId, Guid documentId, CancellationToken cancellationToken = default)
-        {
-            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetDocumentStatus)}");
-            scope.Start();
-
-            try
-            {
-                return _serviceRestClient.GetDocumentStatus(batchId, documentId, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// a.
-        /// </summary>
-        /// <param name="batchId"></param>
-        /// <param name="documentId"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public virtual async Task<Response<DocumentStatusDetail>> GetDocumentStatusAsync(Guid batchId, Guid documentId, CancellationToken cancellationToken = default)
-        {
-            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetDocumentStatusAsync)}");
-            scope.Start();
-
-            try
-            {
-                return await _serviceRestClient.GetDocumentStatusAsync(batchId, documentId, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// a.
-        /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public virtual Pageable<BatchStatusDetail> GetSubmittedBatches(CancellationToken cancellationToken = default)
@@ -340,7 +294,7 @@ namespace Azure.AI.DocumentTranslation
 
                 try
                 {
-                    ExtractTopAndSkip(nextLink, out int top, out int skip);
+                    DocumentTranslationHelpers.ExtractTopAndSkip(nextLink, out int top, out int skip);
 
                     Response<BatchStatusResponse> response = _serviceRestClient.GetOperations(top, skip, cancellationToken);
                     return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
@@ -386,7 +340,7 @@ namespace Azure.AI.DocumentTranslation
 
                 try
                 {
-                    ExtractTopAndSkip(nextLink, out int top, out int skip);
+                    DocumentTranslationHelpers.ExtractTopAndSkip(nextLink, out int top, out int skip);
 
                     Response<BatchStatusResponse> response = await _serviceRestClient.GetOperationsAsync(top, skip, cancellationToken).ConfigureAwait(false);
                     return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
@@ -400,107 +354,6 @@ namespace Azure.AI.DocumentTranslation
 
             return PageableHelpers.CreateAsyncEnumerable(FirstPageFunc, NextPageFunc);
         }
-
-        /// <summary>
-        /// a.
-        /// </summary>
-        /// <param name="jobId"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public virtual Pageable<DocumentStatusDetail> GetBatchDocumentsStatus(string jobId, CancellationToken cancellationToken = default)
-        {
-            // TODO: Find a better name!
-            Page<DocumentStatusDetail> FirstPageFunc(int? pageSizeHint)
-            {
-                pageSizeHint = 3;
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetBatchDocumentsStatus)}");
-                scope.Start();
-
-                try
-                {
-                    var response = _serviceRestClient.GetOperationDocumentsStatus(new Guid(jobId), null, null, cancellationToken);
-                    return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
-                }
-                catch (Exception e)
-                {
-                    scope.Failed(e);
-                    throw;
-                }
-            }
-
-            Page<DocumentStatusDetail> NextPageFunc(string nextLink, int? pageSizeHint)
-            {
-                pageSizeHint = 3;
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetBatchDocumentsStatus)}");
-                scope.Start();
-
-                try
-                {
-                    ExtractTopAndSkip(nextLink, out int top, out int skip);
-
-                    Response<DocumentStatusResponse> response = _serviceRestClient.GetOperationDocumentsStatus(new Guid(jobId), top, skip, cancellationToken);
-                    return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
-                }
-                catch (Exception e)
-                {
-                    scope.Failed(e);
-                    throw;
-                }
-            }
-
-            return PageableHelpers.CreateEnumerable(FirstPageFunc, NextPageFunc);
-        }
-
-        /// <summary>
-        /// a.
-        /// </summary>
-        /// <param name="jobId"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public virtual AsyncPageable<DocumentStatusDetail> GetBatchDocumentsStatusAsync(string jobId, CancellationToken cancellationToken = default)
-        {
-            async Task<Page<DocumentStatusDetail>> FirstPageFunc(int? pageSizeHint)
-            {
-                pageSizeHint = 3;
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetBatchDocumentsStatusAsync)}");
-                scope.Start();
-
-                try
-                {
-                    var response = await _serviceRestClient.GetOperationDocumentsStatusAsync(new Guid(jobId), null, null, cancellationToken).ConfigureAwait(false);
-                    return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
-                }
-                catch (Exception e)
-                {
-                    scope.Failed(e);
-                    throw;
-                }
-            }
-
-            async Task<Page<DocumentStatusDetail>> NextPageFunc(string nextLink, int? pageSizeHint)
-            {
-                pageSizeHint = 3;
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetBatchDocumentsStatusAsync)}");
-                scope.Start();
-
-                try
-                {
-                    ExtractTopAndSkip(nextLink, out int top, out int skip);
-
-                    Response<DocumentStatusResponse> response = await _serviceRestClient.GetOperationDocumentsStatusAsync(new Guid(jobId), top, skip, cancellationToken).ConfigureAwait(false);
-                    return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
-                }
-                catch (Exception e)
-                {
-                    scope.Failed(e);
-                    throw;
-                }
-            }
-
-            return PageableHelpers.CreateAsyncEnumerable(FirstPageFunc, NextPageFunc);
-        }
-
-        // TODO: Should the following functions have a custom collection class as return?
 
         /// <summary>
         /// a.
@@ -633,39 +486,5 @@ namespace Azure.AI.DocumentTranslation
                 throw;
             }
         }
-
-        #region Common
-
-        private static void ExtractTopAndSkip(string nextLink, out int top, out int skip)
-        {
-            top = default;
-            skip = default;
-
-            // Extracting parameters from the URL.
-            // nextLink - https://westus.api.cognitive.microsoft.com/translator/text/batch/v1.0-preview.1/batches/8002878d-2e43-4675-ad20-455fe004641b/documents?$skip=20&$top=0
-
-            string @params = nextLink.Split('?').Last();
-            // params = '$skip=20&$top=0'
-
-            // Extracting Top and Skip parameter values
-            string[] parameters = @params.Split('&');
-            // '$skip=20', '$top=0'
-
-            foreach (string paramater in parameters)
-            {
-                if (paramater.Contains("top"))
-                {
-                    _ = int.TryParse(paramater.Split('=')[1], out top);
-                    // 0
-                }
-                if (paramater.Contains("skip"))
-                {
-                    _ = int.TryParse(paramater.Split('=')[1], out skip);
-                    // 20
-                }
-            }
-        }
-
-        #endregion
     }
 }
