@@ -337,5 +337,47 @@ namespace Azure.AI.DocumentTranslation.Models
 
             return PageableHelpers.CreateAsyncEnumerable(FirstPageFunc, NextPageFunc);
         }
+
+        /// <summary>
+        /// Cancel the batch translation operation.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual Response<BatchStatusDetail> CancelOperation(CancellationToken cancellationToken)
+        {
+            using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(CancelOperation)}");
+            scope.Start();
+
+            try
+            {
+                return _serviceClient.CancelOperation(new Guid(Id), cancellationToken);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Cancel the batch translation operation.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual async Task<Response<BatchStatusDetail>> CancelOperationAsync(CancellationToken cancellationToken)
+        {
+            using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(CancelOperationAsync)}");
+            scope.Start();
+
+            try
+            {
+                return await _serviceClient.CancelOperationAsync(new Guid(Id), cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
     }
 }
