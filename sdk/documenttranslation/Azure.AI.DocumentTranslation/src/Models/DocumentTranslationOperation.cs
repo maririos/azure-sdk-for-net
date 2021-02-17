@@ -20,6 +20,49 @@ namespace Azure.AI.DocumentTranslation.Models
         private readonly ClientDiagnostics _diagnostics;
 
         /// <summary>
+        /// Operation created date time.
+        /// </summary>
+        public DateTimeOffset CreatedDateTimeUtc => _createdDateTimeUtc;
+
+        /// <summary>
+        /// Date time in which the operation&apos;s status has been updated.
+        /// </summary>
+        public DateTimeOffset LastActionDateTimeUtc => _lastActionDateTimeUtc;
+
+        /// <summary>
+        /// List of possible statuses for job or document.
+        /// </summary>
+        public DocumentTranslationOperationStatus? Status => _status;
+
+        /// <summary>
+        /// Total number of documents in the operation.
+        /// </summary>
+        public int? TotalDocuments => _totalDocuments;
+
+        /// <summary>
+        /// Number of documents failed to translate in the operation.
+        /// </summary>
+        public int? DocumentsFailed => _documentsFailed;
+
+        /// <summary>
+        /// Number of documents translated successfully in the operation.
+        /// </summary>
+        public int? DocumentsSucceeded => _documentsSucceeded;
+
+        /// <summary>
+        /// Number of documents in progress in the operation.
+        /// </summary>
+        public int? DocumentsInProgress => _documentsInProgress;
+
+        private int? _totalDocuments;
+        private int? _documentsFailed;
+        private int? _documentsSucceeded;
+        private int? _documentsInProgress;
+        private DateTimeOffset _createdDateTimeUtc;
+        private DateTimeOffset _lastActionDateTimeUtc;
+        private DocumentTranslationOperationStatus? _status;
+
+        /// <summary>
         /// Gets an ID representing the operation that can be used to poll for the status
         /// of the long-running operation.
         /// </summary>
@@ -174,14 +217,22 @@ namespace Azure.AI.DocumentTranslation.Models
 
                     _response = update.GetRawResponse();
 
-                    if (update.Value.Status == Status.Succeeded)
+                    _createdDateTimeUtc = update.Value.CreatedDateTimeUtc;
+                    _lastActionDateTimeUtc = update.Value.LastActionDateTimeUtc;
+                    _status = update.Value.Status;
+                    _totalDocuments = update.Value.Summary.Total;
+                    _documentsFailed = update.Value.Summary.Failed;
+                    _documentsInProgress = update.Value.Summary.InProgress;
+                    _documentsSucceeded = update.Value.Summary.Success;
+
+                    if (update.Value.Status == DocumentTranslationOperationStatus.Succeeded)
                     {
                         // we need to first assign a vaue and then mark the operation as completed to avoid race conditions
                         _value = update.Value;
 
                         _hasCompleted = true;
                     }
-                    else if (update.Value.Status == Status.Failed)
+                    else if (update.Value.Status == DocumentTranslationOperationStatus.Failed)
                     {
                         _requestFailedException = _diagnostics.CreateRequestFailedException(_response);
                         _hasCompleted = true;

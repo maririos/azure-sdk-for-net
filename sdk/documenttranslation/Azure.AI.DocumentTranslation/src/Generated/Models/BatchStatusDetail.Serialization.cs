@@ -18,7 +18,7 @@ namespace Azure.AI.DocumentTranslation.Models
             Guid id = default;
             DateTimeOffset createdDateTimeUtc = default;
             DateTimeOffset lastActionDateTimeUtc = default;
-            Optional<Status> status = default;
+            Optional<DocumentTranslationOperationStatus> status = default;
             StatusSummary summary = default;
             foreach (var property in element.EnumerateObject())
             {
@@ -44,7 +44,7 @@ namespace Azure.AI.DocumentTranslation.Models
                         property.ThrowNonNullablePropertyIsNull();
                         continue;
                     }
-                    status = new Status(property.Value.GetString());
+                    status = new DocumentTranslationOperationStatus(property.Value.GetString());
                     continue;
                 }
                 if (property.NameEquals("summary"))

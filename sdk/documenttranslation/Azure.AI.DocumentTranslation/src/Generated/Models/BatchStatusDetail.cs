@@ -37,7 +37,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="lastActionDateTimeUtc"> Date time in which the operation&apos;s status has been updated. </param>
         /// <param name="status"> List of possible statuses for job or document. </param>
         /// <param name="summary"> . </param>
-        internal BatchStatusDetail(Guid id, DateTimeOffset createdDateTimeUtc, DateTimeOffset lastActionDateTimeUtc, Status? status, StatusSummary summary)
+        internal BatchStatusDetail(Guid id, DateTimeOffset createdDateTimeUtc, DateTimeOffset lastActionDateTimeUtc, DocumentTranslationOperationStatus? status, StatusSummary summary)
         {
             Id = id;
             CreatedDateTimeUtc = createdDateTimeUtc;
@@ -53,7 +53,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <summary> Date time in which the operation&apos;s status has been updated. </summary>
         public DateTimeOffset LastActionDateTimeUtc { get; }
         /// <summary> List of possible statuses for job or document. </summary>
-        public Status? Status { get; }
+        public DocumentTranslationOperationStatus? Status { get; }
         /// <summary> The Status Summary of the operation </summary>
         public StatusSummary Summary { get; }
     }

@@ -19,7 +19,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="status"> List of possible statuses for job or document. </param>
         /// <param name="to"> To language. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="path"/> or <paramref name="to"/> is null. </exception>
-        internal DocumentStatusDetail(string path, DateTimeOffset createdDateTimeUtc, DateTimeOffset lastActionDateTimeUtc, Status status, string to)
+        internal DocumentStatusDetail(string path, DateTimeOffset createdDateTimeUtc, DateTimeOffset lastActionDateTimeUtc, DocumentTranslationOperationStatus status, string to)
         {
             if (path == null)
             {
@@ -47,7 +47,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="error"> This contains an outer error with error code, message, details, target and an inner error with more descriptive details. </param>
         /// <param name="progress"> Progress of the translation if available. </param>
         /// <param name="id"> Document Id. </param>
-        internal DocumentStatusDetail(string path, DateTimeOffset createdDateTimeUtc, DateTimeOffset lastActionDateTimeUtc, Status status, string detectedLanguage, string to, ErrorV2 error, float? progress, Guid? id)
+        internal DocumentStatusDetail(string path, DateTimeOffset createdDateTimeUtc, DateTimeOffset lastActionDateTimeUtc, DocumentTranslationOperationStatus status, string detectedLanguage, string to, ErrorV2 error, float? progress, Guid? id)
         {
             Path = path;
             CreatedDateTimeUtc = createdDateTimeUtc;
@@ -67,7 +67,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <summary> Date time in which the operation&apos;s status has been updated. </summary>
         public DateTimeOffset LastActionDateTimeUtc { get; }
         /// <summary> List of possible statuses for job or document. </summary>
-        public Status Status { get; }
+        public DocumentTranslationOperationStatus Status { get; }
         /// <summary> Detected language of the original document (to be implemented). </summary>
         public string DetectedLanguage { get; }
         /// <summary> To language. </summary>

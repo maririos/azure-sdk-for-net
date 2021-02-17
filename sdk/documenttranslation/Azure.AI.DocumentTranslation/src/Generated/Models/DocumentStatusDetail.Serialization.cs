@@ -18,7 +18,7 @@ namespace Azure.AI.DocumentTranslation.Models
             string path = default;
             DateTimeOffset createdDateTimeUtc = default;
             DateTimeOffset lastActionDateTimeUtc = default;
-            Status status = default;
+            DocumentTranslationOperationStatus status = default;
             Optional<string> detectedLanguage = default;
             string to = default;
             Optional<ErrorV2> error = default;
@@ -43,7 +43,7 @@ namespace Azure.AI.DocumentTranslation.Models
                 }
                 if (property.NameEquals("status"))
                 {
-                    status = new Status(property.Value.GetString());
+                    status = new DocumentTranslationOperationStatus(property.Value.GetString());
                     continue;
                 }
                 if (property.NameEquals("detectedLanguage"))
