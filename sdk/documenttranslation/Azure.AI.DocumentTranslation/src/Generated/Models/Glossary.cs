@@ -48,7 +48,5 @@ namespace Azure.AI.DocumentTranslation.Models
         public string Format { get; set; }
         /// <summary> Version. </summary>
         public string Version { get; set; }
-        /// <summary> Storage Source. </summary>
-        public string StorageSource { get; set; }
     }
 }
