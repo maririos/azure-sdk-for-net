@@ -54,10 +54,22 @@ namespace Azure.AI.DocumentTranslation.Models
         /// </summary>
         public int? DocumentsInProgress => _documentsInProgress;
 
+        /// <summary>
+        /// Number of documents in queue for translation.
+        /// </summary>
+        public int? DocumentsInQueue => _documentsInQueue;
+
+        /// <summary>
+        /// Number of documents cancelled.
+        /// </summary>
+        public int? DocumentsCancelled => _documentsCancelled;
+
         private int? _totalDocuments;
         private int? _documentsFailed;
         private int? _documentsSucceeded;
         private int? _documentsInProgress;
+        private int? _documentsInQueue;
+        private int? _documentsCancelled;
         private DateTimeOffset _createdOn;
         private DateTimeOffset _lastModified;
         private DocumentTranslationOperationStatus? _status;
@@ -225,6 +237,8 @@ namespace Azure.AI.DocumentTranslation.Models
                     _documentsFailed = update.Value.Summary.Failed;
                     _documentsInProgress = update.Value.Summary.InProgress;
                     _documentsSucceeded = update.Value.Summary.Success;
+                    _documentsInQueue = update.Value.Summary.NotYetStarted;
+                    _documentsCancelled = update.Value.Summary.Cancelled;
 
                     if (update.Value.Status == DocumentTranslationOperationStatus.Succeeded)
                     {
