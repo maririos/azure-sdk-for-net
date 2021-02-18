@@ -240,7 +240,8 @@ namespace Azure.AI.DocumentTranslation.Models
                     _documentsInQueue = update.Value.Summary.NotYetStarted;
                     _documentsCancelled = update.Value.Summary.Cancelled;
 
-                    if (update.Value.Status == DocumentTranslationOperationStatus.Succeeded)
+                    if (update.Value.Status == DocumentTranslationOperationStatus.Succeeded
+                        || update.Value.Status == DocumentTranslationOperationStatus.Cancelled)
                     {
                         // we need to first assign a value and then mark the operation as completed to avoid race conditions
                         var response = async
@@ -249,6 +250,7 @@ namespace Azure.AI.DocumentTranslation.Models
                         _firstPage = Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
                         _hasCompleted = true;
                     }
+                    // TODO: Failed operation handling?
                     else if (update.Value.Status == DocumentTranslationOperationStatus.Failed)
                     {
                         _requestFailedException = _diagnostics.CreateRequestFailedException(_response);
