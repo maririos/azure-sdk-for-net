@@ -782,5 +782,283 @@ namespace Azure.AI.DocumentTranslation
                     throw _clientDiagnostics.CreateRequestFailedException(message.Response);
             }
         }
+
+        internal HttpMessage CreateGetOperationsNextPageRequest(string nextLink, int? top, int? skip)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Get;
+            var uri = new RawRequestUriBuilder();
+            uri.AppendRaw(endpoint, false);
+            uri.AppendRaw("/translator/text/batch/v1.0-preview.1", false);
+            uri.AppendRawNextLink(nextLink, false);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            return message;
+        }
+
+        /// <summary>
+        /// Returns a list of batch requests submitted and the status for each request.
+        /// 
+        /// This list only contains batch requests submitted by the user (based on the subscription). The status for each request is sorted by id.
+        /// 
+        /// 
+        /// 
+        /// If the number of requests exceeds our paging limit, server-side paging is used. Paginated responses indicate a partial result and include a continuation token in the response.
+        /// 
+        /// The absence of a continuation token means that no additional pages are available.
+        /// 
+        /// 
+        /// 
+        /// $top and $skip query parameters can be used to specify a number of results to return and an offset for the collection.
+        /// 
+        /// 
+        /// 
+        /// The server honors the values specified by the client. However, clients must be prepared to handle responses that contain a different page size or contain a continuation token.
+        /// 
+        /// 
+        /// 
+        /// When both $top and $skip are included, the server should first apply $skip and then $top on the collection.
+        /// 
+        /// Note: If the server can&apos;t honor $top and/or $skip, the server must return an error to the client informing about it instead of just ignoring the query options.
+        /// 
+        /// This reduces the risk of the client making assumptions about the data returned.
+        /// </summary>
+        /// <param name="nextLink"> The URL to the next page of results. </param>
+        /// <param name="top">
+        /// Take the $top entries in the collection
+        /// 
+        /// When both $top and $skip are supplied, $skip is applied first.
+        /// </param>
+        /// <param name="skip">
+        /// Skip the $skip entries in the collection
+        /// 
+        /// When both $top and $skip are supplied, $skip is applied first.
+        /// </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="nextLink"/> is null. </exception>
+        public async Task<ResponseWithHeaders<BatchStatusResponse, TranslationGetOperationsHeaders>> GetOperationsNextPageAsync(string nextLink, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
+        {
+            if (nextLink == null)
+            {
+                throw new ArgumentNullException(nameof(nextLink));
+            }
+
+            using var message = CreateGetOperationsNextPageRequest(nextLink, top, skip);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            var headers = new TranslationGetOperationsHeaders(message.Response);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        BatchStatusResponse value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, default, cancellationToken).ConfigureAwait(false);
+                        value = BatchStatusResponse.DeserializeBatchStatusResponse(document.RootElement);
+                        return ResponseWithHeaders.FromValue(value, headers, message.Response);
+                    }
+                default:
+                    throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Returns a list of batch requests submitted and the status for each request.
+        /// 
+        /// This list only contains batch requests submitted by the user (based on the subscription). The status for each request is sorted by id.
+        /// 
+        /// 
+        /// 
+        /// If the number of requests exceeds our paging limit, server-side paging is used. Paginated responses indicate a partial result and include a continuation token in the response.
+        /// 
+        /// The absence of a continuation token means that no additional pages are available.
+        /// 
+        /// 
+        /// 
+        /// $top and $skip query parameters can be used to specify a number of results to return and an offset for the collection.
+        /// 
+        /// 
+        /// 
+        /// The server honors the values specified by the client. However, clients must be prepared to handle responses that contain a different page size or contain a continuation token.
+        /// 
+        /// 
+        /// 
+        /// When both $top and $skip are included, the server should first apply $skip and then $top on the collection.
+        /// 
+        /// Note: If the server can&apos;t honor $top and/or $skip, the server must return an error to the client informing about it instead of just ignoring the query options.
+        /// 
+        /// This reduces the risk of the client making assumptions about the data returned.
+        /// </summary>
+        /// <param name="nextLink"> The URL to the next page of results. </param>
+        /// <param name="top">
+        /// Take the $top entries in the collection
+        /// 
+        /// When both $top and $skip are supplied, $skip is applied first.
+        /// </param>
+        /// <param name="skip">
+        /// Skip the $skip entries in the collection
+        /// 
+        /// When both $top and $skip are supplied, $skip is applied first.
+        /// </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="nextLink"/> is null. </exception>
+        public ResponseWithHeaders<BatchStatusResponse, TranslationGetOperationsHeaders> GetOperationsNextPage(string nextLink, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
+        {
+            if (nextLink == null)
+            {
+                throw new ArgumentNullException(nameof(nextLink));
+            }
+
+            using var message = CreateGetOperationsNextPageRequest(nextLink, top, skip);
+            _pipeline.Send(message, cancellationToken);
+            var headers = new TranslationGetOperationsHeaders(message.Response);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        BatchStatusResponse value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream);
+                        value = BatchStatusResponse.DeserializeBatchStatusResponse(document.RootElement);
+                        return ResponseWithHeaders.FromValue(value, headers, message.Response);
+                    }
+                default:
+                    throw _clientDiagnostics.CreateRequestFailedException(message.Response);
+            }
+        }
+
+        internal HttpMessage CreateGetOperationDocumentsStatusNextPageRequest(string nextLink, Guid id, int? top, int? skip)
+        {
+            var message = _pipeline.CreateMessage();
+            var request = message.Request;
+            request.Method = RequestMethod.Get;
+            var uri = new RawRequestUriBuilder();
+            uri.AppendRaw(endpoint, false);
+            uri.AppendRaw("/translator/text/batch/v1.0-preview.1", false);
+            uri.AppendRawNextLink(nextLink, false);
+            request.Uri = uri;
+            request.Headers.Add("Accept", "application/json");
+            return message;
+        }
+
+        /// <summary>
+        /// Returns the status for all documents in a batch document translation request.
+        /// 
+        /// 
+        /// 
+        /// The documents included in the response are sorted by document Id in descending order. If the number of documents in the response exceeds our paging limit, server-side paging is used.
+        /// 
+        /// Paginated responses indicate a partial result and include a continuation token in the response. The absence of a continuation token means that no additional pages are available.
+        /// 
+        /// 
+        /// 
+        /// $top and $skip query parameters can be used to specify a number of results to return and an offset for the collection.
+        /// 
+        /// The server honors the values specified by the client. However, clients must be prepared to handle responses that contain a different page size or contain a continuation token.
+        /// 
+        /// 
+        /// 
+        /// When both $top and $skip are included, the server should first apply $skip and then $top on the collection.
+        /// 
+        /// Note: If the server can&apos;t honor $top and/or $skip, the server must return an error to the client informing about it instead of just ignoring the query options.
+        /// 
+        /// This reduces the risk of the client making assumptions about the data returned.
+        /// </summary>
+        /// <param name="nextLink"> The URL to the next page of results. </param>
+        /// <param name="id"> Format - uuid.  The operation id. </param>
+        /// <param name="top">
+        /// Take the $top entries in the collection
+        /// 
+        /// When both $top and $skip are supplied, $skip is applied first.
+        /// </param>
+        /// <param name="skip">
+        /// Skip the $skip entries in the collection
+        /// 
+        /// When both $top and $skip are supplied, $skip is applied first.
+        /// </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="nextLink"/> is null. </exception>
+        public async Task<ResponseWithHeaders<DocumentStatusResponse, TranslationGetOperationDocumentsStatusHeaders>> GetOperationDocumentsStatusNextPageAsync(string nextLink, Guid id, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
+        {
+            if (nextLink == null)
+            {
+                throw new ArgumentNullException(nameof(nextLink));
+            }
+
+            using var message = CreateGetOperationDocumentsStatusNextPageRequest(nextLink, id, top, skip);
+            await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
+            var headers = new TranslationGetOperationDocumentsStatusHeaders(message.Response);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        DocumentStatusResponse value = default;
+                        using var document = await JsonDocument.ParseAsync(message.Response.ContentStream, default, cancellationToken).ConfigureAwait(false);
+                        value = DocumentStatusResponse.DeserializeDocumentStatusResponse(document.RootElement);
+                        return ResponseWithHeaders.FromValue(value, headers, message.Response);
+                    }
+                default:
+                    throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Returns the status for all documents in a batch document translation request.
+        /// 
+        /// 
+        /// 
+        /// The documents included in the response are sorted by document Id in descending order. If the number of documents in the response exceeds our paging limit, server-side paging is used.
+        /// 
+        /// Paginated responses indicate a partial result and include a continuation token in the response. The absence of a continuation token means that no additional pages are available.
+        /// 
+        /// 
+        /// 
+        /// $top and $skip query parameters can be used to specify a number of results to return and an offset for the collection.
+        /// 
+        /// The server honors the values specified by the client. However, clients must be prepared to handle responses that contain a different page size or contain a continuation token.
+        /// 
+        /// 
+        /// 
+        /// When both $top and $skip are included, the server should first apply $skip and then $top on the collection.
+        /// 
+        /// Note: If the server can&apos;t honor $top and/or $skip, the server must return an error to the client informing about it instead of just ignoring the query options.
+        /// 
+        /// This reduces the risk of the client making assumptions about the data returned.
+        /// </summary>
+        /// <param name="nextLink"> The URL to the next page of results. </param>
+        /// <param name="id"> Format - uuid.  The operation id. </param>
+        /// <param name="top">
+        /// Take the $top entries in the collection
+        /// 
+        /// When both $top and $skip are supplied, $skip is applied first.
+        /// </param>
+        /// <param name="skip">
+        /// Skip the $skip entries in the collection
+        /// 
+        /// When both $top and $skip are supplied, $skip is applied first.
+        /// </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="nextLink"/> is null. </exception>
+        public ResponseWithHeaders<DocumentStatusResponse, TranslationGetOperationDocumentsStatusHeaders> GetOperationDocumentsStatusNextPage(string nextLink, Guid id, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
+        {
+            if (nextLink == null)
+            {
+                throw new ArgumentNullException(nameof(nextLink));
+            }
+
+            using var message = CreateGetOperationDocumentsStatusNextPageRequest(nextLink, id, top, skip);
+            _pipeline.Send(message, cancellationToken);
+            var headers = new TranslationGetOperationDocumentsStatusHeaders(message.Response);
+            switch (message.Response.Status)
+            {
+                case 200:
+                    {
+                        DocumentStatusResponse value = default;
+                        using var document = JsonDocument.Parse(message.Response.ContentStream);
+                        value = DocumentStatusResponse.DeserializeDocumentStatusResponse(document.RootElement);
+                        return ResponseWithHeaders.FromValue(value, headers, message.Response);
+                    }
+                default:
+                    throw _clientDiagnostics.CreateRequestFailedException(message.Response);
+            }
+        }
     }
 }
