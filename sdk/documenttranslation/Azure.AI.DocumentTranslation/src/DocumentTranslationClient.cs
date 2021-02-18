@@ -115,7 +115,7 @@ namespace Azure.AI.DocumentTranslation
             try
             {
                 var job = _serviceRestClient.SubmitBatchRequest(request, cancellationToken);
-                return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
+                return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation, _options.GetVersionString());
             }
             catch (Exception e)
             {
@@ -139,7 +139,7 @@ namespace Azure.AI.DocumentTranslation
             try
             {
                 var job = await _serviceRestClient.SubmitBatchRequestAsync(request, cancellationToken).ConfigureAwait(false);
-                return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
+                return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation, _options.GetVersionString());
             }
             catch (Exception e)
             {
@@ -174,7 +174,7 @@ namespace Azure.AI.DocumentTranslation
             try
             {
                 var job = _serviceRestClient.SubmitBatchRequest(request, cancellationToken);
-                return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
+                return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation, _options.GetVersionString());
             }
             catch (Exception e)
             {
@@ -209,7 +209,7 @@ namespace Azure.AI.DocumentTranslation
             try
             {
                 var job = await _serviceRestClient.SubmitBatchRequestAsync(request, cancellationToken).ConfigureAwait(false);
-                return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
+                return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation, _options.GetVersionString());
             }
             catch (Exception e)
             {
@@ -264,7 +264,7 @@ namespace Azure.AI.DocumentTranslation
 
                 try
                 {
-                    var response = _serviceRestClient.GetOperations(null, null, cancellationToken);
+                    var response = _serviceRestClient.GetOperations(cancellationToken: cancellationToken);
                     return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
                 }
                 catch (Exception e)
@@ -281,9 +281,7 @@ namespace Azure.AI.DocumentTranslation
 
                 try
                 {
-                    DocumentTranslationHelpers.ExtractTopAndSkip(nextLink, out int top, out int skip);
-
-                    Response<BatchStatusResponse> response = _serviceRestClient.GetOperations(top, skip, cancellationToken);
+                    Response<BatchStatusResponse> response = _serviceRestClient.BatchesNextPage(_options.GetVersionString(), nextLink, cancellationToken);
                     return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
                 }
                 catch (Exception e)
@@ -310,7 +308,7 @@ namespace Azure.AI.DocumentTranslation
 
                 try
                 {
-                    var response = await _serviceRestClient.GetOperationsAsync(null, null, cancellationToken).ConfigureAwait(false);
+                    var response = await _serviceRestClient.GetOperationsAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
                     return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
                 }
                 catch (Exception e)
@@ -327,9 +325,7 @@ namespace Azure.AI.DocumentTranslation
 
                 try
                 {
-                    DocumentTranslationHelpers.ExtractTopAndSkip(nextLink, out int top, out int skip);
-
-                    Response<BatchStatusResponse> response = await _serviceRestClient.GetOperationsAsync(top, skip, cancellationToken).ConfigureAwait(false);
+                    Response<BatchStatusResponse> response = await _serviceRestClient.BatchesNextPageAsync(_options.GetVersionString(), nextLink, cancellationToken).ConfigureAwait(false);
                     return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
                 }
                 catch (Exception e)

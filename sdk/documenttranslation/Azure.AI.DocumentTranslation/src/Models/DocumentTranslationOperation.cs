@@ -11,7 +11,7 @@ using Azure.Core.Pipeline;
 namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary> The DocumentTranslationOperation class for LRO. </summary>
-    public class DocumentTranslationOperation : Operation<BatchStatusDetail>
+    public class DocumentTranslationOperation : PageableOperation<DocumentStatusDetail>
     {
         /// <summary>Provides communication with the Translator Cognitive Service through its REST API.</summary>
         private readonly TranslationRestClient _serviceClient;
@@ -22,12 +22,12 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <summary>
         /// Operation created date time.
         /// </summary>
-        public DateTimeOffset CreatedDateTimeUtc => _createdDateTimeUtc;
+        public DateTimeOffset CreatedOn => _createdOn;
 
         /// <summary>
         /// Date time in which the operation&apos;s status has been updated.
         /// </summary>
-        public DateTimeOffset LastActionDateTimeUtc => _lastActionDateTimeUtc;
+        public DateTimeOffset LastModified => _lastModified;
 
         /// <summary>
         /// List of possible statuses for job or document.
@@ -58,8 +58,8 @@ namespace Azure.AI.DocumentTranslation.Models
         private int? _documentsFailed;
         private int? _documentsSucceeded;
         private int? _documentsInProgress;
-        private DateTimeOffset _createdDateTimeUtc;
-        private DateTimeOffset _lastActionDateTimeUtc;
+        private DateTimeOffset _createdOn;
+        private DateTimeOffset _lastModified;
         private DocumentTranslationOperationStatus? _status;
 
         /// <summary>
@@ -74,22 +74,11 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <remarks>
         /// This property can be accessed only after the operation completes successfully (HasValue is true).
         /// </remarks>
-        public override BatchStatusDetail Value
-        {
-            get
-            {
-                if (HasCompleted && !HasValue)
-#pragma warning disable CA1065 // Do not raise exceptions in unexpected locations
-                    throw _requestFailedException;
-#pragma warning restore CA1065 // Do not raise exceptions in unexpected locations
-                else
-                {
-                    return OperationHelpers.GetValue(ref _value);
-                }
-            }
-        }
+        public override AsyncPageable<DocumentStatusDetail> Value => GetValuesAsync();
 
-        /// <summary><c>true</c> if the long-running operation has completed. Otherwise, <c>false</c>.</summary>
+        /// <summary>
+        /// <c>true</c> if the long-running operation has completed. Otherwise, <c>false</c>.
+        /// </summary>
         private bool _hasCompleted;
 
         /// <summary>
@@ -99,16 +88,25 @@ namespace Azure.AI.DocumentTranslation.Models
 
         private RequestFailedException _requestFailedException;
 
-        /// <summary>The last HTTP response received from the server. <c>null</c> until the first response is received.</summary>
+        /// <summary>
+        /// The last HTTP response received from the server. <c>null</c> until the first response is received.
+        /// </summary>
         private Response _response;
 
-        /// <summary>The result of the long-running operation. <c>null</c> until result is received on status update.</summary>
-        private BatchStatusDetail _value;
+        /// <summary>
+        /// Provides the results for the first page.
+        /// </summary>
+        private Page<DocumentStatusDetail> _firstPage;
+
+        /// <summary>
+        /// Provides the api version to use when doing pagination.
+        /// </summary>
+        private readonly string _apiVersion;
 
         /// <summary>
         /// Returns true if the long-running operation completed successfully and has produced final result (accessible by Value property).
         /// </summary>
-        public override bool HasValue => _value != null;
+        public override bool HasValue => _firstPage != null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DocumentTranslationOperation"/> class.
@@ -122,6 +120,7 @@ namespace Azure.AI.DocumentTranslation.Models
             Id = operationId;
             _serviceClient = client._serviceRestClient;
             _diagnostics = client._clientDiagnostics;
+            _apiVersion = client._options.GetVersionString();
         }
 
         /// <summary>
@@ -130,11 +129,13 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="serviceClient">The client for communicating with the Translator Cognitive Service through its REST API.</param>
         /// <param name="diagnostics">The client diagnostics for exception creation in case of failure.</param>
         /// <param name="operationLocation">The address of the long-running operation. It can be obtained from the response headers upon starting the operation.</param>
-        internal DocumentTranslationOperation(TranslationRestClient serviceClient, ClientDiagnostics diagnostics, string operationLocation)
+        /// <param name="apiversion">The specific api version to use.</param>
+        internal DocumentTranslationOperation(TranslationRestClient serviceClient, ClientDiagnostics diagnostics, string operationLocation, string apiversion)
         {
             _serviceClient = serviceClient;
             _diagnostics = diagnostics;
             Id = operationLocation.Split('/').Last();
+            _apiVersion = apiversion;
         }
 
         /// <summary>
@@ -177,7 +178,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <remarks>
         /// This method will periodically call UpdateStatusAsync till HasCompleted is true, then return the final result of the operation.
         /// </remarks>
-        public override ValueTask<Response<BatchStatusDetail>> WaitForCompletionAsync(CancellationToken cancellationToken = default) =>
+        public override ValueTask<Response<AsyncPageable<DocumentStatusDetail>>> WaitForCompletionAsync(CancellationToken cancellationToken = default) =>
             this.DefaultWaitForCompletionAsync(cancellationToken);
 
         /// <summary>
@@ -193,7 +194,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <remarks>
         /// This method will periodically call UpdateStatusAsync till HasCompleted is true, then return the final result of the operation.
         /// </remarks>
-        public override ValueTask<Response<BatchStatusDetail>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default) =>
+        public override ValueTask<Response<AsyncPageable<DocumentStatusDetail>>> WaitForCompletionAsync(TimeSpan pollingInterval, CancellationToken cancellationToken = default) =>
             this.DefaultWaitForCompletionAsync(pollingInterval, cancellationToken);
 
         /// <summary>
@@ -217,8 +218,8 @@ namespace Azure.AI.DocumentTranslation.Models
 
                     _response = update.GetRawResponse();
 
-                    _createdDateTimeUtc = update.Value.CreatedDateTimeUtc;
-                    _lastActionDateTimeUtc = update.Value.LastActionDateTimeUtc;
+                    _createdOn = update.Value.CreatedDateTimeUtc;
+                    _lastModified = update.Value.LastActionDateTimeUtc;
                     _status = update.Value.Status;
                     _totalDocuments = update.Value.Summary.Total;
                     _documentsFailed = update.Value.Summary.Failed;
@@ -227,9 +228,11 @@ namespace Azure.AI.DocumentTranslation.Models
 
                     if (update.Value.Status == DocumentTranslationOperationStatus.Succeeded)
                     {
-                        // we need to first assign a vaue and then mark the operation as completed to avoid race conditions
-                        _value = update.Value;
-
+                        // we need to first assign a value and then mark the operation as completed to avoid race conditions
+                        var response = async
+                            ? await _serviceClient.GetOperationDocumentsStatusAsync(new Guid(Id), cancellationToken: cancellationToken).ConfigureAwait(false)
+                            : _serviceClient.GetOperationDocumentsStatus(new Guid(Id), cancellationToken: cancellationToken);
+                        _firstPage = Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
                         _hasCompleted = true;
                     }
                     else if (update.Value.Status == DocumentTranslationOperationStatus.Failed)
@@ -302,7 +305,6 @@ namespace Azure.AI.DocumentTranslation.Models
         {
             Page<DocumentStatusDetail> FirstPageFunc(int? pageSizeHint)
             {
-                pageSizeHint = 3;
                 using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(GetAllDocumentsStatus)}");
                 scope.Start();
 
@@ -320,15 +322,12 @@ namespace Azure.AI.DocumentTranslation.Models
 
             Page<DocumentStatusDetail> NextPageFunc(string nextLink, int? pageSizeHint)
             {
-                pageSizeHint = 3;
                 using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(GetAllDocumentsStatus)}");
                 scope.Start();
 
                 try
                 {
-                    DocumentTranslationHelpers.ExtractTopAndSkip(nextLink, out int top, out int skip);
-
-                    Response<DocumentStatusResponse> response = _serviceClient.GetOperationDocumentsStatus(new Guid(Id), top, skip, cancellationToken);
+                    Response<DocumentStatusResponse> response = _serviceClient.DocumentsStatusNextPage(_apiVersion, nextLink, cancellationToken);
                     return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
                 }
                 catch (Exception e)
@@ -350,7 +349,6 @@ namespace Azure.AI.DocumentTranslation.Models
         {
             async Task<Page<DocumentStatusDetail>> FirstPageFunc(int? pageSizeHint)
             {
-                pageSizeHint = 3;
                 using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(GetAllDocumentsStatusAsync)}");
                 scope.Start();
 
@@ -368,15 +366,12 @@ namespace Azure.AI.DocumentTranslation.Models
 
             async Task<Page<DocumentStatusDetail>> NextPageFunc(string nextLink, int? pageSizeHint)
             {
-                pageSizeHint = 3;
                 using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(GetAllDocumentsStatusAsync)}");
                 scope.Start();
 
                 try
                 {
-                    DocumentTranslationHelpers.ExtractTopAndSkip(nextLink, out int top, out int skip);
-
-                    Response<DocumentStatusResponse> response = await _serviceClient.GetOperationDocumentsStatusAsync(new Guid(Id), top, skip, cancellationToken).ConfigureAwait(false);
+                    Response<DocumentStatusResponse> response = await _serviceClient.DocumentsStatusNextPageAsync(_apiVersion, nextLink, cancellationToken).ConfigureAwait(false);
                     return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
                 }
                 catch (Exception e)
@@ -393,15 +388,16 @@ namespace Azure.AI.DocumentTranslation.Models
         /// Cancel the batch translation operation.
         /// </summary>
         /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public virtual Response<BatchStatusDetail> CancelOperation(CancellationToken cancellationToken)
+        public virtual void Cancel(CancellationToken cancellationToken)
         {
-            using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(CancelOperation)}");
+            using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(Cancel)}");
             scope.Start();
 
             try
             {
-                return _serviceClient.CancelOperation(new Guid(Id), cancellationToken);
+                Response<BatchStatusDetail> response = _serviceClient.CancelOperation(new Guid(Id), cancellationToken);
+                _response = response.GetRawResponse();
+                // TODO: update status
             }
             catch (Exception e)
             {
@@ -415,20 +411,86 @@ namespace Azure.AI.DocumentTranslation.Models
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<Response<BatchStatusDetail>> CancelOperationAsync(CancellationToken cancellationToken)
+        public virtual async Task CancelAsync(CancellationToken cancellationToken)
         {
-            using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(CancelOperationAsync)}");
+            using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(CancelAsync)}");
             scope.Start();
 
             try
             {
-                return await _serviceClient.CancelOperationAsync(new Guid(Id), cancellationToken).ConfigureAwait(false);
+                Response<BatchStatusDetail> response = await _serviceClient.CancelOperationAsync(new Guid(Id), cancellationToken).ConfigureAwait(false);
+                _response = response.GetRawResponse();
+                // TODO: update status
             }
             catch (Exception e)
             {
                 scope.Failed(e);
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Gets the final result of the long-running operation asynchronously.
+        /// </summary>
+        /// <remarks>
+        /// Operation must complete successfully (HasValue is true) for it to provide values.
+        /// </remarks>
+        public override AsyncPageable<DocumentStatusDetail> GetValuesAsync()
+        {
+            ValidateOperationStatus();
+
+            async Task<Page<DocumentStatusDetail>> NextPageFunc(string nextLink, int? pageSizeHint)
+            {
+                // TODO: diagnostics scope?
+                try
+                {
+                    Response<DocumentStatusResponse> response = await _serviceClient.DocumentsStatusNextPageAsync(_apiVersion, nextLink).ConfigureAwait(false);
+
+                    return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+
+            return PageableHelpers.CreateAsyncEnumerable(_ => Task.FromResult(_firstPage), NextPageFunc);
+        }
+
+        /// <summary>
+        /// Gets the final result of the long-running operation synchronously.
+        /// </summary>
+        /// <remarks>
+        /// Operation must complete successfully (HasValue is true) for it to provide values.
+        /// </remarks>
+        public override Pageable<DocumentStatusDetail> GetValues()
+        {
+            ValidateOperationStatus();
+
+            Page<DocumentStatusDetail> NextPageFunc(string nextLink, int? pageSizeHint)
+            {
+                // TODO: diagnostics scope?
+                try
+                {
+                    Response<DocumentStatusResponse> response = _serviceClient.DocumentsStatusNextPage(_apiVersion, nextLink);
+
+                    return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+
+            return PageableHelpers.CreateEnumerable(_ => _firstPage, NextPageFunc);
+        }
+
+        private void ValidateOperationStatus()
+        {
+            if (!HasCompleted)
+                throw new InvalidOperationException("The operation has not completed yet.");
+            if (!HasValue)
+                throw _requestFailedException;
         }
     }
 }
