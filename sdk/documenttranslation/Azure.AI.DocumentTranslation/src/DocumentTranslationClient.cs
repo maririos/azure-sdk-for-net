@@ -255,11 +255,11 @@ namespace Azure.AI.DocumentTranslation
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual Pageable<BatchStatusDetail> GetSubmittedBatches(CancellationToken cancellationToken = default)
+        public virtual Pageable<BatchStatusDetail> GetAllOperations(CancellationToken cancellationToken = default)
         {
             Page<BatchStatusDetail> FirstPageFunc(int? pageSizeHint)
             {
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSubmittedBatches)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetAllOperations)}");
                 scope.Start();
 
                 try
@@ -276,7 +276,7 @@ namespace Azure.AI.DocumentTranslation
 
             Page<BatchStatusDetail> NextPageFunc(string nextLink, int? pageSizeHint)
             {
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSubmittedBatches)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetAllOperations)}");
                 scope.Start();
 
                 try
@@ -299,11 +299,11 @@ namespace Azure.AI.DocumentTranslation
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual AsyncPageable<BatchStatusDetail> GetSubmittedBatchesAsync(CancellationToken cancellationToken = default)
+        public virtual AsyncPageable<BatchStatusDetail> GetAllOperationsAsync(CancellationToken cancellationToken = default)
         {
             async Task<Page<BatchStatusDetail>> FirstPageFunc(int? pageSizeHint)
             {
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSubmittedBatchesAsync)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetAllOperationsAsync)}");
                 scope.Start();
 
                 try
@@ -320,7 +320,7 @@ namespace Azure.AI.DocumentTranslation
 
             async Task<Page<BatchStatusDetail>> NextPageFunc(string nextLink, int? pageSizeHint)
             {
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSubmittedBatchesAsync)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetAllOperationsAsync)}");
                 scope.Start();
 
                 try

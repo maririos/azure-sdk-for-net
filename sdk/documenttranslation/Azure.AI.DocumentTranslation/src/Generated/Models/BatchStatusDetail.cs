@@ -14,11 +14,11 @@ namespace Azure.AI.DocumentTranslation.Models
     {
         /// <summary> Initializes a new instance of BatchStatusDetail. </summary>
         /// <param name="id"> Id of the operation. </param>
-        /// <param name="createdDateTimeUtc"> Operation created date time. </param>
-        /// <param name="lastActionDateTimeUtc"> Date time in which the operation&apos;s status has been updated. </param>
+        /// <param name="createdOn"> Operation created date time. </param>
+        /// <param name="lastModified"> Date time in which the operation&apos;s status has been updated. </param>
         /// <param name="summary"> . </param>
         /// <exception cref="ArgumentNullException"> <paramref name="summary"/> is null. </exception>
-        internal BatchStatusDetail(Guid id, DateTimeOffset createdDateTimeUtc, DateTimeOffset lastActionDateTimeUtc, StatusSummary summary)
+        internal BatchStatusDetail(Guid id, DateTimeOffset createdOn, DateTimeOffset lastModified, StatusSummary summary)
         {
             if (summary == null)
             {
@@ -26,32 +26,28 @@ namespace Azure.AI.DocumentTranslation.Models
             }
 
             Id = id;
-            CreatedDateTimeUtc = createdDateTimeUtc;
-            LastActionDateTimeUtc = lastActionDateTimeUtc;
+            CreatedOn = createdOn;
+            LastModified = lastModified;
             Summary = summary;
         }
 
         /// <summary> Initializes a new instance of BatchStatusDetail. </summary>
         /// <param name="id"> Id of the operation. </param>
-        /// <param name="createdDateTimeUtc"> Operation created date time. </param>
-        /// <param name="lastActionDateTimeUtc"> Date time in which the operation&apos;s status has been updated. </param>
+        /// <param name="createdOn"> Operation created date time. </param>
+        /// <param name="lastModified"> Date time in which the operation&apos;s status has been updated. </param>
         /// <param name="status"> List of possible statuses for job or document. </param>
         /// <param name="summary"> . </param>
-        internal BatchStatusDetail(Guid id, DateTimeOffset createdDateTimeUtc, DateTimeOffset lastActionDateTimeUtc, DocumentTranslationOperationStatus? status, StatusSummary summary)
+        internal BatchStatusDetail(Guid id, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationOperationStatus? status, StatusSummary summary)
         {
             Id = id;
-            CreatedDateTimeUtc = createdDateTimeUtc;
-            LastActionDateTimeUtc = lastActionDateTimeUtc;
+            CreatedOn = createdOn;
+            LastModified = lastModified;
             Status = status;
             Summary = summary;
         }
 
         /// <summary> Id of the operation. </summary>
         public Guid Id { get; }
-        /// <summary> Operation created date time. </summary>
-        public DateTimeOffset CreatedDateTimeUtc { get; }
-        /// <summary> Date time in which the operation&apos;s status has been updated. </summary>
-        public DateTimeOffset LastActionDateTimeUtc { get; }
         /// <summary> List of possible statuses for job or document. </summary>
         public DocumentTranslationOperationStatus? Status { get; }
         /// <summary> The Status Summary of the operation </summary>

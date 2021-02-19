@@ -14,12 +14,12 @@ namespace Azure.AI.DocumentTranslation.Models
     {
         /// <summary> Initializes a new instance of DocumentStatusDetail. </summary>
         /// <param name="path"> Location of the document or folder. </param>
-        /// <param name="createdDateTimeUtc"> Operation created date time. </param>
-        /// <param name="lastActionDateTimeUtc"> Date time in which the operation&apos;s status has been updated. </param>
+        /// <param name="createdOn"> Operation created date time. </param>
+        /// <param name="lastModified"> Date time in which the operation&apos;s status has been updated. </param>
         /// <param name="status"> List of possible statuses for job or document. </param>
         /// <param name="to"> To language. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="path"/> or <paramref name="to"/> is null. </exception>
-        internal DocumentStatusDetail(string path, DateTimeOffset createdDateTimeUtc, DateTimeOffset lastActionDateTimeUtc, DocumentTranslationOperationStatus status, string to)
+        internal DocumentStatusDetail(string path, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationOperationStatus status, string to)
         {
             if (path == null)
             {
@@ -31,27 +31,27 @@ namespace Azure.AI.DocumentTranslation.Models
             }
 
             Path = path;
-            CreatedDateTimeUtc = createdDateTimeUtc;
-            LastActionDateTimeUtc = lastActionDateTimeUtc;
+            CreatedOn = createdOn;
+            LastModified = lastModified;
             Status = status;
             To = to;
         }
 
         /// <summary> Initializes a new instance of DocumentStatusDetail. </summary>
         /// <param name="path"> Location of the document or folder. </param>
-        /// <param name="createdDateTimeUtc"> Operation created date time. </param>
-        /// <param name="lastActionDateTimeUtc"> Date time in which the operation&apos;s status has been updated. </param>
+        /// <param name="createdOn"> Operation created date time. </param>
+        /// <param name="lastModified"> Date time in which the operation&apos;s status has been updated. </param>
         /// <param name="status"> List of possible statuses for job or document. </param>
         /// <param name="detectedLanguage"> Detected language of the original document (to be implemented). </param>
         /// <param name="to"> To language. </param>
         /// <param name="error"> This contains an outer error with error code, message, details, target and an inner error with more descriptive details. </param>
         /// <param name="progress"> Progress of the translation if available. </param>
         /// <param name="id"> Document Id. </param>
-        internal DocumentStatusDetail(string path, DateTimeOffset createdDateTimeUtc, DateTimeOffset lastActionDateTimeUtc, DocumentTranslationOperationStatus status, string detectedLanguage, string to, ErrorV2 error, float? progress, Guid? id)
+        internal DocumentStatusDetail(string path, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationOperationStatus status, string detectedLanguage, string to, ErrorV2 error, float? progress, Guid? id)
         {
             Path = path;
-            CreatedDateTimeUtc = createdDateTimeUtc;
-            LastActionDateTimeUtc = lastActionDateTimeUtc;
+            CreatedOn = createdOn;
+            LastModified = lastModified;
             Status = status;
             DetectedLanguage = detectedLanguage;
             To = to;
@@ -62,10 +62,6 @@ namespace Azure.AI.DocumentTranslation.Models
 
         /// <summary> Location of the document or folder. </summary>
         public string Path { get; }
-        /// <summary> Operation created date time. </summary>
-        public DateTimeOffset CreatedDateTimeUtc { get; }
-        /// <summary> Date time in which the operation&apos;s status has been updated. </summary>
-        public DateTimeOffset LastActionDateTimeUtc { get; }
         /// <summary> List of possible statuses for job or document. </summary>
         public DocumentTranslationOperationStatus Status { get; }
         /// <summary> Detected language of the original document (to be implemented). </summary>

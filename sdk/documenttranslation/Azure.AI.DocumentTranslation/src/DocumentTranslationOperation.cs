@@ -5,10 +5,11 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure.AI.DocumentTranslation.Models;
 using Azure.Core;
 using Azure.Core.Pipeline;
 
-namespace Azure.AI.DocumentTranslation.Models
+namespace Azure.AI.DocumentTranslation
 {
     /// <summary> The DocumentTranslationOperation class for LRO. </summary>
     public class DocumentTranslationOperation : PageableOperation<DocumentStatusDetail>
@@ -57,7 +58,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <summary>
         /// Number of documents in queue for translation.
         /// </summary>
-        public int? DocumentsInQueue => _documentsInQueue;
+        public int? DocumentsNotStarted => _documentsNotStarted;
 
         /// <summary>
         /// Number of documents cancelled.
@@ -68,7 +69,7 @@ namespace Azure.AI.DocumentTranslation.Models
         private int? _documentsFailed;
         private int? _documentsSucceeded;
         private int? _documentsInProgress;
-        private int? _documentsInQueue;
+        private int? _documentsNotStarted;
         private int? _documentsCancelled;
         private DateTimeOffset _createdOn;
         private DateTimeOffset _lastModified;
@@ -230,14 +231,14 @@ namespace Azure.AI.DocumentTranslation.Models
 
                     _response = update.GetRawResponse();
 
-                    _createdOn = update.Value.CreatedDateTimeUtc;
-                    _lastModified = update.Value.LastActionDateTimeUtc;
+                    _createdOn = update.Value.CreatedOn;
+                    _lastModified = update.Value.LastModified;
                     _status = update.Value.Status;
                     _totalDocuments = update.Value.Summary.Total;
                     _documentsFailed = update.Value.Summary.Failed;
                     _documentsInProgress = update.Value.Summary.InProgress;
                     _documentsSucceeded = update.Value.Summary.Success;
-                    _documentsInQueue = update.Value.Summary.NotYetStarted;
+                    _documentsNotStarted = update.Value.Summary.NotYetStarted;
                     _documentsCancelled = update.Value.Summary.Cancelled;
 
                     if (update.Value.Status == DocumentTranslationOperationStatus.Succeeded
