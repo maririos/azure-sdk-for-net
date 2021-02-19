@@ -343,7 +343,7 @@ namespace Azure.AI.DocumentTranslation.Models
 
                 try
                 {
-                    Response<DocumentStatusResponse> response = _serviceClient.DocumentsStatusNextPage(_apiVersion, nextLink, cancellationToken);
+                    var response = _serviceClient.GetOperationDocumentsStatusNextPage(nextLink, new Guid(Id), cancellationToken: cancellationToken);
                     return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
                 }
                 catch (Exception e)
@@ -387,7 +387,7 @@ namespace Azure.AI.DocumentTranslation.Models
 
                 try
                 {
-                    Response<DocumentStatusResponse> response = await _serviceClient.DocumentsStatusNextPageAsync(_apiVersion, nextLink, cancellationToken).ConfigureAwait(false);
+                    var response = await _serviceClient.GetOperationDocumentsStatusNextPageAsync(nextLink, new Guid(Id), cancellationToken: cancellationToken).ConfigureAwait(false);
                     return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
                 }
                 catch (Exception e)
@@ -413,7 +413,6 @@ namespace Azure.AI.DocumentTranslation.Models
             {
                 Response<BatchStatusDetail> response = _serviceClient.CancelOperation(new Guid(Id), cancellationToken);
                 _response = response.GetRawResponse();
-                // TODO: update status
             }
             catch (Exception e)
             {
@@ -436,7 +435,6 @@ namespace Azure.AI.DocumentTranslation.Models
             {
                 Response<BatchStatusDetail> response = await _serviceClient.CancelOperationAsync(new Guid(Id), cancellationToken).ConfigureAwait(false);
                 _response = response.GetRawResponse();
-                // TODO: update status
             }
             catch (Exception e)
             {
@@ -460,7 +458,7 @@ namespace Azure.AI.DocumentTranslation.Models
                 // TODO: diagnostics scope?
                 try
                 {
-                    Response<DocumentStatusResponse> response = await _serviceClient.DocumentsStatusNextPageAsync(_apiVersion, nextLink).ConfigureAwait(false);
+                    Response<DocumentStatusResponse> response = await _serviceClient.GetOperationDocumentsStatusNextPageAsync(nextLink, new Guid(Id)).ConfigureAwait(false);
 
                     return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
                 }
@@ -488,7 +486,7 @@ namespace Azure.AI.DocumentTranslation.Models
                 // TODO: diagnostics scope?
                 try
                 {
-                    Response<DocumentStatusResponse> response = _serviceClient.DocumentsStatusNextPage(_apiVersion, nextLink);
+                    Response<DocumentStatusResponse> response = _serviceClient.GetOperationDocumentsStatusNextPage(nextLink, new Guid(Id));
 
                     return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
                 }

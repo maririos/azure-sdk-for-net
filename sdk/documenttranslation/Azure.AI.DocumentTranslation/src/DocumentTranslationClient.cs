@@ -281,7 +281,7 @@ namespace Azure.AI.DocumentTranslation
 
                 try
                 {
-                    Response<BatchStatusResponse> response = _serviceRestClient.BatchesNextPage(_options.GetVersionString(), nextLink, cancellationToken);
+                    Response<BatchStatusResponse> response = _serviceRestClient.GetOperationsNextPage(nextLink, cancellationToken: cancellationToken);
                     return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
                 }
                 catch (Exception e)
@@ -325,7 +325,7 @@ namespace Azure.AI.DocumentTranslation
 
                 try
                 {
-                    Response<BatchStatusResponse> response = await _serviceRestClient.BatchesNextPageAsync(_options.GetVersionString(), nextLink, cancellationToken).ConfigureAwait(false);
+                    Response<BatchStatusResponse> response = await _serviceRestClient.GetOperationsNextPageAsync(nextLink, cancellationToken: cancellationToken).ConfigureAwait(false);
                     return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
                 }
                 catch (Exception e)
