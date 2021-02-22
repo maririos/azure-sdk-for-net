@@ -10,6 +10,7 @@ using NUnit.Framework;
 
 namespace Azure.AI.DocumentTranslation.Tests.samples
 {
+    [LiveOnly]
     public partial class DocumentTranslationSamples : SamplesBase<DocumentTranslationTestEnvironment>
     {
         [Test]
