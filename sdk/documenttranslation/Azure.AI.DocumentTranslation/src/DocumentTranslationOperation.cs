@@ -251,6 +251,7 @@ namespace Azure.AI.DocumentTranslation
                         _firstPage = Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
                         _hasCompleted = true;
                     }
+                    // TODO: ValidationFailed Status handling
                     // TODO: Failed operation handling?
                     else if (update.Value.Status == DocumentTranslationOperationStatus.Failed)
                     {
@@ -277,6 +278,7 @@ namespace Azure.AI.DocumentTranslation
         /// <returns></returns>
         public virtual Response<DocumentStatusDetail> GetDocumentStatus(Guid documentId, CancellationToken cancellationToken = default)
         {
+            // TODO: use string instead of Guid ?
             using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(GetDocumentStatus)}");
             scope.Start();
 

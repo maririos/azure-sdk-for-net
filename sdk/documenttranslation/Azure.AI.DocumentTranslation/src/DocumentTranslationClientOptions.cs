@@ -9,7 +9,7 @@ namespace Azure.AI.DocumentTranslation
     /// <summary>
     /// Options that allow to configure the management of the request sent to the service.
     /// </summary>
-    public class TranslatorClientOptions : ClientOptions
+    public class DocumentTranslationClientOptions : ClientOptions
     {
         /// <summary>
         /// The latest service version supported by this client library.
@@ -22,12 +22,12 @@ namespace Azure.AI.DocumentTranslation
         internal ServiceVersion Version { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TranslatorClientOptions"/> class.
+        /// Initializes a new instance of the <see cref="DocumentTranslationClientOptions"/> class.
         /// </summary>
         /// <param name="version">
         /// The <see cref="ServiceVersion"/> of the service API used when making requests.
         /// </param>
-        public TranslatorClientOptions(ServiceVersion version = LatestVersion)
+        public DocumentTranslationClientOptions(ServiceVersion version = LatestVersion)
         {
             Version = version;
         }

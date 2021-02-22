@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Azure.AI.DocumentTranslation", "src\Azure.AI.DocumentTranslation.csproj", "{6BE1651C-C3F6-4363-8717-FFF1D95A3643}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azure.AI.DocumentTranslation.Tests", "tests\Azure.AI.DocumentTranslation.Tests.csproj", "{B0E7B026-E91D-4EEC-8989-AC9902C9BDCE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{6BE1651C-C3F6-4363-8717-FFF1D95A3643}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BE1651C-C3F6-4363-8717-FFF1D95A3643}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BE1651C-C3F6-4363-8717-FFF1D95A3643}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0E7B026-E91D-4EEC-8989-AC9902C9BDCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0E7B026-E91D-4EEC-8989-AC9902C9BDCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0E7B026-E91D-4EEC-8989-AC9902C9BDCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0E7B026-E91D-4EEC-8989-AC9902C9BDCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
