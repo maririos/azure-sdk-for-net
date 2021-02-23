@@ -33,47 +33,47 @@ namespace Azure.AI.DocumentTranslation
         /// <summary>
         /// List of possible statuses for job or document.
         /// </summary>
-        public DocumentTranslationStatus? Status => _status;
+        public DocumentTranslationStatus Status => _status;
 
         /// <summary>
         /// Total number of documents in the operation.
         /// </summary>
-        public int? TotalDocuments => _totalDocuments;
+        public int TotalDocuments => _totalDocuments;
 
         /// <summary>
         /// Number of documents failed to translate in the operation.
         /// </summary>
-        public int? DocumentsFailed => _documentsFailed;
+        public int DocumentsFailed => _documentsFailed;
 
         /// <summary>
         /// Number of documents translated successfully in the operation.
         /// </summary>
-        public int? DocumentsSucceeded => _documentsSucceeded;
+        public int DocumentsSucceeded => _documentsSucceeded;
 
         /// <summary>
         /// Number of documents in progress in the operation.
         /// </summary>
-        public int? DocumentsInProgress => _documentsInProgress;
+        public int DocumentsInProgress => _documentsInProgress;
 
         /// <summary>
         /// Number of documents in queue for translation.
         /// </summary>
-        public int? DocumentsNotStarted => _documentsNotStarted;
+        public int DocumentsNotStarted => _documentsNotStarted;
 
         /// <summary>
         /// Number of documents cancelled.
         /// </summary>
-        public int? DocumentsCancelled => _documentsCancelled;
+        public int DocumentsCancelled => _documentsCancelled;
 
-        private int? _totalDocuments;
-        private int? _documentsFailed;
-        private int? _documentsSucceeded;
-        private int? _documentsInProgress;
-        private int? _documentsNotStarted;
-        private int? _documentsCancelled;
+        private int _totalDocuments;
+        private int _documentsFailed;
+        private int _documentsSucceeded;
+        private int _documentsInProgress;
+        private int _documentsNotStarted;
+        private int _documentsCancelled;
         private DateTimeOffset _createdOn;
         private DateTimeOffset _lastModified;
-        private DocumentTranslationStatus? _status;
+        private DocumentTranslationStatus _status;
 
         /// <summary>
         /// Gets an ID representing the operation that can be used to poll for the status
