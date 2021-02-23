@@ -7,7 +7,7 @@ using Azure.AI.DocumentTranslation.Models;
 using Azure.Core.TestFramework;
 using NUnit.Framework;
 
-namespace Azure.AI.DocumentTranslation.Tests.samples
+namespace Azure.AI.DocumentTranslation.Tests.Samples
 {
     [LiveOnly]
     public partial class DocumentTranslationSamples : SamplesBase<DocumentTranslationTestEnvironment>
@@ -22,24 +22,36 @@ namespace Azure.AI.DocumentTranslation.Tests.samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            var operation = await client.StartBatchTranslationAsync(new Uri(sourceUrl), "en", new Uri(targetUrl), "it");
+            DocumentTranslationOperation operation = await client.StartBatchTranslationAsync(new Uri(sourceUrl), "es", new Uri(targetUrl), "en");
 
-            Response<AsyncPageable<DocumentStatusDetail>> response = await operation.WaitForCompletionAsync();
+            await operation.WaitForCompletionAsync();
 
-            var docsEnumerator = response.Value.GetAsyncEnumerator();
+            Console.WriteLine("Operation Information:");
+            Console.WriteLine($"  Id: {operation.Id}");
+            Console.WriteLine($"  Status: {operation.Status}");
+            Console.WriteLine($"  Created on: {operation.CreatedOn}");
+            Console.WriteLine($"  Last modified: {operation.LastModified}");
+            Console.WriteLine($"  Total documents: {operation.TotalDocuments}");
+            Console.WriteLine($"    Succeeded: {operation.DocumentsSucceeded}");
+            Console.WriteLine($"    Failed: {operation.DocumentsFailed}");
+            Console.WriteLine($"    In Progress: {operation.DocumentsInProgress}");
+            Console.WriteLine($"    Not started: {operation.DocumentsNotStarted}");
 
-            while (await docsEnumerator.MoveNextAsync())
+            await foreach (DocumentStatusDetail document in operation.Value)
             {
-                if (docsEnumerator.Current.Status == DocumentTranslationOperationStatus.Succeeded)
+                Console.WriteLine($"Document with Id: {document.Id}");
+                Console.WriteLine($"  Status:{document.Status}");
+                if (document.Status == DocumentTranslationOperationStatus.Succeeded)
                 {
-                    Console.WriteLine($"Document {docsEnumerator.Current.Path} succedded");
+                    Console.WriteLine($"  Location: {document.Path}");
+                    Console.WriteLine($"  Translated to language: {document.To}.");
                 }
                 else
                 {
-                    Console.WriteLine($"Document {docsEnumerator.Current.Path} failed");
+                    Console.WriteLine($"  Error Code: {document.Error.Code}");
+                    Console.WriteLine($"  Message: {document.Error.Message}");
                 }
             }
         }
-
     }
 }

@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.AI.DocumentTranslation.Models;
@@ -449,5 +450,26 @@ namespace Azure.AI.DocumentTranslation
                 throw;
             }
         }
+
+        #region nobody wants to see these
+        /// <summary>
+        /// Check if two TextAnalyticsClient instances are equal.
+        /// </summary>
+        /// <param name="obj">The instance to compare to.</param>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override bool Equals(object obj) => base.Equals(obj);
+
+        /// <summary>
+        /// Get a hash code for the TextAnalyticsClient.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override int GetHashCode() => base.GetHashCode();
+
+        /// <summary>
+        /// TextAnalyticsClient ToString.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override string ToString() => base.ToString();
+        #endregion
     }
 }

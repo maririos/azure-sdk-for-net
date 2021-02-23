@@ -7,7 +7,7 @@ using Azure.AI.DocumentTranslation.Models;
 using Azure.Core.TestFramework;
 using NUnit.Framework;
 
-namespace Azure.AI.DocumentTranslation.Tests.samples
+namespace Azure.AI.DocumentTranslation.Tests.Samples
 {
     [LiveOnly]
     public partial class DocumentTranslationSamples : SamplesBase<DocumentTranslationTestEnvironment>

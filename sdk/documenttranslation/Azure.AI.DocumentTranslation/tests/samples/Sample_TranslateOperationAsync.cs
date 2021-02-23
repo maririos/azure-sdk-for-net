@@ -8,13 +8,13 @@ using Azure.AI.DocumentTranslation.Models;
 using Azure.Core.TestFramework;
 using NUnit.Framework;
 
-namespace Azure.AI.DocumentTranslation.Tests.samples
+namespace Azure.AI.DocumentTranslation.Tests.Samples
 {
     [LiveOnly]
     public partial class DocumentTranslationSamples : SamplesBase<DocumentTranslationTestEnvironment>
     {
         [Test]
-        public async Task TranslateOperation()
+        public async Task TranslateOperationAsync()
         {
             string endpoint = TestEnvironment.Endpoint;
             string apiKey = TestEnvironment.ApiKey;
