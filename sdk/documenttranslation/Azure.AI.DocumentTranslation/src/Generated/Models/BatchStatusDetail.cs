@@ -19,7 +19,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="status"> List of possible statuses for job or document. </param>
         /// <param name="summary"> . </param>
         /// <exception cref="ArgumentNullException"> <paramref name="summary"/> is null. </exception>
-        internal BatchStatusDetail(Guid id, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationOperationStatus status, StatusSummary summary)
+        internal BatchStatusDetail(Guid id, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationStatus status, StatusSummary summary)
         {
             if (summary == null)
             {
@@ -40,7 +40,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="status"> List of possible statuses for job or document. </param>
         /// <param name="error"> This contains an outer error with error code, message, details, target and an inner error with more descriptive details. </param>
         /// <param name="summary"> . </param>
-        internal BatchStatusDetail(Guid id, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationOperationStatus status, ErrorV2 error, StatusSummary summary)
+        internal BatchStatusDetail(Guid id, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationStatus status, ErrorV2 error, StatusSummary summary)
         {
             Id = id;
             CreatedOn = createdOn;
@@ -53,7 +53,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <summary> Id of the operation. </summary>
         public Guid Id { get; }
         /// <summary> List of possible statuses for job or document. </summary>
-        public DocumentTranslationOperationStatus Status { get; }
+        public DocumentTranslationStatus Status { get; }
         /// <summary> This contains an outer error with error code, message, details, target and an inner error with more descriptive details. </summary>
         public ErrorV2 Error { get; }
         /// <summary> The Status Summary of the operation </summary>

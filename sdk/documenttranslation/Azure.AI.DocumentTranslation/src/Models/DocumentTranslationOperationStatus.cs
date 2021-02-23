@@ -6,7 +6,7 @@ using Azure.Core;
 namespace Azure.AI.DocumentTranslation.Models
 {
     [CodeGenModel("Status")]
-    public partial struct DocumentTranslationOperationStatus
+    public partial struct DocumentTranslationStatus
     {
     }
 }

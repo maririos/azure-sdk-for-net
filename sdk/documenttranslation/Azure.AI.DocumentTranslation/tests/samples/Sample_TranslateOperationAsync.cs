@@ -45,7 +45,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             while (await docsEnumerator.MoveNextAsync())
             {
-                if (docsEnumerator.Current.Status == DocumentTranslationOperationStatus.Succeeded)
+                if (docsEnumerator.Current.Status == DocumentTranslationStatus.Succeeded)
                 {
                     Console.WriteLine($"Document {docsEnumerator.Current.Path} succedded");
                 }

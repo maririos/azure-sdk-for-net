@@ -21,7 +21,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="progress"> Progress of the translation if available. </param>
         /// <param name="id"> Document Id. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="path"/> or <paramref name="to"/> is null. </exception>
-        internal DocumentStatusDetail(string path, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationOperationStatus status, string to, float progress, Guid id)
+        internal DocumentStatusDetail(string path, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationStatus status, string to, float progress, Guid id)
         {
             if (path == null)
             {
@@ -51,7 +51,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="progress"> Progress of the translation if available. </param>
         /// <param name="id"> Document Id. </param>
         /// <param name="characterCharged"> Character charged by the API. </param>
-        internal DocumentStatusDetail(string path, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationOperationStatus status, string to, ErrorV2 error, float progress, Guid id, long? characterCharged)
+        internal DocumentStatusDetail(string path, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationStatus status, string to, ErrorV2 error, float progress, Guid id, long? characterCharged)
         {
             Path = path;
             CreatedOn = createdOn;
@@ -67,7 +67,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <summary> Location of the document or folder. </summary>
         public string Path { get; }
         /// <summary> List of possible statuses for job or document. </summary>
-        public DocumentTranslationOperationStatus Status { get; }
+        public DocumentTranslationStatus Status { get; }
         /// <summary> To language. </summary>
         public string To { get; }
         /// <summary> This contains an outer error with error code, message, details, target and an inner error with more descriptive details. </summary>

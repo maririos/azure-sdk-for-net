@@ -47,7 +47,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
             {
                 Console.WriteLine($"Document with Id: {document.Id}");
                 Console.WriteLine($"  Status:{document.Status}");
-                if (document.Status == DocumentTranslationOperationStatus.Succeeded)
+                if (document.Status == DocumentTranslationStatus.Succeeded)
                 {
                     Console.WriteLine($"  Location: {document.Path}");
                     Console.WriteLine($"  Translated to language: {document.To}.");

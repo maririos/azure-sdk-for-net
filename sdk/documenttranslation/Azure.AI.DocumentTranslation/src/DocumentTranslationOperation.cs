@@ -33,7 +33,7 @@ namespace Azure.AI.DocumentTranslation
         /// <summary>
         /// List of possible statuses for job or document.
         /// </summary>
-        public DocumentTranslationOperationStatus? Status => _status;
+        public DocumentTranslationStatus? Status => _status;
 
         /// <summary>
         /// Total number of documents in the operation.
@@ -73,7 +73,7 @@ namespace Azure.AI.DocumentTranslation
         private int? _documentsCancelled;
         private DateTimeOffset _createdOn;
         private DateTimeOffset _lastModified;
-        private DocumentTranslationOperationStatus? _status;
+        private DocumentTranslationStatus? _status;
 
         /// <summary>
         /// Gets an ID representing the operation that can be used to poll for the status
@@ -241,8 +241,8 @@ namespace Azure.AI.DocumentTranslation
                     _documentsNotStarted = update.Value.Summary.NotYetStarted;
                     _documentsCancelled = update.Value.Summary.Cancelled;
 
-                    if (update.Value.Status == DocumentTranslationOperationStatus.Succeeded
-                        || update.Value.Status == DocumentTranslationOperationStatus.Cancelled)
+                    if (update.Value.Status == DocumentTranslationStatus.Succeeded
+                        || update.Value.Status == DocumentTranslationStatus.Cancelled)
                     {
                         // we need to first assign a value and then mark the operation as completed to avoid race conditions
                         var response = async
@@ -253,7 +253,7 @@ namespace Azure.AI.DocumentTranslation
                     }
                     // TODO: ValidationFailed Status handling
                     // TODO: Failed operation handling?
-                    else if (update.Value.Status == DocumentTranslationOperationStatus.Failed)
+                    else if (update.Value.Status == DocumentTranslationStatus.Failed)
                     {
                         _requestFailedException = _diagnostics.CreateRequestFailedException(_response);
                         _hasCompleted = true;

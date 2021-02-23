@@ -11,13 +11,13 @@ using System.ComponentModel;
 namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary> List of possible statuses for job or document. </summary>
-    public readonly partial struct DocumentTranslationOperationStatus : IEquatable<DocumentTranslationOperationStatus>
+    public readonly partial struct DocumentTranslationStatus : IEquatable<DocumentTranslationStatus>
     {
         private readonly string _value;
 
-        /// <summary> Determines if two <see cref="DocumentTranslationOperationStatus"/> values are the same. </summary>
+        /// <summary> Determines if two <see cref="DocumentTranslationStatus"/> values are the same. </summary>
         /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
-        public DocumentTranslationOperationStatus(string value)
+        public DocumentTranslationStatus(string value)
         {
             _value = value ?? throw new ArgumentNullException(nameof(value));
         }
@@ -31,31 +31,31 @@ namespace Azure.AI.DocumentTranslation.Models
         private const string ValidationFailedValue = "ValidationFailed";
 
         /// <summary> NotStarted. </summary>
-        public static DocumentTranslationOperationStatus NotStarted { get; } = new DocumentTranslationOperationStatus(NotStartedValue);
+        public static DocumentTranslationStatus NotStarted { get; } = new DocumentTranslationStatus(NotStartedValue);
         /// <summary> Running. </summary>
-        public static DocumentTranslationOperationStatus Running { get; } = new DocumentTranslationOperationStatus(RunningValue);
+        public static DocumentTranslationStatus Running { get; } = new DocumentTranslationStatus(RunningValue);
         /// <summary> Succeeded. </summary>
-        public static DocumentTranslationOperationStatus Succeeded { get; } = new DocumentTranslationOperationStatus(SucceededValue);
+        public static DocumentTranslationStatus Succeeded { get; } = new DocumentTranslationStatus(SucceededValue);
         /// <summary> Failed. </summary>
-        public static DocumentTranslationOperationStatus Failed { get; } = new DocumentTranslationOperationStatus(FailedValue);
+        public static DocumentTranslationStatus Failed { get; } = new DocumentTranslationStatus(FailedValue);
         /// <summary> Cancelled. </summary>
-        public static DocumentTranslationOperationStatus Cancelled { get; } = new DocumentTranslationOperationStatus(CancelledValue);
+        public static DocumentTranslationStatus Cancelled { get; } = new DocumentTranslationStatus(CancelledValue);
         /// <summary> Cancelling. </summary>
-        public static DocumentTranslationOperationStatus Cancelling { get; } = new DocumentTranslationOperationStatus(CancellingValue);
+        public static DocumentTranslationStatus Cancelling { get; } = new DocumentTranslationStatus(CancellingValue);
         /// <summary> ValidationFailed. </summary>
-        public static DocumentTranslationOperationStatus ValidationFailed { get; } = new DocumentTranslationOperationStatus(ValidationFailedValue);
-        /// <summary> Determines if two <see cref="DocumentTranslationOperationStatus"/> values are the same. </summary>
-        public static bool operator ==(DocumentTranslationOperationStatus left, DocumentTranslationOperationStatus right) => left.Equals(right);
-        /// <summary> Determines if two <see cref="DocumentTranslationOperationStatus"/> values are not the same. </summary>
-        public static bool operator !=(DocumentTranslationOperationStatus left, DocumentTranslationOperationStatus right) => !left.Equals(right);
-        /// <summary> Converts a string to a <see cref="DocumentTranslationOperationStatus"/>. </summary>
-        public static implicit operator DocumentTranslationOperationStatus(string value) => new DocumentTranslationOperationStatus(value);
+        public static DocumentTranslationStatus ValidationFailed { get; } = new DocumentTranslationStatus(ValidationFailedValue);
+        /// <summary> Determines if two <see cref="DocumentTranslationStatus"/> values are the same. </summary>
+        public static bool operator ==(DocumentTranslationStatus left, DocumentTranslationStatus right) => left.Equals(right);
+        /// <summary> Determines if two <see cref="DocumentTranslationStatus"/> values are not the same. </summary>
+        public static bool operator !=(DocumentTranslationStatus left, DocumentTranslationStatus right) => !left.Equals(right);
+        /// <summary> Converts a string to a <see cref="DocumentTranslationStatus"/>. </summary>
+        public static implicit operator DocumentTranslationStatus(string value) => new DocumentTranslationStatus(value);
 
         /// <inheritdoc />
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool Equals(object obj) => obj is DocumentTranslationOperationStatus other && Equals(other);
+        public override bool Equals(object obj) => obj is DocumentTranslationStatus other && Equals(other);
         /// <inheritdoc />
-        public bool Equals(DocumentTranslationOperationStatus other) => string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
+        public bool Equals(DocumentTranslationStatus other) => string.Equals(_value, other._value, StringComparison.InvariantCultureIgnoreCase);
 
         /// <inheritdoc />
         [EditorBrowsable(EditorBrowsableState.Never)]
