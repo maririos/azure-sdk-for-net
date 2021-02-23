@@ -55,11 +55,11 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
             {
                 if (docsEnumerator.Current.Status == DocumentTranslationStatus.Succeeded)
                 {
-                    Console.WriteLine($"Document {docsEnumerator.Current.Path} succedded");
+                    Console.WriteLine($"Document {docsEnumerator.Current.Url} succedded");
                 }
                 else
                 {
-                    Console.WriteLine($"Document {docsEnumerator.Current.Path} failed");
+                    Console.WriteLine($"Document {docsEnumerator.Current.Url} failed");
                 }
             }
         }

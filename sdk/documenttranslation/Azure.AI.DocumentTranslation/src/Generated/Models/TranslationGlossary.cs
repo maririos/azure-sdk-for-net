@@ -10,9 +10,9 @@ using System;
 namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary> Glossary / translation memory for the request. </summary>
-    public partial class Glossary
+    public partial class TranslationGlossary
     {
-        /// <summary> Initializes a new instance of Glossary. </summary>
+        /// <summary> Initializes a new instance of TranslationGlossary. </summary>
         /// <param name="glossaryUrl">
         /// Location of the glossary.
         /// 
@@ -23,7 +23,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// If the translation language pair is not present in the glossary, it will not be applied.
         /// </param>
         /// <exception cref="ArgumentNullException"> <paramref name="glossaryUrl"/> is null. </exception>
-        public Glossary(string glossaryUrl)
+        public TranslationGlossary(string glossaryUrl)
         {
             if (glossaryUrl == null)
             {
@@ -43,8 +43,6 @@ namespace Azure.AI.DocumentTranslation.Models
         /// If the translation language pair is not present in the glossary, it will not be applied.
         /// </summary>
         public string GlossaryUrl { get; }
-        /// <summary> Format. </summary>
-        public string Format { get; set; }
         /// <summary> Version. </summary>
         public string Version { get; set; }
     }

@@ -31,7 +31,7 @@ namespace Azure.AI.DocumentTranslation.Models
 
             TargetUrl = targetUrl;
             Language = language;
-            Glossaries = new ChangeTrackingList<Glossary>();
+            Glossaries = new ChangeTrackingList<TranslationGlossary>();
         }
 
         /// <summary> Location of the folder / container with your documents. </summary>
@@ -41,6 +41,6 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <summary> Target Language. </summary>
         public string Language { get; }
         /// <summary> List of Glossary. </summary>
-        public IList<Glossary> Glossaries { get; }
+        public IList<TranslationGlossary> Glossaries { get; }
     }
 }

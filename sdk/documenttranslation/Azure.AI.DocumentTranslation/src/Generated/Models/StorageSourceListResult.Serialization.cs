@@ -11,7 +11,7 @@ using Azure.Core;
 
 namespace Azure.AI.DocumentTranslation.Models
 {
-    public partial class StorageSourceListResult
+    internal partial class StorageSourceListResult
     {
         internal static StorageSourceListResult DeserializeStorageSourceListResult(JsonElement element)
         {

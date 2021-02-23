@@ -10,17 +10,17 @@ using Azure.Core;
 
 namespace Azure.AI.DocumentTranslation.Models
 {
-    public partial class Glossary : IUtf8JsonSerializable
+    public partial class TranslationGlossary : IUtf8JsonSerializable
     {
         void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
         {
             writer.WriteStartObject();
             writer.WritePropertyName("glossaryUrl");
             writer.WriteStringValue(GlossaryUrl);
-            if (Optional.IsDefined(Format))
+            if (Optional.IsDefined(FormatVersion))
             {
                 writer.WritePropertyName("format");
-                writer.WriteStringValue(Format);
+                writer.WriteStringValue(FormatVersion);
             }
             if (Optional.IsDefined(Version))
             {

@@ -20,7 +20,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            var operations = client.GetAllOperations();
+            var operations = client.GetStatusesOfOperations();
             var operationsEnumerator = operations.GetEnumerator();
             operationsEnumerator.MoveNext();
 
@@ -32,7 +32,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             while (docsEnumerator.MoveNext())
             {
-                Console.WriteLine($"Document {docsEnumerator.Current.Path} has status {docsEnumerator.Current.Status}");
+                Console.WriteLine($"Document {docsEnumerator.Current.Url} has status {docsEnumerator.Current.Status}");
             }
         }
     }

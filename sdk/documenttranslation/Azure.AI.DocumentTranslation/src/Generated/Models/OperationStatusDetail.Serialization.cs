@@ -11,11 +11,11 @@ using Azure.Core;
 
 namespace Azure.AI.DocumentTranslation.Models
 {
-    public partial class BatchStatusDetail
+    public partial class OperationStatusDetail
     {
-        internal static BatchStatusDetail DeserializeBatchStatusDetail(JsonElement element)
+        internal static OperationStatusDetail DeserializeOperationStatusDetail(JsonElement element)
         {
-            Guid id = default;
+            string id = default;
             DateTimeOffset createdDateTimeUtc = default;
             DateTimeOffset lastActionDateTimeUtc = default;
             DocumentTranslationStatus status = default;
@@ -25,7 +25,7 @@ namespace Azure.AI.DocumentTranslation.Models
             {
                 if (property.NameEquals("id"))
                 {
-                    id = property.Value.GetGuid();
+                    id = property.Value.GetString();
                     continue;
                 }
                 if (property.NameEquals("createdDateTimeUtc"))
@@ -59,7 +59,7 @@ namespace Azure.AI.DocumentTranslation.Models
                     continue;
                 }
             }
-            return new BatchStatusDetail(id, createdDateTimeUtc, lastActionDateTimeUtc, status, error.Value, summary);
+            return new OperationStatusDetail(id, createdDateTimeUtc, lastActionDateTimeUtc, status, error.Value, summary);
         }
     }
 }

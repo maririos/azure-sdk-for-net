@@ -55,7 +55,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
                 docStatus = operation.GetDocumentStatus((Guid)doc.Id);
             }
 
-            Console.WriteLine($"Document {doc.Path} completed with status ${doc.Status}");
+            Console.WriteLine($"Document {doc.Url} completed with status ${doc.Status}");
         }
     }
 }
