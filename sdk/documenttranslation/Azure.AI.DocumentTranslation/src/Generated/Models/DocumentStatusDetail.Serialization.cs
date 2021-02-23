@@ -20,7 +20,7 @@ namespace Azure.AI.DocumentTranslation.Models
             DateTimeOffset lastActionDateTimeUtc = default;
             DocumentTranslationStatus status = default;
             string to = default;
-            Optional<ErrorV2> error = default;
+            Optional<DocumentTranslationError> error = default;
             float progress = default;
             Guid id = default;
             Optional<long> characterCharged = default;
@@ -58,7 +58,7 @@ namespace Azure.AI.DocumentTranslation.Models
                         property.ThrowNonNullablePropertyIsNull();
                         continue;
                     }
-                    error = ErrorV2.DeserializeErrorV2(property.Value);
+                    error = DocumentTranslationError.DeserializeDocumentTranslationError(property.Value);
                     continue;
                 }
                 if (property.NameEquals("progress"))

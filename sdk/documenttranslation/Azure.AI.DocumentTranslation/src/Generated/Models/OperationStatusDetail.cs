@@ -44,7 +44,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="status"> List of possible statuses for job or document. </param>
         /// <param name="error"> This contains an outer error with error code, message, details, target and an inner error with more descriptive details. </param>
         /// <param name="summary"> . </param>
-        internal OperationStatusDetail(string id, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationStatus status, ErrorV2 error, StatusSummary summary)
+        internal OperationStatusDetail(string id, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationStatus status, DocumentTranslationError error, StatusSummary summary)
         {
             Id = id;
             CreatedOn = createdOn;
@@ -56,6 +56,6 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <summary> List of possible statuses for job or document. </summary>
         public DocumentTranslationStatus Status { get; }
         /// <summary> This contains an outer error with error code, message, details, target and an inner error with more descriptive details. </summary>
-        public ErrorV2 Error { get; }
+        public DocumentTranslationError Error { get; }
     }
 }

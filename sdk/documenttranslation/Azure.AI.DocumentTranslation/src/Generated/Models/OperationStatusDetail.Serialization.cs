@@ -19,7 +19,7 @@ namespace Azure.AI.DocumentTranslation.Models
             DateTimeOffset createdDateTimeUtc = default;
             DateTimeOffset lastActionDateTimeUtc = default;
             DocumentTranslationStatus status = default;
-            Optional<ErrorV2> error = default;
+            Optional<DocumentTranslationError> error = default;
             StatusSummary summary = default;
             foreach (var property in element.EnumerateObject())
             {
@@ -50,7 +50,7 @@ namespace Azure.AI.DocumentTranslation.Models
                         property.ThrowNonNullablePropertyIsNull();
                         continue;
                     }
-                    error = ErrorV2.DeserializeErrorV2(property.Value);
+                    error = DocumentTranslationError.DeserializeDocumentTranslationError(property.Value);
                     continue;
                 }
                 if (property.NameEquals("summary"))

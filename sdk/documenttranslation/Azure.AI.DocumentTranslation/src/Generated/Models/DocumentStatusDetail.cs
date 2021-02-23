@@ -51,7 +51,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="translationProgress"> Progress of the translation if available. </param>
         /// <param name="id"> Document Id. </param>
         /// <param name="characterCharged"> Character charged by the API. </param>
-        internal DocumentStatusDetail(string url, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationStatus status, string translateTo, ErrorV2 error, float translationProgress, Guid id, long? characterCharged)
+        internal DocumentStatusDetail(string url, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationStatus status, string translateTo, DocumentTranslationError error, float translationProgress, Guid id, long? characterCharged)
         {
             Url = url;
             CreatedOn = createdOn;
@@ -66,7 +66,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <summary> List of possible statuses for job or document. </summary>
         public DocumentTranslationStatus Status { get; }
         /// <summary> This contains an outer error with error code, message, details, target and an inner error with more descriptive details. </summary>
-        public ErrorV2 Error { get; }
+        public DocumentTranslationError Error { get; }
         /// <summary> Document Id. </summary>
         public Guid Id { get; }
         /// <summary> Character charged by the API. </summary>

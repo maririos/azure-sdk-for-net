@@ -14,7 +14,7 @@ namespace Azure.AI.DocumentTranslation.Models
     {
         internal static ErrorResponseV2 DeserializeErrorResponseV2(JsonElement element)
         {
-            Optional<ErrorV2> error = default;
+            Optional<DocumentTranslationError> error = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("error"))
@@ -24,7 +24,7 @@ namespace Azure.AI.DocumentTranslation.Models
                         property.ThrowNonNullablePropertyIsNull();
                         continue;
                     }
-                    error = ErrorV2.DeserializeErrorV2(property.Value);
+                    error = DocumentTranslationError.DeserializeDocumentTranslationError(property.Value);
                     continue;
                 }
             }

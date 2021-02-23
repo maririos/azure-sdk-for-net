@@ -10,11 +10,11 @@ using Azure.Core;
 
 namespace Azure.AI.DocumentTranslation.Models
 {
-    public partial class ErrorV2
+    public partial class DocumentTranslationError
     {
-        internal static ErrorV2 DeserializeErrorV2(JsonElement element)
+        internal static DocumentTranslationError DeserializeDocumentTranslationError(JsonElement element)
         {
-            Optional<ErrorCodeV2> code = default;
+            Optional<DocumentTranslationErrorCode> code = default;
             string message = default;
             Optional<string> target = default;
             Optional<InnerErrorV2> innerError = default;
@@ -27,7 +27,7 @@ namespace Azure.AI.DocumentTranslation.Models
                         property.ThrowNonNullablePropertyIsNull();
                         continue;
                     }
-                    code = new ErrorCodeV2(property.Value.GetString());
+                    code = new DocumentTranslationErrorCode(property.Value.GetString());
                     continue;
                 }
                 if (property.NameEquals("message"))
@@ -51,7 +51,7 @@ namespace Azure.AI.DocumentTranslation.Models
                     continue;
                 }
             }
-            return new ErrorV2(Optional.ToNullable(code), message, target.Value, innerError.Value);
+            return new DocumentTranslationError(Optional.ToNullable(code), message, target.Value, innerError.Value);
         }
     }
 }

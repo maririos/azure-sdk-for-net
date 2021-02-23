@@ -10,12 +10,12 @@ using System;
 namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary> This contains an outer error with error code, message, details, target and an inner error with more descriptive details. </summary>
-    public partial class ErrorV2
+    public partial class DocumentTranslationError
     {
-        /// <summary> Initializes a new instance of ErrorV2. </summary>
+        /// <summary> Initializes a new instance of DocumentTranslationError. </summary>
         /// <param name="message"> Gets high level error message. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="message"/> is null. </exception>
-        internal ErrorV2(string message)
+        internal DocumentTranslationError(string message)
         {
             if (message == null)
             {
@@ -25,7 +25,7 @@ namespace Azure.AI.DocumentTranslation.Models
             Message = message;
         }
 
-        /// <summary> Initializes a new instance of ErrorV2. </summary>
+        /// <summary> Initializes a new instance of DocumentTranslationError. </summary>
         /// <param name="code"> Enums containing high level error codes. </param>
         /// <param name="message"> Gets high level error message. </param>
         /// <param name="target">
@@ -38,7 +38,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// 
         /// This contains required properties ErrorCode, message and optional properties target, details(key value pair), inner error(this can be nested).
         /// </param>
-        internal ErrorV2(ErrorCodeV2? code, string message, string target, InnerErrorV2 innerError)
+        internal DocumentTranslationError(DocumentTranslationErrorCode? code, string message, string target, InnerErrorV2 innerError)
         {
             Code = code;
             Message = message;
@@ -47,7 +47,7 @@ namespace Azure.AI.DocumentTranslation.Models
         }
 
         /// <summary> Enums containing high level error codes. </summary>
-        public ErrorCodeV2? Code { get; }
+        public DocumentTranslationErrorCode? Code { get; }
         /// <summary> Gets high level error message. </summary>
         public string Message { get; }
         /// <summary>
