@@ -40,7 +40,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
             var operation = client.StartBatchTranslation(inputs);
 
             // get first document
-            var documents = operation.GetAllDocumentsStatus();
+            var documents = operation.GetStatusesOfDocuments();
             IEnumerator<DocumentStatusDetail> docsEnumerator = documents.GetEnumerator();
             docsEnumerator.MoveNext();
 

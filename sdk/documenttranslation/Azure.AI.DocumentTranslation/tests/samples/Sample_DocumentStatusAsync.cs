@@ -41,7 +41,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
             var operation = await client.StartBatchTranslationAsync(inputs);
 
             // get first document
-            var documents = operation.GetAllDocumentsStatusAsync();
+            var documents = operation.GetStatusesOfDocumentsAsync();
             IAsyncEnumerator<DocumentStatusDetail> docsEnumerator = documents.GetAsyncEnumerator();
             await docsEnumerator.MoveNextAsync();
 

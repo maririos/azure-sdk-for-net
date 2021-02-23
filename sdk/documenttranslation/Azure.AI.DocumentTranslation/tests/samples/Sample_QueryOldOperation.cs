@@ -27,7 +27,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
             var latestOperation = operationsEnumerator.Current;
             var operation = new DocumentTranslationOperation(latestOperation.Id.ToString(), client);
 
-            var documents = operation.GetAllDocumentsStatus();
+            var documents = operation.GetStatusesOfDocuments();
             IEnumerator<DocumentStatusDetail> docsEnumerator = documents.GetEnumerator();
 
             while (docsEnumerator.MoveNext())
