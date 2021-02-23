@@ -15,7 +15,7 @@ namespace Azure.AI.DocumentTranslation
     public class DocumentTranslationOperation : PageableOperation<DocumentStatusDetail>
     {
         /// <summary>Provides communication with the Translator Cognitive Service through its REST API.</summary>
-        private readonly TranslationRestClient _serviceClient;
+        private readonly DocumentTranslationRestClient _serviceClient;
 
         /// <summary>Provides tools for exception creation in case of failure.</summary>
         private readonly ClientDiagnostics _diagnostics;
@@ -143,7 +143,7 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="diagnostics">The client diagnostics for exception creation in case of failure.</param>
         /// <param name="operationLocation">The address of the long-running operation. It can be obtained from the response headers upon starting the operation.</param>
         /// <param name="apiversion">The specific api version to use.</param>
-        internal DocumentTranslationOperation(TranslationRestClient serviceClient, ClientDiagnostics diagnostics, string operationLocation, string apiversion)
+        internal DocumentTranslationOperation(DocumentTranslationRestClient serviceClient, ClientDiagnostics diagnostics, string operationLocation, string apiversion)
         {
             _serviceClient = serviceClient;
             _diagnostics = diagnostics;

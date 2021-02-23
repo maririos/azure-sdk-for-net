@@ -32,7 +32,6 @@ namespace Azure.AI.DocumentTranslation.Models
             TargetUrl = targetUrl;
             Language = language;
             Glossaries = new ChangeTrackingList<Glossary>();
-            StorageSource = "AzureBlob";
         }
 
         /// <summary> Location of the folder / container with your documents. </summary>

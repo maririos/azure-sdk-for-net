@@ -15,16 +15,11 @@ namespace Azure.AI.DocumentTranslation.Models
     {
         internal static FileFormatListResult DeserializeFileFormatListResult(JsonElement element)
         {
-            Optional<IReadOnlyList<FileFormat>> value = default;
+            IReadOnlyList<FileFormat> value = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("value"))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        property.ThrowNonNullablePropertyIsNull();
-                        continue;
-                    }
                     List<FileFormat> array = new List<FileFormat>();
                     foreach (var item in property.Value.EnumerateArray())
                     {
@@ -34,7 +29,7 @@ namespace Azure.AI.DocumentTranslation.Models
                     continue;
                 }
             }
-            return new FileFormatListResult(Optional.ToList(value));
+            return new FileFormatListResult(value);
         }
     }
 }

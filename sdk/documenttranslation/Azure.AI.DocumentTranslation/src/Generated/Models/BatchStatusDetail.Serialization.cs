@@ -18,7 +18,8 @@ namespace Azure.AI.DocumentTranslation.Models
             Guid id = default;
             DateTimeOffset createdDateTimeUtc = default;
             DateTimeOffset lastActionDateTimeUtc = default;
-            Optional<DocumentTranslationOperationStatus> status = default;
+            DocumentTranslationOperationStatus status = default;
+            Optional<ErrorV2> error = default;
             StatusSummary summary = default;
             foreach (var property in element.EnumerateObject())
             {
@@ -39,12 +40,17 @@ namespace Azure.AI.DocumentTranslation.Models
                 }
                 if (property.NameEquals("status"))
                 {
+                    status = new DocumentTranslationOperationStatus(property.Value.GetString());
+                    continue;
+                }
+                if (property.NameEquals("error"))
+                {
                     if (property.Value.ValueKind == JsonValueKind.Null)
                     {
                         property.ThrowNonNullablePropertyIsNull();
                         continue;
                     }
-                    status = new DocumentTranslationOperationStatus(property.Value.GetString());
+                    error = ErrorV2.DeserializeErrorV2(property.Value);
                     continue;
                 }
                 if (property.NameEquals("summary"))
@@ -53,7 +59,7 @@ namespace Azure.AI.DocumentTranslation.Models
                     continue;
                 }
             }
-            return new BatchStatusDetail(id, createdDateTimeUtc, lastActionDateTimeUtc, Optional.ToNullable(status), summary);
+            return new BatchStatusDetail(id, createdDateTimeUtc, lastActionDateTimeUtc, status, error.Value, summary);
         }
     }
 }

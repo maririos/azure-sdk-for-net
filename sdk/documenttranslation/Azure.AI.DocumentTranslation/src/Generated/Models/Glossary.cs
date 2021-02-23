@@ -31,7 +31,6 @@ namespace Azure.AI.DocumentTranslation.Models
             }
 
             GlossaryUrl = glossaryUrl;
-            StorageSource = "AzureBlob";
         }
 
         /// <summary>

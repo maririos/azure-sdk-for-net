@@ -16,9 +16,10 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="id"> Id of the operation. </param>
         /// <param name="createdOn"> Operation created date time. </param>
         /// <param name="lastModified"> Date time in which the operation&apos;s status has been updated. </param>
+        /// <param name="status"> List of possible statuses for job or document. </param>
         /// <param name="summary"> . </param>
         /// <exception cref="ArgumentNullException"> <paramref name="summary"/> is null. </exception>
-        internal BatchStatusDetail(Guid id, DateTimeOffset createdOn, DateTimeOffset lastModified, StatusSummary summary)
+        internal BatchStatusDetail(Guid id, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationOperationStatus status, StatusSummary summary)
         {
             if (summary == null)
             {
@@ -28,6 +29,7 @@ namespace Azure.AI.DocumentTranslation.Models
             Id = id;
             CreatedOn = createdOn;
             LastModified = lastModified;
+            Status = status;
             Summary = summary;
         }
 
@@ -36,20 +38,24 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="createdOn"> Operation created date time. </param>
         /// <param name="lastModified"> Date time in which the operation&apos;s status has been updated. </param>
         /// <param name="status"> List of possible statuses for job or document. </param>
+        /// <param name="error"> This contains an outer error with error code, message, details, target and an inner error with more descriptive details. </param>
         /// <param name="summary"> . </param>
-        internal BatchStatusDetail(Guid id, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationOperationStatus? status, StatusSummary summary)
+        internal BatchStatusDetail(Guid id, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationOperationStatus status, ErrorV2 error, StatusSummary summary)
         {
             Id = id;
             CreatedOn = createdOn;
             LastModified = lastModified;
             Status = status;
+            Error = error;
             Summary = summary;
         }
 
         /// <summary> Id of the operation. </summary>
         public Guid Id { get; }
         /// <summary> List of possible statuses for job or document. </summary>
-        public DocumentTranslationOperationStatus? Status { get; }
+        public DocumentTranslationOperationStatus Status { get; }
+        /// <summary> This contains an outer error with error code, message, details, target and an inner error with more descriptive details. </summary>
+        public ErrorV2 Error { get; }
         /// <summary> The Status Summary of the operation </summary>
         public StatusSummary Summary { get; }
     }

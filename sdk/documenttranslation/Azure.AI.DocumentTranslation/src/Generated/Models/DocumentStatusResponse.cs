@@ -5,8 +5,9 @@
 
 #nullable disable
 
+using System;
 using System.Collections.Generic;
-using Azure.Core;
+using System.Linq;
 
 namespace Azure.AI.DocumentTranslation.Models
 {
@@ -14,9 +15,16 @@ namespace Azure.AI.DocumentTranslation.Models
     public partial class DocumentStatusResponse
     {
         /// <summary> Initializes a new instance of DocumentStatusResponse. </summary>
-        internal DocumentStatusResponse()
+        /// <param name="value"> The detail status of individual documents. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
+        internal DocumentStatusResponse(IEnumerable<DocumentStatusDetail> value)
         {
-            Value = new ChangeTrackingList<DocumentStatusDetail>();
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            Value = value.ToList();
         }
 
         /// <summary> Initializes a new instance of DocumentStatusResponse. </summary>

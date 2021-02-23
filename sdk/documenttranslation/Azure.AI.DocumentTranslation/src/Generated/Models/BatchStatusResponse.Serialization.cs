@@ -15,17 +15,12 @@ namespace Azure.AI.DocumentTranslation.Models
     {
         internal static BatchStatusResponse DeserializeBatchStatusResponse(JsonElement element)
         {
-            Optional<IReadOnlyList<BatchStatusDetail>> value = default;
+            IReadOnlyList<BatchStatusDetail> value = default;
             Optional<string> nextLink = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("value"))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        property.ThrowNonNullablePropertyIsNull();
-                        continue;
-                    }
                     List<BatchStatusDetail> array = new List<BatchStatusDetail>();
                     foreach (var item in property.Value.EnumerateArray())
                     {
@@ -40,7 +35,7 @@ namespace Azure.AI.DocumentTranslation.Models
                     continue;
                 }
             }
-            return new BatchStatusResponse(Optional.ToList(value), nextLink.Value);
+            return new BatchStatusResponse(value, nextLink.Value);
         }
     }
 }

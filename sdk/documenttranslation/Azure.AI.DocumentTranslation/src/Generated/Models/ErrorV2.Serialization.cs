@@ -15,7 +15,7 @@ namespace Azure.AI.DocumentTranslation.Models
         internal static ErrorV2 DeserializeErrorV2(JsonElement element)
         {
             Optional<ErrorCodeV2> code = default;
-            Optional<string> message = default;
+            string message = default;
             Optional<string> target = default;
             Optional<InnerErrorV2> innerError = default;
             foreach (var property in element.EnumerateObject())
@@ -51,7 +51,7 @@ namespace Azure.AI.DocumentTranslation.Models
                     continue;
                 }
             }
-            return new ErrorV2(Optional.ToNullable(code), message.Value, target.Value, innerError.Value);
+            return new ErrorV2(Optional.ToNullable(code), message, target.Value, innerError.Value);
         }
     }
 }

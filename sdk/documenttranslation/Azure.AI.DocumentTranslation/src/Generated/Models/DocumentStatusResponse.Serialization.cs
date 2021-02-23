@@ -15,17 +15,12 @@ namespace Azure.AI.DocumentTranslation.Models
     {
         internal static DocumentStatusResponse DeserializeDocumentStatusResponse(JsonElement element)
         {
-            Optional<IReadOnlyList<DocumentStatusDetail>> value = default;
+            IReadOnlyList<DocumentStatusDetail> value = default;
             Optional<string> nextLink = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("value"))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        property.ThrowNonNullablePropertyIsNull();
-                        continue;
-                    }
                     List<DocumentStatusDetail> array = new List<DocumentStatusDetail>();
                     foreach (var item in property.Value.EnumerateArray())
                     {
@@ -40,7 +35,7 @@ namespace Azure.AI.DocumentTranslation.Models
                     continue;
                 }
             }
-            return new DocumentStatusResponse(Optional.ToList(value), nextLink.Value);
+            return new DocumentStatusResponse(value, nextLink.Value);
         }
     }
 }

@@ -28,6 +28,7 @@ namespace Azure.AI.DocumentTranslation.Models
         private const string FailedValue = "Failed";
         private const string CancelledValue = "Cancelled";
         private const string CancellingValue = "Cancelling";
+        private const string ValidationFailedValue = "ValidationFailed";
 
         /// <summary> NotStarted. </summary>
         public static DocumentTranslationOperationStatus NotStarted { get; } = new DocumentTranslationOperationStatus(NotStartedValue);
@@ -41,6 +42,8 @@ namespace Azure.AI.DocumentTranslation.Models
         public static DocumentTranslationOperationStatus Cancelled { get; } = new DocumentTranslationOperationStatus(CancelledValue);
         /// <summary> Cancelling. </summary>
         public static DocumentTranslationOperationStatus Cancelling { get; } = new DocumentTranslationOperationStatus(CancellingValue);
+        /// <summary> ValidationFailed. </summary>
+        public static DocumentTranslationOperationStatus ValidationFailed { get; } = new DocumentTranslationOperationStatus(ValidationFailedValue);
         /// <summary> Determines if two <see cref="DocumentTranslationOperationStatus"/> values are the same. </summary>
         public static bool operator ==(DocumentTranslationOperationStatus left, DocumentTranslationOperationStatus right) => left.Equals(right);
         /// <summary> Determines if two <see cref="DocumentTranslationOperationStatus"/> values are not the same. </summary>

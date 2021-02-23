@@ -14,26 +14,15 @@ namespace Azure.AI.DocumentTranslation.Models
     {
         internal static InnerErrorV2 DeserializeInnerErrorV2(JsonElement element)
         {
-            Optional<int> code = default;
-            Optional<string> error = default;
-            Optional<string> message = default;
+            string code = default;
+            string message = default;
             Optional<string> target = default;
             Optional<InnerErrorV2> innerError = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("code"))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        property.ThrowNonNullablePropertyIsNull();
-                        continue;
-                    }
-                    code = property.Value.GetInt32();
-                    continue;
-                }
-                if (property.NameEquals("error"))
-                {
-                    error = property.Value.GetString();
+                    code = property.Value.GetString();
                     continue;
                 }
                 if (property.NameEquals("message"))
@@ -57,7 +46,7 @@ namespace Azure.AI.DocumentTranslation.Models
                     continue;
                 }
             }
-            return new InnerErrorV2(Optional.ToNullable(code), error.Value, message.Value, target.Value, innerError.Value);
+            return new InnerErrorV2(code, message, target.Value, innerError.Value);
         }
     }
 }

@@ -11,18 +11,14 @@ namespace Azure.AI.DocumentTranslation.Models
     public partial class StatusSummary
     {
         /// <summary> Initializes a new instance of StatusSummary. </summary>
-        internal StatusSummary()
-        {
-        }
-
-        /// <summary> Initializes a new instance of StatusSummary. </summary>
         /// <param name="total"> Total count. </param>
         /// <param name="failed"> Failed count. </param>
         /// <param name="success"> Number of Success. </param>
         /// <param name="inProgress"> Number of in progress. </param>
         /// <param name="notYetStarted"> Count of not yet started. </param>
         /// <param name="cancelled"> Number of cancelled. </param>
-        internal StatusSummary(int? total, int? failed, int? success, int? inProgress, int? notYetStarted, int? cancelled)
+        /// <param name="totalCharacterCharged"> Total characters charged by the API. </param>
+        internal StatusSummary(int total, int failed, int success, int inProgress, int notYetStarted, int cancelled, long totalCharacterCharged)
         {
             Total = total;
             Failed = failed;
@@ -30,19 +26,22 @@ namespace Azure.AI.DocumentTranslation.Models
             InProgress = inProgress;
             NotYetStarted = notYetStarted;
             Cancelled = cancelled;
+            TotalCharacterCharged = totalCharacterCharged;
         }
 
         /// <summary> Total count. </summary>
-        public int? Total { get; }
+        public int Total { get; }
         /// <summary> Failed count. </summary>
-        public int? Failed { get; }
+        public int Failed { get; }
         /// <summary> Number of Success. </summary>
-        public int? Success { get; }
+        public int Success { get; }
         /// <summary> Number of in progress. </summary>
-        public int? InProgress { get; }
+        public int InProgress { get; }
         /// <summary> Count of not yet started. </summary>
-        public int? NotYetStarted { get; }
+        public int NotYetStarted { get; }
         /// <summary> Number of cancelled. </summary>
-        public int? Cancelled { get; }
+        public int Cancelled { get; }
+        /// <summary> Total characters charged by the API. </summary>
+        public long TotalCharacterCharged { get; }
     }
 }

@@ -19,11 +19,11 @@ namespace Azure.AI.DocumentTranslation.Models
             DateTimeOffset createdDateTimeUtc = default;
             DateTimeOffset lastActionDateTimeUtc = default;
             DocumentTranslationOperationStatus status = default;
-            Optional<string> detectedLanguage = default;
             string to = default;
             Optional<ErrorV2> error = default;
-            Optional<float> progress = default;
-            Optional<Guid> id = default;
+            float progress = default;
+            Guid id = default;
+            Optional<long> characterCharged = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("path"))
@@ -46,11 +46,6 @@ namespace Azure.AI.DocumentTranslation.Models
                     status = new DocumentTranslationOperationStatus(property.Value.GetString());
                     continue;
                 }
-                if (property.NameEquals("detectedLanguage"))
-                {
-                    detectedLanguage = property.Value.GetString();
-                    continue;
-                }
                 if (property.NameEquals("to"))
                 {
                     to = property.Value.GetString();
@@ -68,26 +63,26 @@ namespace Azure.AI.DocumentTranslation.Models
                 }
                 if (property.NameEquals("progress"))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        property.ThrowNonNullablePropertyIsNull();
-                        continue;
-                    }
                     progress = property.Value.GetSingle();
                     continue;
                 }
                 if (property.NameEquals("id"))
+                {
+                    id = property.Value.GetGuid();
+                    continue;
+                }
+                if (property.NameEquals("characterCharged"))
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
                     {
                         property.ThrowNonNullablePropertyIsNull();
                         continue;
                     }
-                    id = property.Value.GetGuid();
+                    characterCharged = property.Value.GetInt64();
                     continue;
                 }
             }
-            return new DocumentStatusDetail(path, createdDateTimeUtc, lastActionDateTimeUtc, status, detectedLanguage.Value, to, error.Value, Optional.ToNullable(progress), Optional.ToNullable(id));
+            return new DocumentStatusDetail(path, createdDateTimeUtc, lastActionDateTimeUtc, status, to, error.Value, progress, id, Optional.ToNullable(characterCharged));
         }
     }
 }

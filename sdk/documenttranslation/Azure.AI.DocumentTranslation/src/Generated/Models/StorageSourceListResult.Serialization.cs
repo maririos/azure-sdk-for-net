@@ -15,26 +15,21 @@ namespace Azure.AI.DocumentTranslation.Models
     {
         internal static StorageSourceListResult DeserializeStorageSourceListResult(JsonElement element)
         {
-            Optional<IReadOnlyList<string>> value = default;
+            IReadOnlyList<StorageSource> value = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("value"))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        property.ThrowNonNullablePropertyIsNull();
-                        continue;
-                    }
-                    List<string> array = new List<string>();
+                    List<StorageSource> array = new List<StorageSource>();
                     foreach (var item in property.Value.EnumerateArray())
                     {
-                        array.Add(item.GetString());
+                        array.Add(new StorageSource(item.GetString()));
                     }
                     value = array;
                     continue;
                 }
             }
-            return new StorageSourceListResult(Optional.ToList(value));
+            return new StorageSourceListResult(value);
         }
     }
 }

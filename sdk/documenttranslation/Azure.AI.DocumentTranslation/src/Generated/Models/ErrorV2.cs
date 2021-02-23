@@ -5,14 +5,24 @@
 
 #nullable disable
 
+using System;
+
 namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary> This contains an outer error with error code, message, details, target and an inner error with more descriptive details. </summary>
     public partial class ErrorV2
     {
         /// <summary> Initializes a new instance of ErrorV2. </summary>
-        internal ErrorV2()
+        /// <param name="message"> Gets high level error message. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="message"/> is null. </exception>
+        internal ErrorV2(string message)
         {
+            if (message == null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
+            Message = message;
         }
 
         /// <summary> Initializes a new instance of ErrorV2. </summary>

@@ -16,18 +16,18 @@ using Azure.Core.Pipeline;
 
 namespace Azure.AI.DocumentTranslation
 {
-    internal partial class TranslationRestClient
+    internal partial class DocumentTranslationRestClient
     {
         private string endpoint;
         private ClientDiagnostics _clientDiagnostics;
         private HttpPipeline _pipeline;
 
-        /// <summary> Initializes a new instance of TranslationRestClient. </summary>
+        /// <summary> Initializes a new instance of DocumentTranslationRestClient. </summary>
         /// <param name="clientDiagnostics"> The handler for diagnostic messaging in the client. </param>
         /// <param name="pipeline"> The HTTP pipeline for sending and receiving REST requests and responses. </param>
         /// <param name="endpoint"> Supported Cognitive Services endpoints (protocol and hostname, for example: https://westus.api.cognitive.microsoft.com). </param>
         /// <exception cref="ArgumentNullException"> <paramref name="endpoint"/> is null. </exception>
-        public TranslationRestClient(ClientDiagnostics clientDiagnostics, HttpPipeline pipeline, string endpoint)
+        public DocumentTranslationRestClient(ClientDiagnostics clientDiagnostics, HttpPipeline pipeline, string endpoint)
         {
             if (endpoint == null)
             {
@@ -81,11 +81,11 @@ namespace Azure.AI.DocumentTranslation
         /// </summary>
         /// <param name="body"> request details. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async Task<ResponseWithHeaders<TranslationSubmitBatchRequestHeaders>> SubmitBatchRequestAsync(BatchSubmissionRequest body = null, CancellationToken cancellationToken = default)
+        public async Task<ResponseWithHeaders<DocumentTranslationSubmitBatchRequestHeaders>> SubmitBatchRequestAsync(BatchSubmissionRequest body = null, CancellationToken cancellationToken = default)
         {
             using var message = CreateSubmitBatchRequestRequest(body);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
-            var headers = new TranslationSubmitBatchRequestHeaders(message.Response);
+            var headers = new DocumentTranslationSubmitBatchRequestHeaders(message.Response);
             switch (message.Response.Status)
             {
                 case 202:
@@ -116,11 +116,11 @@ namespace Azure.AI.DocumentTranslation
         /// </summary>
         /// <param name="body"> request details. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public ResponseWithHeaders<TranslationSubmitBatchRequestHeaders> SubmitBatchRequest(BatchSubmissionRequest body = null, CancellationToken cancellationToken = default)
+        public ResponseWithHeaders<DocumentTranslationSubmitBatchRequestHeaders> SubmitBatchRequest(BatchSubmissionRequest body = null, CancellationToken cancellationToken = default)
         {
             using var message = CreateSubmitBatchRequestRequest(body);
             _pipeline.Send(message, cancellationToken);
-            var headers = new TranslationSubmitBatchRequestHeaders(message.Response);
+            var headers = new DocumentTranslationSubmitBatchRequestHeaders(message.Response);
             switch (message.Response.Status)
             {
                 case 202:
@@ -190,11 +190,11 @@ namespace Azure.AI.DocumentTranslation
         /// When both $top and $skip are supplied, $skip is applied first.
         /// </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async Task<ResponseWithHeaders<BatchStatusResponse, TranslationGetOperationsHeaders>> GetOperationsAsync(int? top = null, int? skip = null, CancellationToken cancellationToken = default)
+        public async Task<ResponseWithHeaders<BatchStatusResponse, DocumentTranslationGetOperationsHeaders>> GetOperationsAsync(int? top = null, int? skip = null, CancellationToken cancellationToken = default)
         {
             using var message = CreateGetOperationsRequest(top, skip);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
-            var headers = new TranslationGetOperationsHeaders(message.Response);
+            var headers = new DocumentTranslationGetOperationsHeaders(message.Response);
             switch (message.Response.Status)
             {
                 case 200:
@@ -247,11 +247,11 @@ namespace Azure.AI.DocumentTranslation
         /// When both $top and $skip are supplied, $skip is applied first.
         /// </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public ResponseWithHeaders<BatchStatusResponse, TranslationGetOperationsHeaders> GetOperations(int? top = null, int? skip = null, CancellationToken cancellationToken = default)
+        public ResponseWithHeaders<BatchStatusResponse, DocumentTranslationGetOperationsHeaders> GetOperations(int? top = null, int? skip = null, CancellationToken cancellationToken = default)
         {
             using var message = CreateGetOperationsRequest(top, skip);
             _pipeline.Send(message, cancellationToken);
-            var headers = new TranslationGetOperationsHeaders(message.Response);
+            var headers = new DocumentTranslationGetOperationsHeaders(message.Response);
             switch (message.Response.Status)
             {
                 case 200:
@@ -287,11 +287,11 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="id"> Format - uuid.  The batch id. </param>
         /// <param name="documentId"> Format - uuid.  The document id. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async Task<ResponseWithHeaders<DocumentStatusDetail, TranslationGetDocumentStatusHeaders>> GetDocumentStatusAsync(Guid id, Guid documentId, CancellationToken cancellationToken = default)
+        public async Task<ResponseWithHeaders<DocumentStatusDetail, DocumentTranslationGetDocumentStatusHeaders>> GetDocumentStatusAsync(Guid id, Guid documentId, CancellationToken cancellationToken = default)
         {
             using var message = CreateGetDocumentStatusRequest(id, documentId);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
-            var headers = new TranslationGetDocumentStatusHeaders(message.Response);
+            var headers = new DocumentTranslationGetDocumentStatusHeaders(message.Response);
             switch (message.Response.Status)
             {
                 case 200:
@@ -310,11 +310,11 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="id"> Format - uuid.  The batch id. </param>
         /// <param name="documentId"> Format - uuid.  The document id. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public ResponseWithHeaders<DocumentStatusDetail, TranslationGetDocumentStatusHeaders> GetDocumentStatus(Guid id, Guid documentId, CancellationToken cancellationToken = default)
+        public ResponseWithHeaders<DocumentStatusDetail, DocumentTranslationGetDocumentStatusHeaders> GetDocumentStatus(Guid id, Guid documentId, CancellationToken cancellationToken = default)
         {
             using var message = CreateGetDocumentStatusRequest(id, documentId);
             _pipeline.Send(message, cancellationToken);
-            var headers = new TranslationGetDocumentStatusHeaders(message.Response);
+            var headers = new DocumentTranslationGetDocumentStatusHeaders(message.Response);
             switch (message.Response.Status)
             {
                 case 200:
@@ -351,11 +351,11 @@ namespace Azure.AI.DocumentTranslation
         /// </summary>
         /// <param name="id"> Format - uuid.  The operation id. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async Task<ResponseWithHeaders<BatchStatusDetail, TranslationGetOperationStatusHeaders>> GetOperationStatusAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<ResponseWithHeaders<BatchStatusDetail, DocumentTranslationGetOperationStatusHeaders>> GetOperationStatusAsync(Guid id, CancellationToken cancellationToken = default)
         {
             using var message = CreateGetOperationStatusRequest(id);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
-            var headers = new TranslationGetOperationStatusHeaders(message.Response);
+            var headers = new DocumentTranslationGetOperationStatusHeaders(message.Response);
             switch (message.Response.Status)
             {
                 case 200:
@@ -377,11 +377,11 @@ namespace Azure.AI.DocumentTranslation
         /// </summary>
         /// <param name="id"> Format - uuid.  The operation id. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public ResponseWithHeaders<BatchStatusDetail, TranslationGetOperationStatusHeaders> GetOperationStatus(Guid id, CancellationToken cancellationToken = default)
+        public ResponseWithHeaders<BatchStatusDetail, DocumentTranslationGetOperationStatusHeaders> GetOperationStatus(Guid id, CancellationToken cancellationToken = default)
         {
             using var message = CreateGetOperationStatusRequest(id);
             _pipeline.Send(message, cancellationToken);
-            var headers = new TranslationGetOperationStatusHeaders(message.Response);
+            var headers = new DocumentTranslationGetOperationStatusHeaders(message.Response);
             switch (message.Response.Status)
             {
                 case 200:
@@ -532,11 +532,11 @@ namespace Azure.AI.DocumentTranslation
         /// When both $top and $skip are supplied, $skip is applied first.
         /// </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async Task<ResponseWithHeaders<DocumentStatusResponse, TranslationGetOperationDocumentsStatusHeaders>> GetOperationDocumentsStatusAsync(Guid id, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
+        public async Task<ResponseWithHeaders<DocumentStatusResponse, DocumentTranslationGetOperationDocumentsStatusHeaders>> GetOperationDocumentsStatusAsync(Guid id, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
         {
             using var message = CreateGetOperationDocumentsStatusRequest(id, top, skip);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
-            var headers = new TranslationGetOperationDocumentsStatusHeaders(message.Response);
+            var headers = new DocumentTranslationGetOperationDocumentsStatusHeaders(message.Response);
             switch (message.Response.Status)
             {
                 case 200:
@@ -586,11 +586,11 @@ namespace Azure.AI.DocumentTranslation
         /// When both $top and $skip are supplied, $skip is applied first.
         /// </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public ResponseWithHeaders<DocumentStatusResponse, TranslationGetOperationDocumentsStatusHeaders> GetOperationDocumentsStatus(Guid id, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
+        public ResponseWithHeaders<DocumentStatusResponse, DocumentTranslationGetOperationDocumentsStatusHeaders> GetOperationDocumentsStatus(Guid id, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
         {
             using var message = CreateGetOperationDocumentsStatusRequest(id, top, skip);
             _pipeline.Send(message, cancellationToken);
-            var headers = new TranslationGetOperationDocumentsStatusHeaders(message.Response);
+            var headers = new DocumentTranslationGetOperationDocumentsStatusHeaders(message.Response);
             switch (message.Response.Status)
             {
                 case 200:
@@ -837,7 +837,7 @@ namespace Azure.AI.DocumentTranslation
         /// </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="nextLink"/> is null. </exception>
-        public async Task<ResponseWithHeaders<BatchStatusResponse, TranslationGetOperationsHeaders>> GetOperationsNextPageAsync(string nextLink, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
+        public async Task<ResponseWithHeaders<BatchStatusResponse, DocumentTranslationGetOperationsHeaders>> GetOperationsNextPageAsync(string nextLink, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
         {
             if (nextLink == null)
             {
@@ -846,7 +846,7 @@ namespace Azure.AI.DocumentTranslation
 
             using var message = CreateGetOperationsNextPageRequest(nextLink, top, skip);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
-            var headers = new TranslationGetOperationsHeaders(message.Response);
+            var headers = new DocumentTranslationGetOperationsHeaders(message.Response);
             switch (message.Response.Status)
             {
                 case 200:
@@ -901,7 +901,7 @@ namespace Azure.AI.DocumentTranslation
         /// </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="nextLink"/> is null. </exception>
-        public ResponseWithHeaders<BatchStatusResponse, TranslationGetOperationsHeaders> GetOperationsNextPage(string nextLink, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
+        public ResponseWithHeaders<BatchStatusResponse, DocumentTranslationGetOperationsHeaders> GetOperationsNextPage(string nextLink, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
         {
             if (nextLink == null)
             {
@@ -910,7 +910,7 @@ namespace Azure.AI.DocumentTranslation
 
             using var message = CreateGetOperationsNextPageRequest(nextLink, top, skip);
             _pipeline.Send(message, cancellationToken);
-            var headers = new TranslationGetOperationsHeaders(message.Response);
+            var headers = new DocumentTranslationGetOperationsHeaders(message.Response);
             switch (message.Response.Status)
             {
                 case 200:
@@ -976,7 +976,7 @@ namespace Azure.AI.DocumentTranslation
         /// </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="nextLink"/> is null. </exception>
-        public async Task<ResponseWithHeaders<DocumentStatusResponse, TranslationGetOperationDocumentsStatusHeaders>> GetOperationDocumentsStatusNextPageAsync(string nextLink, Guid id, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
+        public async Task<ResponseWithHeaders<DocumentStatusResponse, DocumentTranslationGetOperationDocumentsStatusHeaders>> GetOperationDocumentsStatusNextPageAsync(string nextLink, Guid id, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
         {
             if (nextLink == null)
             {
@@ -985,7 +985,7 @@ namespace Azure.AI.DocumentTranslation
 
             using var message = CreateGetOperationDocumentsStatusNextPageRequest(nextLink, id, top, skip);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
-            var headers = new TranslationGetOperationDocumentsStatusHeaders(message.Response);
+            var headers = new DocumentTranslationGetOperationDocumentsStatusHeaders(message.Response);
             switch (message.Response.Status)
             {
                 case 200:
@@ -1037,7 +1037,7 @@ namespace Azure.AI.DocumentTranslation
         /// </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="nextLink"/> is null. </exception>
-        public ResponseWithHeaders<DocumentStatusResponse, TranslationGetOperationDocumentsStatusHeaders> GetOperationDocumentsStatusNextPage(string nextLink, Guid id, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
+        public ResponseWithHeaders<DocumentStatusResponse, DocumentTranslationGetOperationDocumentsStatusHeaders> GetOperationDocumentsStatusNextPage(string nextLink, Guid id, int? top = null, int? skip = null, CancellationToken cancellationToken = default)
         {
             if (nextLink == null)
             {
@@ -1046,7 +1046,7 @@ namespace Azure.AI.DocumentTranslation
 
             using var message = CreateGetOperationDocumentsStatusNextPageRequest(nextLink, id, top, skip);
             _pipeline.Send(message, cancellationToken);
-            var headers = new TranslationGetOperationDocumentsStatusHeaders(message.Response);
+            var headers = new DocumentTranslationGetOperationDocumentsStatusHeaders(message.Response);
             switch (message.Response.Status)
             {
                 case 200:

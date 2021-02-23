@@ -17,7 +17,7 @@ namespace Azure.AI.DocumentTranslation
     /// </summary>
     public class DocumentTranslationClient
     {
-        internal readonly TranslationRestClient _serviceRestClient;
+        internal readonly DocumentTranslationRestClient _serviceRestClient;
         internal readonly ClientDiagnostics _clientDiagnostics;
         internal readonly DocumentTranslationClientOptions _options;
 
@@ -50,7 +50,7 @@ namespace Azure.AI.DocumentTranslation
             _clientDiagnostics = new ClientDiagnostics(options);
 
             var pipeline = HttpPipelineBuilder.Build(options, new BearerTokenAuthenticationPolicy(credential, DefaultCognitiveScope));
-            _serviceRestClient = new TranslationRestClient(_clientDiagnostics, pipeline, endpoint.AbsoluteUri);
+            _serviceRestClient = new DocumentTranslationRestClient(_clientDiagnostics, pipeline, endpoint.AbsoluteUri);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Azure.AI.DocumentTranslation
             _clientDiagnostics = new ClientDiagnostics(options);
 
             var pipeline = HttpPipelineBuilder.Build(options, new AzureKeyCredentialPolicy(credential, AuthorizationHeader));
-            _serviceRestClient = new TranslationRestClient(_clientDiagnostics, pipeline, endpoint.AbsoluteUri);
+            _serviceRestClient = new DocumentTranslationRestClient(_clientDiagnostics, pipeline, endpoint.AbsoluteUri);
         }
 
         /// <summary>
@@ -417,7 +417,7 @@ namespace Azure.AI.DocumentTranslation
             }
         }
 
-        internal virtual Response<IReadOnlyList<string>> GetSupportedStorageSources(CancellationToken cancellationToken = default)
+        internal virtual Response<IReadOnlyList<StorageSource>> GetSupportedStorageSources(CancellationToken cancellationToken = default)
         {
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSupportedStorageSources)}");
             scope.Start();
@@ -434,7 +434,7 @@ namespace Azure.AI.DocumentTranslation
             }
         }
 
-        internal virtual async Task<Response<IReadOnlyList<string>>> GetSupportedStorageSourcesAsync(CancellationToken cancellationToken = default)
+        internal virtual async Task<Response<IReadOnlyList<StorageSource>>> GetSupportedStorageSourcesAsync(CancellationToken cancellationToken = default)
         {
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSupportedStorageSourcesAsync)}");
             scope.Start();

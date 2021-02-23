@@ -5,6 +5,8 @@
 
 #nullable disable
 
+using System;
+
 namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary>
@@ -15,13 +17,26 @@ namespace Azure.AI.DocumentTranslation.Models
     public partial class InnerErrorV2
     {
         /// <summary> Initializes a new instance of InnerErrorV2. </summary>
-        internal InnerErrorV2()
+        /// <param name="code"> Gets code error string. </param>
+        /// <param name="message"> Gets high level error message. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="code"/> or <paramref name="message"/> is null. </exception>
+        internal InnerErrorV2(string code, string message)
         {
+            if (code == null)
+            {
+                throw new ArgumentNullException(nameof(code));
+            }
+            if (message == null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
+
+            Code = code;
+            Message = message;
         }
 
         /// <summary> Initializes a new instance of InnerErrorV2. </summary>
-        /// <param name="code"> Gets detailed error code. </param>
-        /// <param name="error"> Gets detailed error string. </param>
+        /// <param name="code"> Gets code error string. </param>
         /// <param name="message"> Gets high level error message. </param>
         /// <param name="target">
         /// Gets the source of the error.
@@ -33,19 +48,16 @@ namespace Azure.AI.DocumentTranslation.Models
         /// 
         /// This contains required properties ErrorCode, message and optional properties target, details(key value pair), inner error(this can be nested).
         /// </param>
-        internal InnerErrorV2(int? code, string error, string message, string target, InnerErrorV2 innerError)
+        internal InnerErrorV2(string code, string message, string target, InnerErrorV2 innerError)
         {
             Code = code;
-            Error = error;
             Message = message;
             Target = target;
             InnerError = innerError;
         }
 
-        /// <summary> Gets detailed error code. </summary>
-        public int? Code { get; }
-        /// <summary> Gets detailed error string. </summary>
-        public string Error { get; }
+        /// <summary> Gets code error string. </summary>
+        public string Code { get; }
         /// <summary> Gets high level error message. </summary>
         public string Message { get; }
         /// <summary>

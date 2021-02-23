@@ -5,8 +5,9 @@
 
 #nullable disable
 
+using System;
 using System.Collections.Generic;
-using Azure.Core;
+using System.Linq;
 
 namespace Azure.AI.DocumentTranslation.Models
 {
@@ -14,9 +15,16 @@ namespace Azure.AI.DocumentTranslation.Models
     public partial class FileFormatListResult
     {
         /// <summary> Initializes a new instance of FileFormatListResult. </summary>
-        internal FileFormatListResult()
+        /// <param name="value"> list of objects. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
+        internal FileFormatListResult(IEnumerable<FileFormat> value)
         {
-            Value = new ChangeTrackingList<FileFormat>();
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            Value = value.ToList();
         }
 
         /// <summary> Initializes a new instance of FileFormatListResult. </summary>

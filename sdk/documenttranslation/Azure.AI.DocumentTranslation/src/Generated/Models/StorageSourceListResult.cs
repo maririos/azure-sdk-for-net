@@ -5,8 +5,9 @@
 
 #nullable disable
 
+using System;
 using System.Collections.Generic;
-using Azure.Core;
+using System.Linq;
 
 namespace Azure.AI.DocumentTranslation.Models
 {
@@ -14,19 +15,26 @@ namespace Azure.AI.DocumentTranslation.Models
     public partial class StorageSourceListResult
     {
         /// <summary> Initializes a new instance of StorageSourceListResult. </summary>
-        internal StorageSourceListResult()
+        /// <param name="value"> list of objects. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
+        internal StorageSourceListResult(IEnumerable<StorageSource> value)
         {
-            Value = new ChangeTrackingList<string>();
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            Value = value.ToList();
         }
 
         /// <summary> Initializes a new instance of StorageSourceListResult. </summary>
         /// <param name="value"> list of objects. </param>
-        internal StorageSourceListResult(IReadOnlyList<string> value)
+        internal StorageSourceListResult(IReadOnlyList<StorageSource> value)
         {
             Value = value;
         }
 
         /// <summary> list of objects. </summary>
-        public IReadOnlyList<string> Value { get; }
+        public IReadOnlyList<StorageSource> Value { get; }
     }
 }

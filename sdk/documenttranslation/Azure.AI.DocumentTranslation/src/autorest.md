@@ -7,5 +7,5 @@ Run `dotnet build /t:GenerateCode` to generate code.
 
 ``` yaml
 input-file:
-    -  https://github.com/Azure/azure-sdk-for-python-pr/blob/b0420985b6518eacbb97a46e7ae2f612fcee9068/sdk/documenttranslation/azure-ai-documenttranslation/swagger/TranslatorBatch_edits.json
+    -  https://github.com/Azure/azure-rest-api-specs/blob/a23007d37fda10c8faada14ac960a49a39501803/specification/cognitiveservices/data-plane/TranslatorText/preview/v1.0-preview.1/TranslatorBatch.json
 ```
