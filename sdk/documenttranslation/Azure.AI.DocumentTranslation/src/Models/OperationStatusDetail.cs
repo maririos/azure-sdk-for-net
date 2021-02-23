@@ -23,7 +23,7 @@ namespace Azure.AI.DocumentTranslation.Models
 
         /// <summary> The Status Summary of the operation. </summary>
         [CodeGenMember("Summary")]
-        private StatusSummary Summary { get; }
+        internal StatusSummary Summary { get; set; }
 
         /// <summary> Total count. </summary>
         public int TotalDocuments => Summary.Total;
