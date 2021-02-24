@@ -112,11 +112,6 @@ namespace Azure.AI.DocumentTranslation
         private Page<DocumentStatusDetail> _firstPage;
 
         /// <summary>
-        /// Provides the api version to use when doing pagination.
-        /// </summary>
-        private readonly string _apiVersion;
-
-        /// <summary>
         /// Returns true if the long-running operation completed successfully and has produced final result (accessible by Value property).
         /// </summary>
         public override bool HasValue => _firstPage != null;
@@ -133,7 +128,6 @@ namespace Azure.AI.DocumentTranslation
             Id = operationId;
             _serviceClient = client._serviceRestClient;
             _diagnostics = client._clientDiagnostics;
-            _apiVersion = client._options.GetVersionString();
         }
 
         /// <summary>
@@ -142,13 +136,11 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="serviceClient">The client for communicating with the Translator Cognitive Service through its REST API.</param>
         /// <param name="diagnostics">The client diagnostics for exception creation in case of failure.</param>
         /// <param name="operationLocation">The address of the long-running operation. It can be obtained from the response headers upon starting the operation.</param>
-        /// <param name="apiversion">The specific api version to use.</param>
-        internal DocumentTranslationOperation(DocumentTranslationRestClient serviceClient, ClientDiagnostics diagnostics, string operationLocation, string apiversion)
+        internal DocumentTranslationOperation(DocumentTranslationRestClient serviceClient, ClientDiagnostics diagnostics, string operationLocation)
         {
             _serviceClient = serviceClient;
             _diagnostics = diagnostics;
             Id = operationLocation.Split('/').Last();
-            _apiVersion = apiversion;
         }
 
         /// <summary>
@@ -276,7 +268,7 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="documentId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual Response<DocumentStatusDetail> GetDocumentStatus(Guid documentId, CancellationToken cancellationToken = default)
+        public virtual Response<DocumentStatusDetail> GetDocumentStatus(string documentId, CancellationToken cancellationToken = default)
         {
             // TODO: use string instead of Guid ?
             using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(GetDocumentStatus)}");
@@ -284,7 +276,7 @@ namespace Azure.AI.DocumentTranslation
 
             try
             {
-                return _serviceClient.GetDocumentStatus(new Guid(Id), documentId, cancellationToken);
+                return _serviceClient.GetDocumentStatus(new Guid(Id), new Guid(documentId), cancellationToken);
             }
             catch (Exception e)
             {
@@ -299,14 +291,14 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="documentId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<Response<DocumentStatusDetail>> GetDocumentStatusAsync(Guid documentId, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<DocumentStatusDetail>> GetDocumentStatusAsync(string documentId, CancellationToken cancellationToken = default)
         {
             using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(GetDocumentStatusAsync)}");
             scope.Start();
 
             try
             {
-                return await _serviceClient.GetDocumentStatusAsync(new Guid(Id), documentId, cancellationToken).ConfigureAwait(false);
+                return await _serviceClient.GetDocumentStatusAsync(new Guid(Id), new Guid(documentId), cancellationToken).ConfigureAwait(false);
             }
             catch (Exception e)
             {

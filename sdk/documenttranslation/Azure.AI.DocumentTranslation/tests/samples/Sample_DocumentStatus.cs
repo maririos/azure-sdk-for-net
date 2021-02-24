@@ -47,12 +47,12 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
             var doc = docsEnumerator.Current;
 
             // TODO: use string instead
-            var docStatus = operation.GetDocumentStatus((Guid)doc.Id);
+            var docStatus = operation.GetDocumentStatus(doc.Id);
 
             while (docStatus.Value.Status != DocumentTranslationStatus.Failed
                 && docStatus.Value.Status != DocumentTranslationStatus.Succeeded)
             {
-                docStatus = operation.GetDocumentStatus((Guid)doc.Id);
+                docStatus = operation.GetDocumentStatus(doc.Id);
             }
 
             Console.WriteLine($"Document {doc.Url} completed with status ${doc.Status}");
