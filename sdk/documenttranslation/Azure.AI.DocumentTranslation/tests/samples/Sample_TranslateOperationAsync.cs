@@ -38,20 +38,37 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
                     }
                 };
 
-            var operation = await client.StartBatchTranslationAsync(inputs);
+            DocumentTranslationOperation operation = await client.StartBatchTranslationAsync(inputs);
 
-            Response<AsyncPageable<DocumentStatusDetail>> response = await operation.WaitForCompletionAsync();
-            var docsEnumerator = response.Value.GetAsyncEnumerator();
+            Response<OperationStatusDetail> response = await operation.WaitForCompletionAsync();
 
-            while (await docsEnumerator.MoveNextAsync())
+            // response has the same fields in the operation class
+
+            Console.WriteLine($"  Status: {response.Value.Status} \t {operation.Status}");
+            Console.WriteLine($"  Created on: {response.Value.CreatedOn} \t {operation.CreatedOn}");
+            Console.WriteLine($"  Last modified: {response.Value.LastModified} \t {operation.LastModified}");
+            Console.WriteLine($"  Total documents: {response.Value.TotalDocuments} \t {operation.TotalDocuments}");
+            Console.WriteLine($"    Succeeded: {response.Value.DocumentsSucceeded} \t {operation.DocumentsSucceeded}");
+            Console.WriteLine($"    Failed: {response.Value.DocumentsFailed} \t {operation.DocumentsFailed}");
+            Console.WriteLine($"    In Progress: {response.Value.DocumentsInProgress} \t {operation.DocumentsInProgress}");
+            Console.WriteLine($"    Not started: {response.Value.DocumentsNotStarted} \t {operation.DocumentsNotStarted}");
+
+            // Get Status of documents
+            AsyncPageable<DocumentStatusDetail> documents = operation.GetStatusesOfDocumentsAsync();
+
+            await foreach (DocumentStatusDetail document in documents)
             {
-                if (docsEnumerator.Current.Status == DocumentTranslationStatus.Succeeded)
+                Console.WriteLine($"Document with Id: {document.Id}");
+                Console.WriteLine($"  Status:{document.Status}");
+                if (document.Status == DocumentTranslationStatus.Succeeded)
                 {
-                    Console.WriteLine($"Document {docsEnumerator.Current.Url} succedded");
+                    Console.WriteLine($"  Location: {document.Url}");
+                    Console.WriteLine($"  Translated to language: {document.TranslateTo}.");
                 }
                 else
                 {
-                    Console.WriteLine($"Document {docsEnumerator.Current.Url} failed");
+                    Console.WriteLine($"  Error Code: {document.Error.Code}");
+                    Console.WriteLine($"  Message: {document.Error.Message}");
                 }
             }
         }

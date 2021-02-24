@@ -20,14 +20,14 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            var operations = client.GetStatusesOfOperationsAsync();
-            var operationsEnumerator = operations.GetAsyncEnumerator();
+            AsyncPageable<OperationStatusDetail> operations = client.GetStatusesOfOperationsAsync();
+            IAsyncEnumerator<OperationStatusDetail> operationsEnumerator = operations.GetAsyncEnumerator();
             await operationsEnumerator.MoveNextAsync();
 
-            var latestOperation = operationsEnumerator.Current;
-            var operation = new DocumentTranslationOperation(latestOperation.Id.ToString(), client);
+            OperationStatusDetail latestOperation = operationsEnumerator.Current;
+            var operation = new DocumentTranslationOperation(latestOperation.Id, client);
 
-            var documents = operation.GetStatusesOfDocumentsAsync();
+            AsyncPageable<DocumentStatusDetail> documents = operation.GetStatusesOfDocumentsAsync();
             IAsyncEnumerator<DocumentStatusDetail> docsEnumerator = documents.GetAsyncEnumerator();
 
             while (await docsEnumerator.MoveNextAsync())

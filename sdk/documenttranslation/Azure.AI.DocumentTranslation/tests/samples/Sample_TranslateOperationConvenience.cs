@@ -43,7 +43,10 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
                 Console.WriteLine($"    Not started: {operation.DocumentsNotStarted}");
             }
 
-            foreach (DocumentStatusDetail document in operation.GetValues())
+            // Get Status of documents
+            Pageable<DocumentStatusDetail> documents = operation.GetStatusesOfDocuments();
+
+            foreach (DocumentStatusDetail document in documents)
             {
                 Console.WriteLine($"Document with Id: {document.Id}");
                 Console.WriteLine($"  Status:{document.Status}");

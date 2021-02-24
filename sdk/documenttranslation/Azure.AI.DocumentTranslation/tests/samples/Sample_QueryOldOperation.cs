@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Azure.AI.DocumentTranslation.Models;
 using Azure.Core.TestFramework;
 using NUnit.Framework;
@@ -20,14 +21,14 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            var operations = client.GetStatusesOfOperations();
-            var operationsEnumerator = operations.GetEnumerator();
+            Pageable<OperationStatusDetail> operations = client.GetStatusesOfOperations();
+            IEnumerator<OperationStatusDetail> operationsEnumerator = operations.GetEnumerator();
             operationsEnumerator.MoveNext();
 
-            var latestOperation = operationsEnumerator.Current;
-            var operation = new DocumentTranslationOperation(latestOperation.Id.ToString(), client);
+            OperationStatusDetail latestOperation = operationsEnumerator.Current;
+            var operation = new DocumentTranslationOperation(latestOperation.Id, client);
 
-            var documents = operation.GetStatusesOfDocuments();
+            Pageable<DocumentStatusDetail> documents = operation.GetStatusesOfDocuments();
             IEnumerator<DocumentStatusDetail> docsEnumerator = documents.GetEnumerator();
 
             while (docsEnumerator.MoveNext())

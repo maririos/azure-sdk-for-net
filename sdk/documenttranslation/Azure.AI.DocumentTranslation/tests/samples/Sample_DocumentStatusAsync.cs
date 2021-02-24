@@ -38,25 +38,27 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
                     }
                 };
 
-            var operation = await client.StartBatchTranslationAsync(inputs);
+            DocumentTranslationOperation operation = await client.StartBatchTranslationAsync(inputs);
 
             // get first document
-            var documents = operation.GetStatusesOfDocumentsAsync();
+            AsyncPageable<DocumentStatusDetail> documents = operation.GetStatusesOfDocumentsAsync();
             IAsyncEnumerator<DocumentStatusDetail> docsEnumerator = documents.GetAsyncEnumerator();
             await docsEnumerator.MoveNextAsync();
 
-            var doc = docsEnumerator.Current;
+            DocumentStatusDetail firstDocument = docsEnumerator.Current;
 
-            // TODO: use string instead
-            var docStatus = operation.GetDocumentStatus((Guid)doc.Id);
+            TimeSpan pollingInterval = new TimeSpan(1000);
+
+            Response<DocumentStatusDetail> docStatus = operation.GetDocumentStatus(firstDocument.Id);
 
             while (docStatus.Value.Status != DocumentTranslationStatus.Failed
                 && docStatus.Value.Status != DocumentTranslationStatus.Succeeded)
             {
-                docStatus = operation.GetDocumentStatus((Guid)doc.Id);
+                await Task.Delay(pollingInterval);
+                docStatus = operation.GetDocumentStatus(firstDocument.Id);
             }
 
-            Console.WriteLine($"Document {doc.Url} completed with status ${doc.Status}");
+            Console.WriteLine($"Document {firstDocument.Url} completed with status ${firstDocument.Status}");
         }
     }
 }

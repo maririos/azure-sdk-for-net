@@ -26,18 +26,23 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             await operation.WaitForCompletionAsync();
 
-            Console.WriteLine("Operation Information:");
-            Console.WriteLine($"  Id: {operation.Id}");
-            Console.WriteLine($"  Status: {operation.Status}");
-            Console.WriteLine($"  Created on: {operation.CreatedOn}");
-            Console.WriteLine($"  Last modified: {operation.LastModified}");
-            Console.WriteLine($"  Total documents: {operation.TotalDocuments}");
-            Console.WriteLine($"    Succeeded: {operation.DocumentsSucceeded}");
-            Console.WriteLine($"    Failed: {operation.DocumentsFailed}");
-            Console.WriteLine($"    In Progress: {operation.DocumentsInProgress}");
-            Console.WriteLine($"    Not started: {operation.DocumentsNotStarted}");
+            Response<OperationStatusDetail> response = await operation.WaitForCompletionAsync();
 
-            await foreach (DocumentStatusDetail document in operation.Value)
+            // response has the same fields in the operation class
+
+            Console.WriteLine($"  Status: {response.Value.Status} \t {operation.Status}");
+            Console.WriteLine($"  Created on: {response.Value.CreatedOn} \t {operation.CreatedOn}");
+            Console.WriteLine($"  Last modified: {response.Value.LastModified} \t {operation.LastModified}");
+            Console.WriteLine($"  Total documents: {response.Value.TotalDocuments} \t {operation.TotalDocuments}");
+            Console.WriteLine($"    Succeeded: {response.Value.DocumentsSucceeded} \t {operation.DocumentsSucceeded}");
+            Console.WriteLine($"    Failed: {response.Value.DocumentsFailed} \t {operation.DocumentsFailed}");
+            Console.WriteLine($"    In Progress: {response.Value.DocumentsInProgress} \t {operation.DocumentsInProgress}");
+            Console.WriteLine($"    Not started: {response.Value.DocumentsNotStarted} \t {operation.DocumentsNotStarted}");
+
+            // Get Status of documents
+            AsyncPageable<DocumentStatusDetail> documents = operation.GetStatusesOfDocumentsAsync();
+
+            await foreach (DocumentStatusDetail document in documents)
             {
                 Console.WriteLine($"Document with Id: {document.Id}");
                 Console.WriteLine($"  Status:{document.Status}");

@@ -9,6 +9,10 @@ namespace Azure.AI.DocumentTranslation.Models
     [CodeGenModel("DocumentStatusDetail")]
     public partial class DocumentStatusDetail
     {
+        /// <summary> Document Id. </summary>
+        [CodeGenMember("Id")]
+        public string Id { get; }
+
         /// <summary> Location of the document or folder. </summary>
         [CodeGenMember("Path")]
 #pragma warning disable CA1056 // URI-like properties should not be strings

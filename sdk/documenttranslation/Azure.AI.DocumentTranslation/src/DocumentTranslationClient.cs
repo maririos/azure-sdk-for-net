@@ -116,7 +116,7 @@ namespace Azure.AI.DocumentTranslation
             try
             {
                 var job = _serviceRestClient.SubmitBatchRequest(request, cancellationToken);
-                return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation, _options.GetVersionString());
+                return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
             }
             catch (Exception e)
             {
@@ -140,7 +140,7 @@ namespace Azure.AI.DocumentTranslation
             try
             {
                 var job = await _serviceRestClient.SubmitBatchRequestAsync(request, cancellationToken).ConfigureAwait(false);
-                return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation, _options.GetVersionString());
+                return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
             }
             catch (Exception e)
             {
@@ -175,7 +175,7 @@ namespace Azure.AI.DocumentTranslation
             try
             {
                 var job = _serviceRestClient.SubmitBatchRequest(request, cancellationToken);
-                return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation, _options.GetVersionString());
+                return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
             }
             catch (Exception e)
             {
@@ -210,7 +210,7 @@ namespace Azure.AI.DocumentTranslation
             try
             {
                 var job = await _serviceRestClient.SubmitBatchRequestAsync(request, cancellationToken).ConfigureAwait(false);
-                return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation, _options.GetVersionString());
+                return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
             }
             catch (Exception e)
             {

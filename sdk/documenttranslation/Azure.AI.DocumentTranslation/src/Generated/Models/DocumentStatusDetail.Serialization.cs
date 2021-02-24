@@ -22,7 +22,7 @@ namespace Azure.AI.DocumentTranslation.Models
             string to = default;
             Optional<DocumentTranslationError> error = default;
             float progress = default;
-            Guid id = default;
+            string id = default;
             Optional<long> characterCharged = default;
             foreach (var property in element.EnumerateObject())
             {
@@ -68,7 +68,7 @@ namespace Azure.AI.DocumentTranslation.Models
                 }
                 if (property.NameEquals("id"))
                 {
-                    id = property.Value.GetGuid();
+                    id = property.Value.GetString();
                     continue;
                 }
                 if (property.NameEquals("characterCharged"))

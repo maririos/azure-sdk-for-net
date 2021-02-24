@@ -20,8 +20,8 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="translateTo"> To language. </param>
         /// <param name="translationProgress"> Progress of the translation if available. </param>
         /// <param name="id"> Document Id. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="url"/> or <paramref name="translateTo"/> is null. </exception>
-        internal DocumentStatusDetail(string url, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationStatus status, string translateTo, float translationProgress, Guid id)
+        /// <exception cref="ArgumentNullException"> <paramref name="url"/>, <paramref name="translateTo"/>, or <paramref name="id"/> is null. </exception>
+        internal DocumentStatusDetail(string url, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationStatus status, string translateTo, float translationProgress, string id)
         {
             if (url == null)
             {
@@ -30,6 +30,10 @@ namespace Azure.AI.DocumentTranslation.Models
             if (translateTo == null)
             {
                 throw new ArgumentNullException(nameof(translateTo));
+            }
+            if (id == null)
+            {
+                throw new ArgumentNullException(nameof(id));
             }
 
             Url = url;
@@ -51,7 +55,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="translationProgress"> Progress of the translation if available. </param>
         /// <param name="id"> Document Id. </param>
         /// <param name="characterCharged"> Character charged by the API. </param>
-        internal DocumentStatusDetail(string url, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationStatus status, string translateTo, DocumentTranslationError error, float translationProgress, Guid id, long? characterCharged)
+        internal DocumentStatusDetail(string url, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationStatus status, string translateTo, DocumentTranslationError error, float translationProgress, string id, long? characterCharged)
         {
             Url = url;
             CreatedOn = createdOn;
@@ -67,8 +71,6 @@ namespace Azure.AI.DocumentTranslation.Models
         public DocumentTranslationStatus Status { get; }
         /// <summary> This contains an outer error with error code, message, details, target and an inner error with more descriptive details. </summary>
         public DocumentTranslationError Error { get; }
-        /// <summary> Document Id. </summary>
-        public Guid Id { get; }
         /// <summary> Character charged by the API. </summary>
         public long? CharacterCharged { get; }
     }
