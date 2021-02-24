@@ -102,6 +102,16 @@ namespace Azure.AI.DocumentTranslation
         }
 
         /// <summary>
+        /// Returns an instance of <see cref="DocumentsClient"/> to get the status of documents
+        /// </summary>
+        /// <param name="operationId"></param>
+        /// <returns></returns>
+        public DocumentsClient GetDocumentsClient(string operationId)
+        {
+            return new DocumentsClient(this, operationId);
+        }
+
+        /// <summary>
         /// a.
         /// </summary>
         /// <param name="inputs"></param>

@@ -43,8 +43,11 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
                 Console.WriteLine($"    Not started: {operation.DocumentsNotStarted}");
             }
 
+            // Create a documents client
+            DocumentsClient documentsClient = client.GetDocumentsClient(operation.Id);
+
             // Get Status of documents
-            Pageable<DocumentStatusDetail> documents = operation.GetStatusesOfDocuments();
+            Pageable<DocumentStatusDetail> documents = documentsClient.GetStatusesOfDocuments();
 
             foreach (DocumentStatusDetail document in documents)
             {

@@ -39,8 +39,11 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
             Console.WriteLine($"    In Progress: {response.Value.DocumentsInProgress} \t {operation.DocumentsInProgress}");
             Console.WriteLine($"    Not started: {response.Value.DocumentsNotStarted} \t {operation.DocumentsNotStarted}");
 
+            // Create a documents client
+            DocumentsClient documentsClient = client.GetDocumentsClient(operation.Id);
+
             // Get Status of documents
-            AsyncPageable<DocumentStatusDetail> documents = operation.GetStatusesOfDocumentsAsync();
+            AsyncPageable<DocumentStatusDetail> documents = documentsClient.GetStatusesOfDocumentsAsync();
 
             await foreach (DocumentStatusDetail document in documents)
             {
