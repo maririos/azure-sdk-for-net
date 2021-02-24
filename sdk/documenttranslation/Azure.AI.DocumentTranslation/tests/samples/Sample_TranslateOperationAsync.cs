@@ -38,10 +38,10 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
                     }
                 };
 
-            var operation = await client.StartBatchTranslationAsync(inputs);
+            DocumentTranslationOperation operation = await client.StartBatchTranslationAsync(inputs);
 
             Response<AsyncPageable<DocumentStatusDetail>> response = await operation.WaitForCompletionAsync();
-            var docsEnumerator = response.Value.GetAsyncEnumerator();
+            IAsyncEnumerator<DocumentStatusDetail> docsEnumerator = response.Value.GetAsyncEnumerator();
 
             while (await docsEnumerator.MoveNextAsync())
             {

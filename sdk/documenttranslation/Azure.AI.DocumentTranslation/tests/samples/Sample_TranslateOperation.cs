@@ -38,7 +38,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
                     }
                 };
 
-            var operation = client.StartBatchTranslation(inputs);
+            DocumentTranslationOperation operation = client.StartBatchTranslation(inputs);
 
             TimeSpan pollingInterval = new TimeSpan(1000);
 
@@ -49,7 +49,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
             }
 
             Pageable<DocumentStatusDetail> response = operation.GetValues();
-            var docsEnumerator = response.GetEnumerator();
+            IEnumerator<DocumentStatusDetail> docsEnumerator = response.GetEnumerator();
 
             while (docsEnumerator.MoveNext())
             {
