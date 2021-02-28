@@ -22,25 +22,21 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            DocumentTranslationOperation operation = await client.StartBatchTranslationAsync(new Uri(sourceUrl), "es", new Uri(targetUrl), "en");
+            Response<string> operation = await client.StartBatchTranslationAsync(new Uri(sourceUrl), "es", new Uri(targetUrl), "en");
 
-            await operation.WaitForCompletionAsync();
+            Response<OperationStatusDetail> response = await client.WaitForOperationCompletionAsync(operation.Value);
 
-            Response<OperationStatusDetail> response = await operation.WaitForCompletionAsync();
-
-            // response has the same fields in the operation class
-
-            Console.WriteLine($"  Status: {response.Value.Status} \t {operation.Status}");
-            Console.WriteLine($"  Created on: {response.Value.CreatedOn} \t {operation.CreatedOn}");
-            Console.WriteLine($"  Last modified: {response.Value.LastModified} \t {operation.LastModified}");
-            Console.WriteLine($"  Total documents: {response.Value.TotalDocuments} \t {operation.TotalDocuments}");
-            Console.WriteLine($"    Succeeded: {response.Value.DocumentsSucceeded} \t {operation.DocumentsSucceeded}");
-            Console.WriteLine($"    Failed: {response.Value.DocumentsFailed} \t {operation.DocumentsFailed}");
-            Console.WriteLine($"    In Progress: {response.Value.DocumentsInProgress} \t {operation.DocumentsInProgress}");
-            Console.WriteLine($"    Not started: {response.Value.DocumentsNotStarted} \t {operation.DocumentsNotStarted}");
+            Console.WriteLine($"  Status: {response.Value.Status}");
+            Console.WriteLine($"  Created on: {response.Value.CreatedOn}");
+            Console.WriteLine($"  Last modified: {response.Value.LastModified}");
+            Console.WriteLine($"  Total documents: {response.Value.TotalDocuments}");
+            Console.WriteLine($"    Succeeded: {response.Value.DocumentsSucceeded}");
+            Console.WriteLine($"    Failed: {response.Value.DocumentsFailed}");
+            Console.WriteLine($"    In Progress: {response.Value.DocumentsInProgress}");
+            Console.WriteLine($"    Not started: {response.Value.DocumentsNotStarted}");
 
             // Get Status of documents
-            AsyncPageable<DocumentStatusDetail> documents = client.GetStatusesOfDocumentsAsync(operation.Id);
+            AsyncPageable<DocumentStatusDetail> documents = client.GetStatusesOfDocumentsAsync(operation.Value);
 
             await foreach (DocumentStatusDetail document in documents)
             {

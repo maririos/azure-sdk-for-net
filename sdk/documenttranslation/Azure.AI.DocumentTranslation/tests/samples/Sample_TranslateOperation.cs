@@ -38,27 +38,31 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
                     }
                 };
 
-            DocumentTranslationOperation operation = client.StartBatchTranslation(inputs);
+            Response<string> operation = client.StartBatchTranslation(inputs);
 
             TimeSpan pollingInterval = new TimeSpan(1000);
 
-            while (!operation.HasCompleted)
+            Response<OperationStatusDetail> status = client.GetOperationStatus(operation.Value);
+
+            while (status.Value.Status != DocumentTranslationStatus.Failed
+                   || status.Value.Status != DocumentTranslationStatus.Succeeded
+                   || status.Value.Status != DocumentTranslationStatus.ValidationFailed)
             {
                 Thread.Sleep(pollingInterval);
-                operation.UpdateStatus();
+                status = client.GetOperationStatus(operation.Value);
             }
 
-            Console.WriteLine($"  Status: {operation.Status}");
-            Console.WriteLine($"  Created on: {operation.CreatedOn}");
-            Console.WriteLine($"  Last modified: {operation.LastModified}");
-            Console.WriteLine($"  Total documents: {operation.TotalDocuments}");
-            Console.WriteLine($"    Succeeded: {operation.DocumentsSucceeded}");
-            Console.WriteLine($"    Failed: {operation.DocumentsFailed}");
-            Console.WriteLine($"    In Progress: {operation.DocumentsInProgress}");
-            Console.WriteLine($"    Not started: {operation.DocumentsNotStarted}");
+            Console.WriteLine($"  Status: {status.Value.Status}");
+            Console.WriteLine($"  Created on: {status.Value.CreatedOn}");
+            Console.WriteLine($"  Last modified: {status.Value.LastModified}");
+            Console.WriteLine($"  Total documents: {status.Value.TotalDocuments}");
+            Console.WriteLine($"    Succeeded: {status.Value.DocumentsSucceeded}");
+            Console.WriteLine($"    Failed: {status.Value.DocumentsFailed}");
+            Console.WriteLine($"    In Progress: {status.Value.DocumentsInProgress}");
+            Console.WriteLine($"    Not started: {status.Value.DocumentsNotStarted}");
 
             // Get Status of documents
-            Pageable<DocumentStatusDetail> documents = client.GetStatusesOfDocuments(operation.Id);
+            Pageable<DocumentStatusDetail> documents = client.GetStatusesOfDocuments(operation.Value);
 
             foreach (DocumentStatusDetail document in documents)
             {

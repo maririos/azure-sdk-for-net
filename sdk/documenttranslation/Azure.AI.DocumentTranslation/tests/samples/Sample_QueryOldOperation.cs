@@ -26,9 +26,8 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
             operationsEnumerator.MoveNext();
 
             OperationStatusDetail latestOperation = operationsEnumerator.Current;
-            var operation = new DocumentTranslationOperation(latestOperation.Id, client);
 
-            Pageable<DocumentStatusDetail> documents = client.GetStatusesOfDocuments(operation.Id);
+            Pageable<DocumentStatusDetail> documents = client.GetStatusesOfDocuments(latestOperation.Id);
             IEnumerator<DocumentStatusDetail> docsEnumerator = documents.GetEnumerator();
 
             while (docsEnumerator.MoveNext())
