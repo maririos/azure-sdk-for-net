@@ -40,11 +40,8 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             DocumentTranslationOperation operation = await client.StartBatchTranslationAsync(inputs);
 
-            // Create a documents client
-            DocumentsClient documentsClient = client.GetDocumentsClient(operation.Id);
-
             // get first document
-            AsyncPageable<DocumentStatusDetail> documents = documentsClient.GetStatusesOfDocumentsAsync();
+            AsyncPageable<DocumentStatusDetail> documents = client.GetStatusesOfDocumentsAsync(operation.Id);
             IAsyncEnumerator<DocumentStatusDetail> docsEnumerator = documents.GetAsyncEnumerator();
             await docsEnumerator.MoveNextAsync();
 
@@ -52,13 +49,13 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             TimeSpan pollingInterval = new TimeSpan(1000);
 
-            Response<DocumentStatusDetail> docStatus = await documentsClient.GetDocumentStatusAsync(firstDocument.Id);
+            Response<DocumentStatusDetail> docStatus = await client.GetDocumentStatusAsync(operation.Id, firstDocument.Id);
 
             while (docStatus.Value.Status != DocumentTranslationStatus.Failed
                 && docStatus.Value.Status != DocumentTranslationStatus.Succeeded)
             {
                 await Task.Delay(pollingInterval);
-                docStatus = await documentsClient.GetDocumentStatusAsync(firstDocument.Id);
+                docStatus = await client.GetDocumentStatusAsync(operation.Id, firstDocument.Id);
             }
 
             Console.WriteLine($"Document {firstDocument.Url} completed with status ${firstDocument.Status}");
