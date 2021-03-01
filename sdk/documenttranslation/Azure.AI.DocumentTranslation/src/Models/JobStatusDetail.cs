@@ -7,9 +7,9 @@ using Azure.Core;
 namespace Azure.AI.DocumentTranslation.Models
 {
     [CodeGenModel("BatchStatusDetail")]
-    public partial class OperationStatusDetail
+    public partial class JobStatusDetail
     {
-        /// <summary> Id of the operation. </summary>
+        /// <summary> Id of the job. </summary>
         [CodeGenMember("Id")]
         public string Id { get; }
 

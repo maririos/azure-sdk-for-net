@@ -10,16 +10,16 @@ using System;
 namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary> Job status response. </summary>
-    public partial class OperationStatusDetail
+    public partial class JobStatusDetail
     {
-        /// <summary> Initializes a new instance of OperationStatusDetail. </summary>
+        /// <summary> Initializes a new instance of JobStatusDetail. </summary>
         /// <param name="id"> Id of the operation. </param>
         /// <param name="createdOn"> Operation created date time. </param>
         /// <param name="lastModified"> Date time in which the operation&apos;s status has been updated. </param>
         /// <param name="status"> List of possible statuses for job or document. </param>
         /// <param name="summary"> . </param>
         /// <exception cref="ArgumentNullException"> <paramref name="id"/> or <paramref name="summary"/> is null. </exception>
-        internal OperationStatusDetail(string id, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationStatus status, StatusSummary summary)
+        internal JobStatusDetail(string id, DateTimeOffset createdOn, DateTimeOffset lastModified, TranslationStatus status, StatusSummary summary)
         {
             if (id == null)
             {
@@ -37,14 +37,14 @@ namespace Azure.AI.DocumentTranslation.Models
             Summary = summary;
         }
 
-        /// <summary> Initializes a new instance of OperationStatusDetail. </summary>
+        /// <summary> Initializes a new instance of JobStatusDetail. </summary>
         /// <param name="id"> Id of the operation. </param>
         /// <param name="createdOn"> Operation created date time. </param>
         /// <param name="lastModified"> Date time in which the operation&apos;s status has been updated. </param>
         /// <param name="status"> List of possible statuses for job or document. </param>
         /// <param name="error"> This contains an outer error with error code, message, details, target and an inner error with more descriptive details. </param>
         /// <param name="summary"> . </param>
-        internal OperationStatusDetail(string id, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationStatus status, DocumentTranslationError error, StatusSummary summary)
+        internal JobStatusDetail(string id, DateTimeOffset createdOn, DateTimeOffset lastModified, TranslationStatus status, DocumentTranslationError error, StatusSummary summary)
         {
             Id = id;
             CreatedOn = createdOn;
@@ -54,7 +54,7 @@ namespace Azure.AI.DocumentTranslation.Models
             Summary = summary;
         }
         /// <summary> List of possible statuses for job or document. </summary>
-        public DocumentTranslationStatus Status { get; }
+        public TranslationStatus Status { get; }
         /// <summary> This contains an outer error with error code, message, details, target and an inner error with more descriptive details. </summary>
         public DocumentTranslationError Error { get; }
     }

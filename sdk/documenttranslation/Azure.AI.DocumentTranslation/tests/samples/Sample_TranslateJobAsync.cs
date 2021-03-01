@@ -3,7 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading;
+using System.Threading.Tasks;
 using Azure.AI.DocumentTranslation.Models;
 using Azure.Core.TestFramework;
 using NUnit.Framework;
@@ -14,7 +14,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
     public partial class DocumentTranslationSamples : SamplesBase<DocumentTranslationTestEnvironment>
     {
         [Test]
-        public void TranslateOperation()
+        public async Task TranslateJobAsync()
         {
             string endpoint = TestEnvironment.Endpoint;
             string apiKey = TestEnvironment.ApiKey;
@@ -23,9 +23,9 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            var inputs = new List<BatchDocumentInput>()
+            var inputs = new List<DocumentTranslationInput>()
                 {
-                    new BatchDocumentInput(new SourceInput(sourceUrl)
+                    new DocumentTranslationInput(new SourceInput(sourceUrl)
                         {
                             Language = "en"
                         },
@@ -38,37 +38,27 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
                     }
                 };
 
-            Response<string> operation = client.StartBatchTranslation(inputs);
+            Response<JobStatusDetail> job = await client.CreateTranslationJobAsync(inputs);
 
-            TimeSpan pollingInterval = new TimeSpan(1000);
+            Response<JobStatusDetail> jobStatus = await client.WaitForJobCompletionAsync(job.Value.Id);
 
-            Response<OperationStatusDetail> status = client.GetOperationStatus(operation.Value);
-
-            while (status.Value.Status != DocumentTranslationStatus.Failed
-                   || status.Value.Status != DocumentTranslationStatus.Succeeded
-                   || status.Value.Status != DocumentTranslationStatus.ValidationFailed)
-            {
-                Thread.Sleep(pollingInterval);
-                status = client.GetOperationStatus(operation.Value);
-            }
-
-            Console.WriteLine($"  Status: {status.Value.Status}");
-            Console.WriteLine($"  Created on: {status.Value.CreatedOn}");
-            Console.WriteLine($"  Last modified: {status.Value.LastModified}");
-            Console.WriteLine($"  Total documents: {status.Value.TotalDocuments}");
-            Console.WriteLine($"    Succeeded: {status.Value.DocumentsSucceeded}");
-            Console.WriteLine($"    Failed: {status.Value.DocumentsFailed}");
-            Console.WriteLine($"    In Progress: {status.Value.DocumentsInProgress}");
-            Console.WriteLine($"    Not started: {status.Value.DocumentsNotStarted}");
+            Console.WriteLine($"  Status: {jobStatus.Value.Status}");
+            Console.WriteLine($"  Created on: {jobStatus.Value.CreatedOn}");
+            Console.WriteLine($"  Last modified: {jobStatus.Value.LastModified}");
+            Console.WriteLine($"  Total documents: {jobStatus.Value.TotalDocuments}");
+            Console.WriteLine($"    Succeeded: {jobStatus.Value.DocumentsSucceeded}");
+            Console.WriteLine($"    Failed: {jobStatus.Value.DocumentsFailed}");
+            Console.WriteLine($"    In Progress: {jobStatus.Value.DocumentsInProgress}");
+            Console.WriteLine($"    Not started: {jobStatus.Value.DocumentsNotStarted}");
 
             // Get Status of documents
-            Pageable<DocumentStatusDetail> documents = client.GetStatusesOfDocuments(operation.Value);
+            AsyncPageable<DocumentStatusDetail> documents = client.GetStatusesOfDocumentsAsync(job.Value.Id);
 
-            foreach (DocumentStatusDetail document in documents)
+            await foreach (DocumentStatusDetail document in documents)
             {
                 Console.WriteLine($"Document with Id: {document.Id}");
                 Console.WriteLine($"  Status:{document.Status}");
-                if (document.Status == DocumentTranslationStatus.Succeeded)
+                if (document.Status == TranslationStatus.Succeeded)
                 {
                     Console.WriteLine($"  Location: {document.Url}");
                     Console.WriteLine($"  Translated to language: {document.TranslateTo}.");

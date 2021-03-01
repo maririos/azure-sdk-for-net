@@ -12,12 +12,12 @@ using System.Linq;
 namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary> Document Status Response. </summary>
-    public partial class BatchStatusResponse
+    internal partial class BatchStatusResponse
     {
         /// <summary> Initializes a new instance of BatchStatusResponse. </summary>
         /// <param name="value"> The summary status of individual operation. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="value"/> is null. </exception>
-        internal BatchStatusResponse(IEnumerable<OperationStatusDetail> value)
+        internal BatchStatusResponse(IEnumerable<JobStatusDetail> value)
         {
             if (value == null)
             {
@@ -30,14 +30,14 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <summary> Initializes a new instance of BatchStatusResponse. </summary>
         /// <param name="value"> The summary status of individual operation. </param>
         /// <param name="nextLink"> Url for the next page.  Null if no more pages available. </param>
-        internal BatchStatusResponse(IReadOnlyList<OperationStatusDetail> value, string nextLink)
+        internal BatchStatusResponse(IReadOnlyList<JobStatusDetail> value, string nextLink)
         {
             Value = value;
             NextLink = nextLink;
         }
 
         /// <summary> The summary status of individual operation. </summary>
-        public IReadOnlyList<OperationStatusDetail> Value { get; }
+        public IReadOnlyList<JobStatusDetail> Value { get; }
         /// <summary> Url for the next page.  Null if no more pages available. </summary>
         public string NextLink { get; }
     }

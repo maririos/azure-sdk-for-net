@@ -17,7 +17,7 @@ namespace Azure.AI.DocumentTranslation.Models
             Optional<DocumentTranslationErrorCode> code = default;
             string message = default;
             Optional<string> target = default;
-            Optional<InnerErrorV2> innerError = default;
+            Optional<DocumentTranslationInnerError> innerError = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("code"))
@@ -47,7 +47,7 @@ namespace Azure.AI.DocumentTranslation.Models
                         property.ThrowNonNullablePropertyIsNull();
                         continue;
                     }
-                    innerError = InnerErrorV2.DeserializeInnerErrorV2(property.Value);
+                    innerError = DocumentTranslationInnerError.DeserializeDocumentTranslationInnerError(property.Value);
                     continue;
                 }
             }

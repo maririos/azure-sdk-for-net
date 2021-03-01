@@ -12,12 +12,12 @@ using System.Linq;
 namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary> Job submission batch request. </summary>
-    public partial class BatchSubmissionRequest
+    internal partial class BatchSubmissionRequest
     {
         /// <summary> Initializes a new instance of BatchSubmissionRequest. </summary>
         /// <param name="inputs"> The input list of documents or folders containing documents. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="inputs"/> is null. </exception>
-        public BatchSubmissionRequest(IEnumerable<BatchDocumentInput> inputs)
+        public BatchSubmissionRequest(IEnumerable<DocumentTranslationInput> inputs)
         {
             if (inputs == null)
             {
@@ -28,6 +28,6 @@ namespace Azure.AI.DocumentTranslation.Models
         }
 
         /// <summary> The input list of documents or folders containing documents. </summary>
-        public IList<BatchDocumentInput> Inputs { get; }
+        public IList<DocumentTranslationInput> Inputs { get; }
     }
 }

@@ -5,8 +5,8 @@ using Azure.Core;
 
 namespace Azure.AI.DocumentTranslation.Models
 {
-    [CodeGenModel("Status")]
-    public partial struct TranslationStatus
+    [CodeGenModel("InnerErrorV2")]
+    public partial class DocumentTranslationInnerError
     {
     }
 }

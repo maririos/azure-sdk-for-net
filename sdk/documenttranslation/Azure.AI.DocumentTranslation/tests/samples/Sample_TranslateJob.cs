@@ -3,7 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Threading;
 using Azure.AI.DocumentTranslation.Models;
 using Azure.Core.TestFramework;
 using NUnit.Framework;
@@ -14,7 +14,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
     public partial class DocumentTranslationSamples : SamplesBase<DocumentTranslationTestEnvironment>
     {
         [Test]
-        public async Task TranslateOperationAsync()
+        public void TranslateJob()
         {
             string endpoint = TestEnvironment.Endpoint;
             string apiKey = TestEnvironment.ApiKey;
@@ -23,9 +23,9 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            var inputs = new List<BatchDocumentInput>()
+            var inputs = new List<DocumentTranslationInput>()
                 {
-                    new BatchDocumentInput(new SourceInput(sourceUrl)
+                    new DocumentTranslationInput(new SourceInput(sourceUrl)
                         {
                             Language = "en"
                         },
@@ -38,27 +38,27 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
                     }
                 };
 
-            Response<string> operation = await client.StartBatchTranslationAsync(inputs);
+            Response<JobStatusDetail> job = client.CreateTranslationJob(inputs);
 
-            Response<OperationStatusDetail> response = await client.WaitForOperationCompletionAsync(operation.Value);
+            var jobStatus = client.WaitForJobCompletion(job.Value.Id);
 
-            Console.WriteLine($"  Status: {response.Value.Status}");
-            Console.WriteLine($"  Created on: {response.Value.CreatedOn}");
-            Console.WriteLine($"  Last modified: {response.Value.LastModified}");
-            Console.WriteLine($"  Total documents: {response.Value.TotalDocuments}");
-            Console.WriteLine($"    Succeeded: {response.Value.DocumentsSucceeded}");
-            Console.WriteLine($"    Failed: {response.Value.DocumentsFailed}");
-            Console.WriteLine($"    In Progress: {response.Value.DocumentsInProgress}");
-            Console.WriteLine($"    Not started: {response.Value.DocumentsNotStarted}");
+            Console.WriteLine($"  Status: {jobStatus.Value.Status}");
+            Console.WriteLine($"  Created on: {jobStatus.Value.CreatedOn}");
+            Console.WriteLine($"  Last modified: {jobStatus.Value.LastModified}");
+            Console.WriteLine($"  Total documents: {jobStatus.Value.TotalDocuments}");
+            Console.WriteLine($"    Succeeded: {jobStatus.Value.DocumentsSucceeded}");
+            Console.WriteLine($"    Failed: {jobStatus.Value.DocumentsFailed}");
+            Console.WriteLine($"    In Progress: {jobStatus.Value.DocumentsInProgress}");
+            Console.WriteLine($"    Not started: {jobStatus.Value.DocumentsNotStarted}");
 
             // Get Status of documents
-            AsyncPageable<DocumentStatusDetail> documents = client.GetStatusesOfDocumentsAsync(operation.Value);
+            Pageable<DocumentStatusDetail> documents = client.GetStatusesOfDocuments(job.Value.Id);
 
-            await foreach (DocumentStatusDetail document in documents)
+            foreach (DocumentStatusDetail document in documents)
             {
                 Console.WriteLine($"Document with Id: {document.Id}");
                 Console.WriteLine($"  Status:{document.Status}");
-                if (document.Status == DocumentTranslationStatus.Succeeded)
+                if (document.Status == TranslationStatus.Succeeded)
                 {
                     Console.WriteLine($"  Location: {document.Url}");
                     Console.WriteLine($"  Translated to language: {document.TranslateTo}.");

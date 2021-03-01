@@ -11,20 +11,20 @@ using Azure.Core;
 
 namespace Azure.AI.DocumentTranslation.Models
 {
-    public partial class BatchStatusResponse
+    internal partial class BatchStatusResponse
     {
         internal static BatchStatusResponse DeserializeBatchStatusResponse(JsonElement element)
         {
-            IReadOnlyList<OperationStatusDetail> value = default;
+            IReadOnlyList<JobStatusDetail> value = default;
             Optional<string> nextLink = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("value"))
                 {
-                    List<OperationStatusDetail> array = new List<OperationStatusDetail>();
+                    List<JobStatusDetail> array = new List<JobStatusDetail>();
                     foreach (var item in property.Value.EnumerateArray())
                     {
-                        array.Add(OperationStatusDetail.DeserializeOperationStatusDetail(item));
+                        array.Add(JobStatusDetail.DeserializeJobStatusDetail(item));
                     }
                     value = array;
                     continue;
