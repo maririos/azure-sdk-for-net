@@ -11,7 +11,7 @@ using Azure.Core;
 
 namespace Azure.AI.DocumentTranslation.Models
 {
-    public partial class FileFormatListResult
+    internal partial class FileFormatListResult
     {
         internal static FileFormatListResult DeserializeFileFormatListResult(JsonElement element)
         {
