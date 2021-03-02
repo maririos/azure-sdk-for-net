@@ -330,38 +330,6 @@ namespace Azure.AI.DocumentTranslation
             }
         }
 
-        internal virtual Response<JobStatusDetail> GetBatchStatus(Guid id, CancellationToken cancellationToken = default)
-        {
-            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetBatchStatus)}");
-            scope.Start();
-
-            try
-            {
-                return _serviceRestClient.GetOperationStatus(id, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        internal virtual async Task<Response<JobStatusDetail>> GetBatchStatusAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetBatchStatusAsync)}");
-            scope.Start();
-
-            try
-            {
-                return await _serviceRestClient.GetOperationStatusAsync(id, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
         /// <summary>
         /// a.
         /// </summary>
@@ -584,6 +552,49 @@ namespace Azure.AI.DocumentTranslation
             }
 
             return PageableHelpers.CreateAsyncEnumerable(FirstPageFunc, NextPageFunc);
+        }
+
+        /// <summary>
+        /// a.
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <param name="cancellationToken"></param>
+        public virtual Response<JobStatusDetail> CancelTranslationJob(string jobId, CancellationToken cancellationToken = default)
+        {
+            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(CancelTranslationJob)}");
+            scope.Start();
+
+            try
+            {
+                return _serviceRestClient.CancelOperation(new Guid(jobId), cancellationToken);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// a.
+        /// </summary>
+        /// <param name="jobId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public virtual async Task<Response<JobStatusDetail>> CancelTranslationJobAsync(string jobId, CancellationToken cancellationToken = default)
+        {
+            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(CancelTranslationJobAsync)}");
+            scope.Start();
+
+            try
+            {
+                return await _serviceRestClient.CancelOperationAsync(new Guid(jobId), cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
