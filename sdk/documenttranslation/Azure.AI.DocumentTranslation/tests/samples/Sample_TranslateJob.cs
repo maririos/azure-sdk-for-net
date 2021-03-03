@@ -24,17 +24,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            var glossaries = new List<TranslationGlossary>()
-            {
-                new TranslationGlossary(glossaryUrl)
-            };
-
-            var options = new TranslationOperationOptions
-            {
-                StorageType = StorageType.Folder
-            };
-
-            Response<JobStatusDetail> job = client.CreateTranslationJob(sourceUrl, targetUrl, "it", glossaries, options);
+            Response<JobStatusDetail> job = client.CreateTranslationJob(sourceUrl, targetUrl, "it");
 
             Response<JobStatusDetail> jobStatus = client.WaitForJobCompletion(job.Value.Id);
 

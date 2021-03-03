@@ -165,7 +165,7 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="options"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual Response<JobStatusDetail> CreateTranslationJob(Uri sourceUrl, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries, TranslationOperationOptions options, CancellationToken cancellationToken = default)
+        public virtual Response<JobStatusDetail> CreateTranslationJob(Uri sourceUrl, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries = default, TranslationOperationOptions options = default, CancellationToken cancellationToken = default)
         {
             var source = new SourceConfiguration(sourceUrl.AbsoluteUri)
             {
@@ -214,7 +214,7 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="options"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<Response<JobStatusDetail>> CreateTranslationJobAsync(Uri sourceUrl, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries, TranslationOperationOptions options, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<JobStatusDetail>> CreateTranslationJobAsync(Uri sourceUrl, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries = default, TranslationOperationOptions options = default, CancellationToken cancellationToken = default)
         {
             var source = new SourceConfiguration(sourceUrl.AbsoluteUri)
             {
