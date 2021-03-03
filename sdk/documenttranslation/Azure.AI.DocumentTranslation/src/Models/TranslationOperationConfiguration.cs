@@ -5,8 +5,9 @@ using Azure.Core;
 
 namespace Azure.AI.DocumentTranslation.Models
 {
-    [CodeGenModel("Status")]
-    public partial struct DocumentTranslationStatus
+    /// <summary> Definition for the input batch translation request. </summary>
+    [CodeGenModel("BatchRequest")]
+    public partial class TranslationOperationConfiguration
     {
     }
 }

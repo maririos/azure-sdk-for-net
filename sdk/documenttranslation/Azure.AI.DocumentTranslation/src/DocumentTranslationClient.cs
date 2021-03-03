@@ -107,7 +107,7 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="configurations"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual DocumentTranslationOperation StartTranslation(List<TranlsationOperationConfiguration> configurations, CancellationToken cancellationToken = default)
+        public virtual DocumentTranslationOperation StartTranslation(List<TranslationOperationConfiguration> configurations, CancellationToken cancellationToken = default)
         {
             var request = new BatchSubmissionRequest(configurations);
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartTranslation)}");
@@ -131,7 +131,7 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="configurations"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<DocumentTranslationOperation> StartTranslationAsync(List<TranlsationOperationConfiguration> configurations, CancellationToken cancellationToken = default)
+        public virtual async Task<DocumentTranslationOperation> StartTranslationAsync(List<TranslationOperationConfiguration> configurations, CancellationToken cancellationToken = default)
         {
             var request = new BatchSubmissionRequest(configurations);
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartTranslationAsync)}");
@@ -161,9 +161,9 @@ namespace Azure.AI.DocumentTranslation
         /// <returns></returns>
         internal virtual DocumentTranslationOperation StartTranslation(Uri sourceUrl, string sourceLanguage, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries, CancellationToken cancellationToken = default)
         {
-            var request = new BatchSubmissionRequest(new List<TranlsationOperationConfiguration>
+            var request = new BatchSubmissionRequest(new List<TranslationOperationConfiguration>
                 {
-                    new TranlsationOperationConfiguration(new SourceConfiguration(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetConfiguration>
+                    new TranslationOperationConfiguration(new SourceConfiguration(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetConfiguration>
                         {
                             new TargetConfiguration(targetUrl.AbsoluteUri, targetLanguage, glossaries)
                         })
@@ -196,9 +196,9 @@ namespace Azure.AI.DocumentTranslation
         /// <returns></returns>
         internal virtual async Task<DocumentTranslationOperation> StartTranslationAsync(Uri sourceUrl, string sourceLanguage, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries, CancellationToken cancellationToken = default)
         {
-            var request = new BatchSubmissionRequest(new List<TranlsationOperationConfiguration>
+            var request = new BatchSubmissionRequest(new List<TranslationOperationConfiguration>
                 {
-                    new TranlsationOperationConfiguration(new SourceConfiguration(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetConfiguration>
+                    new TranslationOperationConfiguration(new SourceConfiguration(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetConfiguration>
                         {
                             new TargetConfiguration(targetUrl.AbsoluteUri, targetLanguage, glossaries)
                         })

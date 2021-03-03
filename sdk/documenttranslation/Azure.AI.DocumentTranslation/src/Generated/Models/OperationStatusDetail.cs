@@ -19,7 +19,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="status"> List of possible statuses for job or document. </param>
         /// <param name="summary"> . </param>
         /// <exception cref="ArgumentNullException"> <paramref name="id"/> or <paramref name="summary"/> is null. </exception>
-        internal OperationStatusDetail(string id, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationStatus status, StatusSummary summary)
+        internal OperationStatusDetail(string id, DateTimeOffset createdOn, DateTimeOffset lastModified, TranslationStatus status, StatusSummary summary)
         {
             if (id == null)
             {
@@ -44,7 +44,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="status"> List of possible statuses for job or document. </param>
         /// <param name="error"> This contains an outer error with error code, message, details, target and an inner error with more descriptive details. </param>
         /// <param name="summary"> . </param>
-        internal OperationStatusDetail(string id, DateTimeOffset createdOn, DateTimeOffset lastModified, DocumentTranslationStatus status, DocumentTranslationError error, StatusSummary summary)
+        internal OperationStatusDetail(string id, DateTimeOffset createdOn, DateTimeOffset lastModified, TranslationStatus status, DocumentTranslationError error, StatusSummary summary)
         {
             Id = id;
             CreatedOn = createdOn;
@@ -54,7 +54,7 @@ namespace Azure.AI.DocumentTranslation.Models
             Summary = summary;
         }
         /// <summary> List of possible statuses for job or document. </summary>
-        public DocumentTranslationStatus Status { get; }
+        public TranslationStatus Status { get; }
         /// <summary> This contains an outer error with error code, message, details, target and an inner error with more descriptive details. </summary>
         public DocumentTranslationError Error { get; }
     }

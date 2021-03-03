@@ -23,9 +23,9 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            var inputs = new List<TranlsationOperationConfiguration>()
+            var inputs = new List<TranslationOperationConfiguration>()
                 {
-                    new TranlsationOperationConfiguration(new SourceConfiguration(sourceUrl)
+                    new TranslationOperationConfiguration(new SourceConfiguration(sourceUrl)
                         {
                             Language = "en"
                         },
@@ -40,18 +40,33 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             DocumentTranslationOperation operation = await client.StartTranslationAsync(inputs);
 
-            Response<AsyncPageable<DocumentStatusDetail>> response = await operation.WaitForCompletionAsync();
-            IAsyncEnumerator<DocumentStatusDetail> docsEnumerator = response.Value.GetAsyncEnumerator();
+            await operation.WaitForCompletionAsync();
 
-            while (await docsEnumerator.MoveNextAsync())
+            Console.WriteLine($"  Status: {operation.Status}");
+            Console.WriteLine($"  Created on: {operation.CreatedOn}");
+            Console.WriteLine($"  Last modified: {operation.LastModified}");
+            Console.WriteLine($"  Total documents: {operation.TotalDocuments}");
+            Console.WriteLine($"    Succeeded: {operation.DocumentsSucceeded}");
+            Console.WriteLine($"    Failed: {operation.DocumentsFailed}");
+            Console.WriteLine($"    In Progress: {operation.DocumentsInProgress}");
+            Console.WriteLine($"    Not started: {operation.DocumentsNotStarted}");
+
+            // Get Status of documents
+            AsyncPageable<DocumentStatusDetail> documents = operation.GetDocumentsStatusAsync();
+
+            await foreach (DocumentStatusDetail document in documents)
             {
-                if (docsEnumerator.Current.Status == DocumentTranslationStatus.Succeeded)
+                Console.WriteLine($"Document with Id: {document.Id}");
+                Console.WriteLine($"  Status:{document.Status}");
+                if (document.Status == TranslationStatus.Succeeded)
                 {
-                    Console.WriteLine($"Document {docsEnumerator.Current.Url} succedded");
+                    Console.WriteLine($"  Location: {document.Url}");
+                    Console.WriteLine($"  Translated to language: {document.TranslateTo}.");
                 }
                 else
                 {
-                    Console.WriteLine($"Document {docsEnumerator.Current.Url} failed");
+                    Console.WriteLine($"  Error Code: {document.Error.Code}");
+                    Console.WriteLine($"  Message: {document.Error.Message}");
                 }
             }
         }
