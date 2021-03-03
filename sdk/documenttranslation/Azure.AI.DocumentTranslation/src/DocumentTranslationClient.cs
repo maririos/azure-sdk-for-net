@@ -104,13 +104,13 @@ namespace Azure.AI.DocumentTranslation
         /// <summary>
         /// a.
         /// </summary>
-        /// <param name="inputs"></param>
+        /// <param name="configurations"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual DocumentTranslationOperation StartBatchTranslation(List<BatchDocumentInput> inputs, CancellationToken cancellationToken = default)
+        public virtual DocumentTranslationOperation StartTranslation(List<TranlsationOperationConfiguration> configurations, CancellationToken cancellationToken = default)
         {
-            var request = new BatchSubmissionRequest(inputs);
-            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartBatchTranslation)}");
+            var request = new BatchSubmissionRequest(configurations);
+            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartTranslation)}");
             scope.Start();
 
             try
@@ -128,13 +128,13 @@ namespace Azure.AI.DocumentTranslation
         /// <summary>
         /// a.
         /// </summary>
-        /// <param name="inputs"></param>
+        /// <param name="configurations"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<DocumentTranslationOperation> StartBatchTranslationAsync(List<BatchDocumentInput> inputs, CancellationToken cancellationToken = default)
+        public virtual async Task<DocumentTranslationOperation> StartTranslationAsync(List<TranlsationOperationConfiguration> configurations, CancellationToken cancellationToken = default)
         {
-            var request = new BatchSubmissionRequest(inputs);
-            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartBatchTranslationAsync)}");
+            var request = new BatchSubmissionRequest(configurations);
+            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartTranslationAsync)}");
             scope.Start();
 
             try
@@ -158,18 +158,17 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="targetLanguage"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual DocumentTranslationOperation StartBatchTranslation(Uri sourceUrl, string sourceLanguage, Uri targetUrl, string targetLanguage, CancellationToken cancellationToken = default)
+        public virtual DocumentTranslationOperation StartTranslation(Uri sourceUrl, string sourceLanguage, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries, CancellationToken cancellationToken = default)
         {
-            // TODO: remove sourceLanguage when service supports automatic language detection
-            var request = new BatchSubmissionRequest(new List<BatchDocumentInput>
+            var request = new BatchSubmissionRequest(new List<TranlsationOperationConfiguration>
                 {
-                    new BatchDocumentInput(new SourceInput(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetInput>
+                    new TranlsationOperationConfiguration(new SourceConfiguration(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetConfiguration>
                         {
-                            new TargetInput(targetUrl.AbsoluteUri, targetLanguage)
+                            new TargetConfiguration(targetUrl.AbsoluteUri, targetLanguage, glossaries)
                         })
                 });
 
-            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartBatchTranslation)}");
+            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartTranslation)}");
             scope.Start();
 
             try
@@ -193,18 +192,17 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="targetLanguage"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<DocumentTranslationOperation> StartBatchTranslationAsync(Uri sourceUrl, string sourceLanguage, Uri targetUrl, string targetLanguage, CancellationToken cancellationToken = default)
+        public virtual async Task<DocumentTranslationOperation> StartTranslationAsync(Uri sourceUrl, string sourceLanguage, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries, CancellationToken cancellationToken = default)
         {
-            // TODO: remove sourceLanguage when service supports automatic language detection
-            var request = new BatchSubmissionRequest(new List<BatchDocumentInput>
+            var request = new BatchSubmissionRequest(new List<TranlsationOperationConfiguration>
                 {
-                    new BatchDocumentInput(new SourceInput(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetInput>
+                    new TranlsationOperationConfiguration(new SourceConfiguration(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetConfiguration>
                         {
-                            new TargetInput(targetUrl.AbsoluteUri, targetLanguage)
+                            new TargetConfiguration(targetUrl.AbsoluteUri, targetLanguage, glossaries)
                         })
                 });
 
-            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartBatchTranslationAsync)}");
+            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartTranslationAsync)}");
             scope.Start();
 
             try
@@ -219,48 +217,16 @@ namespace Azure.AI.DocumentTranslation
             }
         }
 
-        internal virtual Response<OperationStatusDetail> GetBatchStatus(Guid id, CancellationToken cancellationToken = default)
-        {
-            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetBatchStatus)}");
-            scope.Start();
-
-            try
-            {
-                return _serviceRestClient.GetOperationStatus(id, cancellationToken);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
-        internal virtual async Task<Response<OperationStatusDetail>> GetBatchStatusAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetBatchStatusAsync)}");
-            scope.Start();
-
-            try
-            {
-                return await _serviceRestClient.GetOperationStatusAsync(id, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                scope.Failed(e);
-                throw;
-            }
-        }
-
         /// <summary>
         /// a.
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual Pageable<OperationStatusDetail> GetStatusesOfOperations(CancellationToken cancellationToken = default)
+        public virtual Pageable<OperationStatusDetail> GetOperationsStatus(CancellationToken cancellationToken = default)
         {
             Page<OperationStatusDetail> FirstPageFunc(int? pageSizeHint)
             {
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetStatusesOfOperations)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetOperationsStatus)}");
                 scope.Start();
 
                 try
@@ -277,7 +243,7 @@ namespace Azure.AI.DocumentTranslation
 
             Page<OperationStatusDetail> NextPageFunc(string nextLink, int? pageSizeHint)
             {
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetStatusesOfOperations)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetOperationsStatus)}");
                 scope.Start();
 
                 try
@@ -300,11 +266,11 @@ namespace Azure.AI.DocumentTranslation
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual AsyncPageable<OperationStatusDetail> GetStatusesOfOperationsAsync(CancellationToken cancellationToken = default)
+        public virtual AsyncPageable<OperationStatusDetail> GetOperationsStatusAsync(CancellationToken cancellationToken = default)
         {
             async Task<Page<OperationStatusDetail>> FirstPageFunc(int? pageSizeHint)
             {
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetStatusesOfOperationsAsync)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetOperationsStatusAsync)}");
                 scope.Start();
 
                 try
@@ -321,7 +287,7 @@ namespace Azure.AI.DocumentTranslation
 
             async Task<Page<OperationStatusDetail>> NextPageFunc(string nextLink, int? pageSizeHint)
             {
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetStatusesOfOperationsAsync)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetOperationsStatusAsync)}");
                 scope.Start();
 
                 try
@@ -339,12 +305,9 @@ namespace Azure.AI.DocumentTranslation
             return PageableHelpers.CreateAsyncEnumerable(FirstPageFunc, NextPageFunc);
         }
 
-        /// <summary>
-        /// a.
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public virtual Response<IReadOnlyList<FileFormat>> GetSupportedGlossaryFormats(CancellationToken cancellationToken = default)
+        #region supported formats functions
+
+        internal virtual Response<IReadOnlyList<FileFormat>> GetSupportedGlossaryFormats(CancellationToken cancellationToken = default)
         {
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSupportedGlossaryFormats)}");
             scope.Start();
@@ -361,12 +324,7 @@ namespace Azure.AI.DocumentTranslation
             }
         }
 
-        /// <summary>
-        /// a.
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public virtual async Task<Response<IReadOnlyList<FileFormat>>> GetSupportedGlossaryFormatsAsync(CancellationToken cancellationToken = default)
+        internal virtual async Task<Response<IReadOnlyList<FileFormat>>> GetSupportedGlossaryFormatsAsync(CancellationToken cancellationToken = default)
         {
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSupportedGlossaryFormatsAsync)}");
             scope.Start();
@@ -450,6 +408,8 @@ namespace Azure.AI.DocumentTranslation
                 throw;
             }
         }
+
+        #endregion
 
         #region nobody wants to see these
         /// <summary>

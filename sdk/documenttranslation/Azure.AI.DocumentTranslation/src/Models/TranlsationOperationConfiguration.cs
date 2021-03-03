@@ -5,10 +5,9 @@ using Azure.Core;
 
 namespace Azure.AI.DocumentTranslation.Models
 {
-    [CodeGenModel("SourceInput")]
-    public partial class SourceInput
+    /// <summary> Definition for the input batch translation request. </summary>
+    [CodeGenModel("BatchRequest")]
+    public partial class TranlsationOperationConfiguration
     {
-        [CodeGenMember("StorageSource")]
-        internal string StorageSource { get; set; }
     }
 }

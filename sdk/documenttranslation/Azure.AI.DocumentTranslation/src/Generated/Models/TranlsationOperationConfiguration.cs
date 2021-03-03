@@ -12,13 +12,13 @@ using System.Linq;
 namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary> Definition for the input batch translation request. </summary>
-    public partial class BatchDocumentInput
+    public partial class TranlsationOperationConfiguration
     {
-        /// <summary> Initializes a new instance of BatchDocumentInput. </summary>
+        /// <summary> Initializes a new instance of TranlsationOperationConfiguration. </summary>
         /// <param name="source"> Source of the input documents. </param>
         /// <param name="targets"> Location of the destination for the output. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="source"/> or <paramref name="targets"/> is null. </exception>
-        public BatchDocumentInput(SourceInput source, IEnumerable<TargetInput> targets)
+        public TranlsationOperationConfiguration(SourceConfiguration source, IEnumerable<TargetConfiguration> targets)
         {
             if (source == null)
             {
@@ -34,9 +34,9 @@ namespace Azure.AI.DocumentTranslation.Models
         }
 
         /// <summary> Source of the input documents. </summary>
-        public SourceInput Source { get; }
+        public SourceConfiguration Source { get; }
         /// <summary> Location of the destination for the output. </summary>
-        public IList<TargetInput> Targets { get; }
+        public IList<TargetConfiguration> Targets { get; }
         /// <summary> Storage type of the input documents source string. </summary>
         public StorageInputType? StorageType { get; set; }
     }

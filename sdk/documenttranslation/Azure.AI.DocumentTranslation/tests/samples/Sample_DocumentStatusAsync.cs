@@ -23,25 +23,25 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            var inputs = new List<BatchDocumentInput>()
+            var inputs = new List<TranlsationOperationConfiguration>()
                 {
-                    new BatchDocumentInput(new SourceInput(sourceUrl)
+                    new TranlsationOperationConfiguration(new SourceConfiguration(sourceUrl)
                         {
                             Language = "en"
                         },
-                    new List<TargetInput>()
+                    new List<TargetConfiguration>()
                         {
-                            new TargetInput(targetUrl, "it")
+                            new TargetConfiguration(targetUrl, "it")
                         })
                     {
                         StorageType = StorageInputType.Folder
                     }
                 };
 
-            DocumentTranslationOperation operation = await client.StartBatchTranslationAsync(inputs);
+            DocumentTranslationOperation operation = await client.StartTranslationAsync(inputs);
 
             // get first document
-            AsyncPageable<DocumentStatusDetail> documents = operation.GetStatusesOfDocumentsAsync();
+            AsyncPageable<DocumentStatusDetail> documents = operation.GetDocumentsStatusAsync();
             IAsyncEnumerator<DocumentStatusDetail> docsEnumerator = documents.GetAsyncEnumerator();
             await docsEnumerator.MoveNextAsync();
 

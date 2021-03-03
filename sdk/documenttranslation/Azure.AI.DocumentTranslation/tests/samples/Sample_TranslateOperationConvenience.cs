@@ -22,7 +22,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            DocumentTranslationOperation operation = client.StartBatchTranslation(new Uri(sourceUrl), "en",  new Uri(targetUrl), "it");
+            DocumentTranslationOperation operation = client.StartTranslation(new Uri(sourceUrl), "en",  new Uri(targetUrl), "it");
 
             Console.WriteLine("Operation Information:");
             Console.WriteLine($"  Id: {operation.Id}");
