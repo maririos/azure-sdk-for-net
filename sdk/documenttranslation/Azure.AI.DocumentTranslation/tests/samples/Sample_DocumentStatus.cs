@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using Azure.AI.DocumentTranslation.Models;
 using Azure.Core.TestFramework;
 using NUnit.Framework;
@@ -40,37 +39,33 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             DocumentTranslationOperation operation = client.StartTranslation(inputs);
 
-            // get not finished documents
-            List<string> documentIds = new List<string>();
-            Pageable<DocumentStatusDetail> documents = operation.GetDocumentsStatus();
+            var documentsSucceeded = new HashSet<string>();
+            var documentsFailed = new HashSet<string>();
 
-            foreach (DocumentStatusDetail docStatus in documents)
+            while (!operation.HasCompleted)
             {
-                if (docStatus.Status == TranslationStatus.NotStarted || docStatus.Status == TranslationStatus.Running)
-                {
-                    documentIds.Add(docStatus.Id);
-                }
-                else
-                {
-                    Console.WriteLine($"Document {docStatus.Url} completed with status ${docStatus.Status}");
-                }
-            }
+                operation.UpdateStatus();
 
-            TimeSpan pollingInterval = new TimeSpan(1000);
-
-            while (documentIds.Count > 0)
-            {
-                Thread.Sleep(pollingInterval);
-                for (int i = documentIds.Count - 1; i >= 0; i--)
+                // update list when any document is done
+                if (operation.DocumentsSucceeded > documentsSucceeded.Count || operation.DocumentsFailed > documentsFailed.Count)
                 {
-                    Response<DocumentStatusDetail> status = operation.GetDocumentStatus(documentIds[i]);
-                    if (status.Value.Status != TranslationStatus.NotStarted && status.Value.Status != TranslationStatus.Running)
+                    Pageable<DocumentStatusDetail> documentsStatus = operation.GetDocumentsStatus();
+                    foreach (DocumentStatusDetail docStatus in documentsStatus)
                     {
-                        Console.WriteLine($"Document {status.Value.Url} completed with status ${status.Value.Status}");
-                        documentIds.RemoveAt(i);
+                        if (docStatus.Status == TranslationStatus.Succeeded)
+                        {
+                            documentsSucceeded.Add(docStatus.Id);
+                        }
+                        else if (docStatus.Status == TranslationStatus.Failed)
+                        {
+                            documentsFailed.Add(docStatus.Id);
+                        }
                     }
                 }
             }
+
+            Console.WriteLine($"Documents Succeeded: {documentsSucceeded}");
+            Console.WriteLine($"Documents Failed: {documentsFailed}");
         }
     }
 }

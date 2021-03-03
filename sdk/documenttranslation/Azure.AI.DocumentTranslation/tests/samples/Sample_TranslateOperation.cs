@@ -46,21 +46,18 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
             {
                 Thread.Sleep(pollingInterval);
                 operation.UpdateStatus();
+
+                Console.WriteLine($"  Status: {operation.Status}");
+                Console.WriteLine($"  Created on: {operation.CreatedOn}");
+                Console.WriteLine($"  Last modified: {operation.LastModified}");
+                Console.WriteLine($"  Total documents: {operation.TotalDocuments}");
+                Console.WriteLine($"    Succeeded: {operation.DocumentsSucceeded}");
+                Console.WriteLine($"    Failed: {operation.DocumentsFailed}");
+                Console.WriteLine($"    In Progress: {operation.DocumentsInProgress}");
+                Console.WriteLine($"    Not started: {operation.DocumentsNotStarted}");
             }
 
-            Console.WriteLine($"  Status: {operation.Status}");
-            Console.WriteLine($"  Created on: {operation.CreatedOn}");
-            Console.WriteLine($"  Last modified: {operation.LastModified}");
-            Console.WriteLine($"  Total documents: {operation.TotalDocuments}");
-            Console.WriteLine($"    Succeeded: {operation.DocumentsSucceeded}");
-            Console.WriteLine($"    Failed: {operation.DocumentsFailed}");
-            Console.WriteLine($"    In Progress: {operation.DocumentsInProgress}");
-            Console.WriteLine($"    Not started: {operation.DocumentsNotStarted}");
-
-            // Get Status of documents
-            Pageable<DocumentStatusDetail> documents = operation.GetDocumentsStatus();
-
-            foreach (DocumentStatusDetail document in documents)
+            foreach (DocumentStatusDetail document in operation.GetValues())
             {
                 Console.WriteLine($"Document with Id: {document.Id}");
                 Console.WriteLine($"  Status:{document.Status}");

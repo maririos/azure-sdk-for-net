@@ -19,35 +19,37 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            AsyncPageable<OperationStatusDetail> jobs = client.GetOperationsStatusAsync();
+            AsyncPageable<OperationStatusDetail> operationsStatus = client.GetOperationsStatusAsync();
 
-            int jobsCount = 0;
+            int operationsCount = 0;
             int totalDocs = 0;
             int docsCancelled = 0;
             int docsSucceeded = 0;
             int maxDocs = 0;
-            string largestJobId = "";
+            OperationStatusDetail largestOperation = null;
 
-            await foreach (OperationStatusDetail job in jobs)
+            await foreach (OperationStatusDetail operationStatus in operationsStatus)
             {
-                jobsCount++;
-                totalDocs += job.TotalDocuments;
-                docsCancelled += job.DocumentsCancelled;
-                docsSucceeded += job.DocumentsSucceeded;
+                operationsCount++;
+                totalDocs += operationStatus.TotalDocuments;
+                docsCancelled += operationStatus.DocumentsCancelled;
+                docsSucceeded += operationStatus.DocumentsSucceeded;
                 if (totalDocs > maxDocs)
                 {
                     maxDocs = totalDocs;
-                    largestJobId = job.Id;
+                    largestOperation = operationStatus;
                 }
             }
 
-            Console.WriteLine($"# of jobs: {jobsCount}\nTotal Documents: {totalDocs}\n"
+            Console.WriteLine($"# of operations: {operationsCount}\nTotal Documents: {totalDocs}\n"
                               + $"DocumentsSucceeded: {docsSucceeded}\n"
                               + $"Cancelled Documents: {docsCancelled}");
 
-            Console.WriteLine($"Largest job is {largestJobId} and has the documents:");
+            Console.WriteLine($"Largest operation is {largestOperation} and has the documents:");
 
-            DocumentTranslationOperation operation = new DocumentTranslationOperation(largestJobId, client);
+            // After user studies we can do this if needed
+            // DocumentTranslationOperation operation = largestOperation.GetOperation();
+            DocumentTranslationOperation operation = new DocumentTranslationOperation(largestOperation.Id, client);
 
             AsyncPageable<DocumentStatusDetail> docs = operation.GetDocumentsStatusAsync();
 
