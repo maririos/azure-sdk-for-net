@@ -7,7 +7,7 @@ namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary> Definition for the input batch translation request. </summary>
     [CodeGenModel("BatchRequest")]
-    public partial class DocumentTranslationInput
+    public partial class TranslationJobConfiguration
     {
     }
 }

@@ -19,7 +19,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            Pageable<JobStatusDetail> jobs = client.GetStatusesOfJobs();
+            Pageable<JobStatusDetail> jobs = client.GetJobsStatus();
 
             int jobsCount = 0;
             int totalDocs = 0;
@@ -46,7 +46,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
                               + $"Cancelled Documents: {docsCancelled}");
 
             Console.WriteLine($"Largest job is {largestJobId} and has the documents:");
-            Pageable<DocumentStatusDetail> docs = client.GetStatusesOfDocuments(largestJobId);
+            Pageable<DocumentStatusDetail> docs = client.GetDocumentsStatus(largestJobId);
 
             foreach (DocumentStatusDetail docStatus in docs)
             {

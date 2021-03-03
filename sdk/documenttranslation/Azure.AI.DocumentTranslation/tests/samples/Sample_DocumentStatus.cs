@@ -23,9 +23,9 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            var inputs = new List<DocumentTranslationInput>()
+            var inputs = new List<TranslationJobConfiguration>()
                 {
-                    new DocumentTranslationInput(new SourceInput(sourceUrl)
+                    new TranslationJobConfiguration(new SourceInput(sourceUrl)
                         {
                             Language = "en"
                         },
@@ -42,7 +42,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             // get not finished documents
             List<string> documentIds = new List<string>();
-            Pageable<DocumentStatusDetail> documents = client.GetStatusesOfDocuments(job.Value.Id);
+            Pageable<DocumentStatusDetail> documents = client.GetDocumentsStatus(job.Value.Id);
 
             foreach (DocumentStatusDetail docStatus in documents)
             {

@@ -23,9 +23,9 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            var inputs = new List<DocumentTranslationInput>()
+            var inputs = new List<TranslationJobConfiguration>()
                 {
-                    new DocumentTranslationInput(new SourceInput(sourceUrl)
+                    new TranslationJobConfiguration(new SourceInput(sourceUrl)
                         {
                             Language = "en"
                         },
@@ -52,7 +52,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
             Console.WriteLine($"    Not started: {jobStatus.Value.DocumentsNotStarted}");
 
             // Get Status of documents
-            AsyncPageable<DocumentStatusDetail> documents = client.GetStatusesOfDocumentsAsync(job.Value.Id);
+            AsyncPageable<DocumentStatusDetail> documents = client.GetDocumentsStatusAsync(job.Value.Id);
 
             await foreach (DocumentStatusDetail document in documents)
             {
