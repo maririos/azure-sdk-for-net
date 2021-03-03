@@ -15,7 +15,7 @@ namespace Azure.AI.DocumentTranslation.Models
     {
         internal static DocumentStatusDetail DeserializeDocumentStatusDetail(JsonElement element)
         {
-            string path = default;
+            Uri path = default;
             DateTimeOffset createdDateTimeUtc = default;
             DateTimeOffset lastActionDateTimeUtc = default;
             TranslationStatus status = default;
@@ -28,7 +28,7 @@ namespace Azure.AI.DocumentTranslation.Models
             {
                 if (property.NameEquals("path"))
                 {
-                    path = property.Value.GetString();
+                    path = new Uri(property.Value.GetString());
                     continue;
                 }
                 if (property.NameEquals("createdDateTimeUtc"))

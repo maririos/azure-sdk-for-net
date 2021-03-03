@@ -14,9 +14,7 @@ namespace Azure.AI.DocumentTranslation.Models
         public string Id { get; }
         /// <summary> Location of the document or folder. </summary>
         [CodeGenMember("Path")]
-#pragma warning disable CA1056 // URI-like properties should not be strings
-        public string Url { get; }
-#pragma warning restore CA1056 // URI-like properties should not be strings
+        public Uri Url { get; }
 
         /// <summary> Progress of the translation if available. </summary>
         [CodeGenMember("Progress")]

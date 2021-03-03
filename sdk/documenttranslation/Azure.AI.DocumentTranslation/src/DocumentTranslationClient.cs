@@ -153,20 +153,33 @@ namespace Azure.AI.DocumentTranslation
         /// a.
         /// </summary>
         /// <param name="sourceUrl"></param>
-        /// <param name="sourceLanguage"></param>
         /// <param name="targetUrl"></param>
         /// <param name="targetLanguage"></param>
         /// <param name="glossaries"></param>
+        /// <param name="options"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        internal virtual DocumentTranslationOperation StartTranslation(Uri sourceUrl, string sourceLanguage, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries, CancellationToken cancellationToken = default)
+        public virtual DocumentTranslationOperation StartTranslation(Uri sourceUrl, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries, TranslationOperationOptions options, CancellationToken cancellationToken = default)
         {
+            var source = new SourceConfiguration(sourceUrl.AbsoluteUri)
+            {
+                Language = options.SourceLanguage,
+                Filter = options.Filter
+            };
+
+            var targets = new List<TargetConfiguration>
+            {
+                new TargetConfiguration(targetUrl.AbsoluteUri, targetLanguage, glossaries)
+                {
+                    Category = options.Category
+                }
+            };
             var request = new BatchSubmissionRequest(new List<TranslationOperationConfiguration>
                 {
-                    new TranslationOperationConfiguration(new SourceConfiguration(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetConfiguration>
-                        {
-                            new TargetConfiguration(targetUrl.AbsoluteUri, targetLanguage, glossaries)
-                        })
+                    new TranslationOperationConfiguration(source, targets)
+                    {
+                        StorageType = options.StorageType
+                    }
                 });
 
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartTranslation)}");
@@ -188,20 +201,33 @@ namespace Azure.AI.DocumentTranslation
         /// a.
         /// </summary>
         /// <param name="sourceUrl"></param>
-        /// <param name="sourceLanguage"></param>
         /// <param name="targetUrl"></param>
         /// <param name="targetLanguage"></param>
         /// <param name="glossaries"></param>
+        /// <param name="options"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        internal virtual async Task<DocumentTranslationOperation> StartTranslationAsync(Uri sourceUrl, string sourceLanguage, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries, CancellationToken cancellationToken = default)
+        public virtual async Task<DocumentTranslationOperation> StartTranslationAsync(Uri sourceUrl, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries, TranslationOperationOptions options, CancellationToken cancellationToken = default)
         {
+            var source = new SourceConfiguration(sourceUrl.AbsoluteUri)
+            {
+                Language = options.SourceLanguage,
+                Filter = options.Filter
+            };
+
+            var targets = new List<TargetConfiguration>
+            {
+                new TargetConfiguration(targetUrl.AbsoluteUri, targetLanguage, glossaries)
+                {
+                    Category = options.Category
+                }
+            };
             var request = new BatchSubmissionRequest(new List<TranslationOperationConfiguration>
                 {
-                    new TranslationOperationConfiguration(new SourceConfiguration(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetConfiguration>
-                        {
-                            new TargetConfiguration(targetUrl.AbsoluteUri, targetLanguage, glossaries)
-                        })
+                    new TranslationOperationConfiguration(source, targets)
+                    {
+                        StorageType = options.StorageType
+                    }
                 });
 
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartTranslationAsync)}");

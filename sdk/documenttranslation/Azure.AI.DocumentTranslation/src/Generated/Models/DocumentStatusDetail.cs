@@ -21,7 +21,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="translationProgress"> Progress of the translation if available. </param>
         /// <param name="id"> Document Id. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="url"/>, <paramref name="translateTo"/>, or <paramref name="id"/> is null. </exception>
-        internal DocumentStatusDetail(string url, DateTimeOffset createdOn, DateTimeOffset lastModified, TranslationStatus status, string translateTo, float translationProgress, string id)
+        internal DocumentStatusDetail(Uri url, DateTimeOffset createdOn, DateTimeOffset lastModified, TranslationStatus status, string translateTo, float translationProgress, string id)
         {
             if (url == null)
             {
@@ -55,7 +55,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="translationProgress"> Progress of the translation if available. </param>
         /// <param name="id"> Document Id. </param>
         /// <param name="characterCharged"> Character charged by the API. </param>
-        internal DocumentStatusDetail(string url, DateTimeOffset createdOn, DateTimeOffset lastModified, TranslationStatus status, string translateTo, DocumentTranslationError error, float translationProgress, string id, long? characterCharged)
+        internal DocumentStatusDetail(Uri url, DateTimeOffset createdOn, DateTimeOffset lastModified, TranslationStatus status, string translateTo, DocumentTranslationError error, float translationProgress, string id, long? characterCharged)
         {
             Url = url;
             CreatedOn = createdOn;

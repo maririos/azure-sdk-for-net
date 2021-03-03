@@ -23,7 +23,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// If the translation language pair is not present in the glossary, it will not be applied.
         /// </param>
         /// <exception cref="ArgumentNullException"> <paramref name="glossaryUrl"/> is null. </exception>
-        public TranslationGlossary(string glossaryUrl)
+        public TranslationGlossary(Uri glossaryUrl)
         {
             if (glossaryUrl == null)
             {
@@ -32,17 +32,6 @@ namespace Azure.AI.DocumentTranslation.Models
 
             GlossaryUrl = glossaryUrl;
         }
-
-        /// <summary>
-        /// Location of the glossary.
-        /// 
-        /// We will use the file extension to extract the formatting if the format parameter is not supplied.
-        /// 
-        /// 
-        /// 
-        /// If the translation language pair is not present in the glossary, it will not be applied.
-        /// </summary>
-        public string GlossaryUrl { get; }
         /// <summary> Version. </summary>
         public string Version { get; set; }
     }

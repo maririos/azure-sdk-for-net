@@ -17,27 +17,23 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
         {
             string endpoint = TestEnvironment.Endpoint;
             string apiKey = TestEnvironment.ApiKey;
-            string sourceUrl = TestEnvironment.SourceUrl;
-            string targetUrl = TestEnvironment.TargetUrl;
+            Uri sourceUrl = new Uri(TestEnvironment.SourceUrl);
+            Uri targetUrl = new Uri(TestEnvironment.TargetUrl);
+            Uri glossaryUrl = new Uri(TestEnvironment.GlossaryUrl);
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            var inputs = new List<TranslationOperationConfiguration>()
-                {
-                    new TranslationOperationConfiguration(new SourceConfiguration(sourceUrl)
-                        {
-                            Language = "en"
-                        },
-                    new List<TargetConfiguration>()
-                        {
-                            new TargetConfiguration(targetUrl, "it")
-                        })
-                    {
-                        StorageType = StorageInputType.Folder
-                    }
-                };
+            var glossaries = new List<TranslationGlossary>()
+            {
+                new TranslationGlossary(glossaryUrl)
+            };
 
-            DocumentTranslationOperation operation = client.StartTranslation(inputs);
+            var options = new TranslationOperationOptions
+            {
+                StorageType = StorageType.Folder
+            };
+
+            DocumentTranslationOperation operation = client.StartTranslation(sourceUrl, targetUrl, "it", glossaries, options);
 
             var documentscompleted = new HashSet<string>();
 
