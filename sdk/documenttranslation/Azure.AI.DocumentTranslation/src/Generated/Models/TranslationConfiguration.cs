@@ -12,13 +12,13 @@ using System.Linq;
 namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary> Definition for the input batch translation request. </summary>
-    public partial class TranslationOperationConfiguration
+    public partial class TranslationConfiguration
     {
-        /// <summary> Initializes a new instance of TranslationOperationConfiguration. </summary>
+        /// <summary> Initializes a new instance of TranslationConfiguration. </summary>
         /// <param name="source"> Source of the input documents. </param>
         /// <param name="targets"> Location of the destination for the output. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="source"/> or <paramref name="targets"/> is null. </exception>
-        public TranslationOperationConfiguration(SourceConfiguration source, IEnumerable<TargetConfiguration> targets)
+        public TranslationConfiguration(SourceConfiguration source, IEnumerable<TargetConfiguration> targets)
         {
             if (source == null)
             {

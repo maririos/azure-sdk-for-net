@@ -107,7 +107,7 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="configurations"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual DocumentTranslationOperation StartTranslation(List<TranslationOperationConfiguration> configurations, CancellationToken cancellationToken = default)
+        public virtual DocumentTranslationOperation StartTranslation(List<TranslationConfiguration> configurations, CancellationToken cancellationToken = default)
         {
             var request = new BatchSubmissionRequest(configurations);
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartTranslation)}");
@@ -131,7 +131,7 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="configurations"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<DocumentTranslationOperation> StartTranslationAsync(List<TranslationOperationConfiguration> configurations, CancellationToken cancellationToken = default)
+        public virtual async Task<DocumentTranslationOperation> StartTranslationAsync(List<TranslationConfiguration> configurations, CancellationToken cancellationToken = default)
         {
             var request = new BatchSubmissionRequest(configurations);
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartTranslationAsync)}");
@@ -174,9 +174,9 @@ namespace Azure.AI.DocumentTranslation
                     Category = options.Category
                 }
             };
-            var request = new BatchSubmissionRequest(new List<TranslationOperationConfiguration>
+            var request = new BatchSubmissionRequest(new List<TranslationConfiguration>
                 {
-                    new TranslationOperationConfiguration(source, targets)
+                    new TranslationConfiguration(source, targets)
                     {
                         StorageType = options.StorageType
                     }
@@ -222,9 +222,9 @@ namespace Azure.AI.DocumentTranslation
                     Category = options.Category
                 }
             };
-            var request = new BatchSubmissionRequest(new List<TranslationOperationConfiguration>
+            var request = new BatchSubmissionRequest(new List<TranslationConfiguration>
                 {
-                    new TranslationOperationConfiguration(source, targets)
+                    new TranslationConfiguration(source, targets)
                     {
                         StorageType = options.StorageType
                     }

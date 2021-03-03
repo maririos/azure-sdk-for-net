@@ -10,14 +10,14 @@ namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary> Definition for the input batch translation request. </summary>
     [CodeGenModel("BatchRequest")]
-    public partial class TranslationOperationConfiguration
+    public partial class TranslationConfiguration
     {
         /// <summary> Initializes a new instance of TranslationOperationConfiguration. </summary>
         /// <param name="source"> Source of the input documents. </param>
         /// <param name="targets"> Location of the destination for the output. </param>
         /// <param name="storageType"></param>
         /// <exception cref="ArgumentNullException"> <paramref name="source"/> or <paramref name="targets"/> is null. </exception>
-        public TranslationOperationConfiguration(SourceConfiguration source, IEnumerable<TargetConfiguration> targets, StorageType storageType)
+        public TranslationConfiguration(SourceConfiguration source, IEnumerable<TargetConfiguration> targets, StorageType storageType)
         {
             if (source == null)
             {

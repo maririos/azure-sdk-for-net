@@ -24,7 +24,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            var input1 = new TranslationOperationConfiguration(
+            var input1 = new TranslationConfiguration(
                 new SourceConfiguration(sourceUrl),
                 new List<TargetConfiguration>()
                     {
@@ -32,7 +32,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
                     },
                 StorageType.Folder);
 
-            var input2 = new TranslationOperationConfiguration(
+            var input2 = new TranslationConfiguration(
                 new SourceConfiguration(targetUrl),
                 new List<TargetConfiguration>()
                     {
@@ -40,7 +40,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
                     },
                 StorageType.Folder);
 
-            var inputs = new List<TranslationOperationConfiguration>()
+            var inputs = new List<TranslationConfiguration>()
                 {
                     input1,
                     input2

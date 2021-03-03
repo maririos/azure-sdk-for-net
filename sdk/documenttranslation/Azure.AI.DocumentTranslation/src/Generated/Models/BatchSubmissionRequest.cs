@@ -17,7 +17,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <summary> Initializes a new instance of BatchSubmissionRequest. </summary>
         /// <param name="inputs"> The input list of documents or folders containing documents. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="inputs"/> is null. </exception>
-        public BatchSubmissionRequest(IEnumerable<TranslationOperationConfiguration> inputs)
+        public BatchSubmissionRequest(IEnumerable<TranslationConfiguration> inputs)
         {
             if (inputs == null)
             {
@@ -28,6 +28,6 @@ namespace Azure.AI.DocumentTranslation.Models
         }
 
         /// <summary> The input list of documents or folders containing documents. </summary>
-        public IList<TranslationOperationConfiguration> Inputs { get; }
+        public IList<TranslationConfiguration> Inputs { get; }
     }
 }
