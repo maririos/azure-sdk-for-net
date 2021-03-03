@@ -40,27 +40,21 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             DocumentTranslationOperation operation = await client.StartTranslationAsync(inputs);
 
-            var documentsSucceeded = new HashSet<string>();
-            var documentsFailed = new HashSet<string>();
+            var documentscompleted = new HashSet<string>();
 
             while (!operation.HasCompleted)
             {
-                operation.UpdateStatus();
+                await operation.UpdateStatusAsync();
 
-                // update list when any document is done
-                if (operation.DocumentsSucceeded > documentsSucceeded.Count || operation.DocumentsFailed > documentsFailed.Count)
+                AsyncPageable<DocumentStatusDetail> documentsStatus = operation.GetDocumentsStatusAsync();
+                await foreach (DocumentStatusDetail docStatus in documentsStatus)
                 {
-                    AsyncPageable<DocumentStatusDetail> documentsStatus = operation.GetDocumentsStatusAsync();
-                    await foreach (DocumentStatusDetail docStatus in documentsStatus)
+                    if (documentscompleted.Contains(docStatus.Id))
+                        continue;
+                    if (docStatus.Status == TranslationStatus.Succeeded || docStatus.Status == TranslationStatus.Failed)
                     {
-                        if (docStatus.Status == TranslationStatus.Succeeded)
-                        {
-                            documentsSucceeded.Add(docStatus.Id);
-                        }
-                        else if (docStatus.Status == TranslationStatus.Failed)
-                        {
-                            documentsFailed.Add(docStatus.Id);
-                        }
+                        documentscompleted.Add(docStatus.Id);
+                        Console.WriteLine($"Document {docStatus.Url} completed with status ${docStatus.Status}");
                     }
                 }
             }
