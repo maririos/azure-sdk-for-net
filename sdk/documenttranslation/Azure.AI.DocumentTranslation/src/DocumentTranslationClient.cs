@@ -159,7 +159,7 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="options"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual DocumentTranslationOperation StartTranslation(Uri sourceUrl, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries, TranslationOperationOptions options, CancellationToken cancellationToken = default)
+        public virtual DocumentTranslationOperation StartTranslation(Uri sourceUrl, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries = default, TranslationOperationOptions options = default, CancellationToken cancellationToken = default)
         {
             var source = new SourceConfiguration(sourceUrl.AbsoluteUri)
             {
@@ -207,7 +207,7 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="options"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<DocumentTranslationOperation> StartTranslationAsync(Uri sourceUrl, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries, TranslationOperationOptions options, CancellationToken cancellationToken = default)
+        public virtual async Task<DocumentTranslationOperation> StartTranslationAsync(Uri sourceUrl, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries = default, TranslationOperationOptions options = default, CancellationToken cancellationToken = default)
         {
             var source = new SourceConfiguration(sourceUrl.AbsoluteUri)
             {

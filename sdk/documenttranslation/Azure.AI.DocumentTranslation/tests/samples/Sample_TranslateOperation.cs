@@ -24,17 +24,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            var glossaries = new List<TranslationGlossary>()
-            {
-                new TranslationGlossary(glossaryUrl)
-            };
-
-            var options = new TranslationOperationOptions
-            {
-                StorageType = StorageType.Folder
-            };
-
-            DocumentTranslationOperation operation = client.StartTranslation(sourceUrl, targetUrl, "it", glossaries, options);
+            DocumentTranslationOperation operation = client.StartTranslation(sourceUrl, targetUrl, "it");
 
             TimeSpan pollingInterval = new TimeSpan(1000);
 
