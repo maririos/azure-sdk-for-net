@@ -41,9 +41,10 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
                 }
             }
 
-            Console.WriteLine($"# of operations: {operationsCount}\nTotal Documents: {totalDocs}\n"
-                              + $"DocumentsSucceeded: {docsSucceeded}\n"
-                              + $"Cancelled Documents: {docsCancelled}");
+            Console.WriteLine($"# of operations: {operationsCount}");
+            Console.WriteLine($"Total Documents: {totalDocs}");
+            Console.WriteLine($"DocumentsSucceeded: {docsSucceeded}");
+            Console.WriteLine($"Cancelled Documents: {docsCancelled}");
 
             Console.WriteLine($"Largest operation is {largestOperation} and has the documents:");
 
