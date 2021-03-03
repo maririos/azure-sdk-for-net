@@ -41,9 +41,10 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
                 }
             }
 
-            Console.WriteLine($"# of jobs: {jobsCount}\nTotal Documents: {totalDocs}\n"
-                              + $"DocumentsSucceeded: {docsSucceeded}\n"
-                              + $"Cancelled Documents: {docsCancelled}");
+            Console.WriteLine($"# of jobs: {jobsCount}");
+            Console.WriteLine($"Total Documents: {totalDocs}");
+            Console.WriteLine($"DocumentsSucceeded: {docsSucceeded}");
+            Console.WriteLine($"Cancelled Documents: {docsCancelled}");
 
             Console.WriteLine($"Largest job is {largestJobId} and has the documents:");
             Pageable<DocumentStatusDetail> docs = client.GetDocumentsStatus(largestJobId);

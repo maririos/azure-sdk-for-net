@@ -20,21 +20,10 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
             string apiKey = TestEnvironment.ApiKey;
             Uri sourceUrl = new Uri(TestEnvironment.SourceUrl);
             Uri targetUrl = new Uri(TestEnvironment.TargetUrl);
-            Uri glossaryUrl = new Uri(TestEnvironment.GlossaryUrl);
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            var glossaries = new List<TranslationGlossary>()
-            {
-                new TranslationGlossary(glossaryUrl)
-            };
-
-            var options = new TranslationOperationOptions
-            {
-                StorageType = StorageType.Folder
-            };
-
-            Response<JobStatusDetail> job = client.CreateTranslationJob(sourceUrl, targetUrl, "it", glossaries, options);
+            Response<JobStatusDetail> job = client.CreateTranslationJob(sourceUrl, targetUrl, "it");
 
             // get not finished documents
             List<string> documentIds = new List<string>();

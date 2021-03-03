@@ -18,32 +18,30 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
         {
             string endpoint = TestEnvironment.Endpoint;
             string apiKey = TestEnvironment.ApiKey;
-            string sourceUrl = TestEnvironment.SourceUrl;
-            string targetUrl = TestEnvironment.TargetUrl;
+            string sourceUrl1 = TestEnvironment.SourceUrl;
+            string sourceUrl2 = TestEnvironment.SourceUrl;
+            string targetUrl1 = TestEnvironment.TargetUrl;
+            string targetUrl2 = TestEnvironment.TargetUrl;
             Uri glossaryUrl = new Uri(TestEnvironment.GlossaryUrl);
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            var input1 = new TranslationJobConfiguration(
-                new SourceConfiguration(sourceUrl),
-                new List<TargetConfiguration>()
-                    {
-                        new TargetConfiguration(targetUrl, "it", new List<TranslationGlossary> {new TranslationGlossary(glossaryUrl)})
-                    },
-                StorageType.Folder);
+            var glossaries = new List<TranslationGlossary>() { new TranslationGlossary(glossaryUrl) };
 
-            var input2 = new TranslationJobConfiguration(
-                new SourceConfiguration(targetUrl),
-                new List<TargetConfiguration>()
-                    {
-                        new TargetConfiguration(sourceUrl, "en", new List<TranslationGlossary> {new TranslationGlossary(glossaryUrl)})
-                    },
-                StorageType.Folder);
+            var configuration1 = new TranslationJobConfiguration(
+                source: new SourceConfiguration(sourceUrl1),
+                targets: new List<TargetConfiguration>() { new TargetConfiguration(targetUrl1, "it", glossaries) },
+                storageType: StorageType.Folder);
+
+            var configuration2 = new TranslationJobConfiguration(
+                source: new SourceConfiguration(sourceUrl2),
+                targets: new List<TargetConfiguration>() { new TargetConfiguration(targetUrl2, "it", glossaries) },
+                storageType: StorageType.Folder);
 
             var inputs = new List<TranslationJobConfiguration>()
                 {
-                    input1,
-                    input2
+                    configuration1,
+                    configuration2
                 };
 
             Response<JobStatusDetail> job = client.CreateTranslationJob(inputs);
