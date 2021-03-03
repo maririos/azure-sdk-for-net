@@ -3,7 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Threading;
 using Azure.AI.DocumentTranslation.Models;
 using Azure.Core.TestFramework;
 using NUnit.Framework;
@@ -14,29 +14,41 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
     public partial class DocumentTranslationSamples : SamplesBase<DocumentTranslationTestEnvironment>
     {
         [Test]
-        public async Task TranslateJobAsync()
+        public void TranslateOperationComplex()
         {
             string endpoint = TestEnvironment.Endpoint;
             string apiKey = TestEnvironment.ApiKey;
-            Uri sourceUrl = new Uri(TestEnvironment.SourceUrl);
-            Uri targetUrl = new Uri(TestEnvironment.TargetUrl);
+            string sourceUrl = TestEnvironment.SourceUrl;
+            string targetUrl = TestEnvironment.TargetUrl;
             Uri glossaryUrl = new Uri(TestEnvironment.GlossaryUrl);
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            var glossaries = new List<TranslationGlossary>()
-            {
-                new TranslationGlossary(glossaryUrl)
-            };
+            var input1 = new TranslationJobConfiguration(
+                new SourceConfiguration(sourceUrl),
+                new List<TargetConfiguration>()
+                    {
+                        new TargetConfiguration(targetUrl, "it", new List<TranslationGlossary> {new TranslationGlossary(glossaryUrl)})
+                    },
+                StorageType.Folder);
 
-            var options = new TranslationOperationOptions
-            {
-                StorageType = StorageType.Folder
-            };
+            var input2 = new TranslationJobConfiguration(
+                new SourceConfiguration(targetUrl),
+                new List<TargetConfiguration>()
+                    {
+                        new TargetConfiguration(sourceUrl, "en", new List<TranslationGlossary> {new TranslationGlossary(glossaryUrl)})
+                    },
+                StorageType.Folder);
 
-            Response<JobStatusDetail> job = await client.CreateTranslationJobAsync(sourceUrl, targetUrl, "it", glossaries, options);
+            var inputs = new List<TranslationJobConfiguration>()
+                {
+                    input1,
+                    input2
+                };
 
-            Response<JobStatusDetail> jobStatus = await client.WaitForJobCompletionAsync(job.Value.Id);
+            Response<JobStatusDetail> job = client.CreateTranslationJob(inputs);
+
+            Response<JobStatusDetail> jobStatus = client.WaitForJobCompletion(job.Value.Id);
 
             Console.WriteLine($"  Status: {jobStatus.Value.Status}");
             Console.WriteLine($"  Created on: {jobStatus.Value.CreatedOn}");
@@ -48,9 +60,9 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
             Console.WriteLine($"    Not started: {jobStatus.Value.DocumentsNotStarted}");
 
             // Get Status of documents
-            AsyncPageable<DocumentStatusDetail> documents = client.GetDocumentsStatusAsync(job.Value.Id);
+            Pageable<DocumentStatusDetail> documents = client.GetDocumentsStatus(job.Value.Id);
 
-            await foreach (DocumentStatusDetail document in documents)
+            foreach (DocumentStatusDetail document in documents)
             {
                 Console.WriteLine($"Document with Id: {document.Id}");
                 Console.WriteLine($"  Status:{document.Status}");

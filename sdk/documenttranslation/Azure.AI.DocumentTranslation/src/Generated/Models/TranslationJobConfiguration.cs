@@ -38,6 +38,6 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <summary> Location of the destination for the output. </summary>
         public IList<TargetConfiguration> Targets { get; }
         /// <summary> Storage type of the input documents source string. </summary>
-        public StorageInputType? StorageType { get; set; }
+        public StorageType? StorageType { get; set; }
     }
 }

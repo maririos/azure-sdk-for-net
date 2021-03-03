@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.AI.DocumentTranslation.Models;
@@ -113,7 +114,7 @@ namespace Azure.AI.DocumentTranslation
         public virtual Response<JobStatusDetail> CreateTranslationJob(List<TranslationJobConfiguration> configurations, CancellationToken cancellationToken = default)
         {
             var request = new BatchSubmissionRequest(configurations);
-            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartBatchTranslation)}");
+            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(CreateTranslationJob)}");
             scope.Start();
 
             try
@@ -138,7 +139,7 @@ namespace Azure.AI.DocumentTranslation
         public virtual async Task<Response<JobStatusDetail>> CreateTranslationJobAsync(List<TranslationJobConfiguration> configurations, CancellationToken cancellationToken = default)
         {
             var request = new BatchSubmissionRequest(configurations);
-            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartBatchTranslationAsync)}");
+            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(CreateTranslationJobAsync)}");
             scope.Start();
 
             try
@@ -158,29 +159,43 @@ namespace Azure.AI.DocumentTranslation
         /// a.
         /// </summary>
         /// <param name="sourceUrl"></param>
-        /// <param name="sourceLanguage"></param>
         /// <param name="targetUrl"></param>
         /// <param name="targetLanguage"></param>
         /// <param name="glossaries"></param>
+        /// <param name="options"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        internal virtual Response<string> StartBatchTranslation(Uri sourceUrl, string sourceLanguage, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries, CancellationToken cancellationToken = default)
+        public virtual Response<JobStatusDetail> CreateTranslationJob(Uri sourceUrl, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries, TranslationOperationOptions options, CancellationToken cancellationToken = default)
         {
+            var source = new SourceConfiguration(sourceUrl.AbsoluteUri)
+            {
+                Language = options.SourceLanguage,
+                Filter = options.Filter
+            };
+
+            var targets = new List<TargetConfiguration>
+            {
+                new TargetConfiguration(targetUrl.AbsoluteUri, targetLanguage, glossaries)
+                {
+                    Category = options.Category
+                }
+            };
             var request = new BatchSubmissionRequest(new List<TranslationJobConfiguration>
                 {
-                    new TranslationJobConfiguration(new SourceConfiguration(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetConfiguration>
-                        {
-                            new TargetConfiguration(targetUrl.AbsoluteUri, targetLanguage, glossaries)
-                        })
+                    new TranslationJobConfiguration(source, targets)
+                    {
+                        StorageType = options.StorageType
+                    }
                 });
 
-            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartBatchTranslation)}");
+            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(CreateTranslationJob)}");
             scope.Start();
 
             try
             {
-                ResponseWithHeaders<DocumentTranslationSubmitBatchRequestHeaders> response = _serviceRestClient.SubmitBatchRequest(request, cancellationToken);
-                return Response.FromValue(response.Headers.OperationLocation, response.GetRawResponse());
+                ResponseWithHeaders<DocumentTranslationSubmitBatchRequestHeaders> job = _serviceRestClient.SubmitBatchRequest(request, cancellationToken);
+                var id = job.Headers.OperationLocation.Split('/').Last();
+                return _serviceRestClient.GetOperationStatus(new Guid(id), cancellationToken);
             }
             catch (Exception e)
             {
@@ -193,29 +208,43 @@ namespace Azure.AI.DocumentTranslation
         /// a.
         /// </summary>
         /// <param name="sourceUrl"></param>
-        /// <param name="sourceLanguage"></param>
         /// <param name="targetUrl"></param>
         /// <param name="targetLanguage"></param>
         /// <param name="glossaries"></param>
+        /// <param name="options"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        internal virtual async Task<Response<string>> StartBatchTranslationAsync(Uri sourceUrl, string sourceLanguage, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<JobStatusDetail>> CreateTranslationJobAsync(Uri sourceUrl, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries, TranslationOperationOptions options, CancellationToken cancellationToken = default)
         {
+            var source = new SourceConfiguration(sourceUrl.AbsoluteUri)
+            {
+                Language = options.SourceLanguage,
+                Filter = options.Filter
+            };
+
+            var targets = new List<TargetConfiguration>
+            {
+                new TargetConfiguration(targetUrl.AbsoluteUri, targetLanguage, glossaries)
+                {
+                    Category = options.Category
+                }
+            };
             var request = new BatchSubmissionRequest(new List<TranslationJobConfiguration>
                 {
-                    new TranslationJobConfiguration(new SourceConfiguration(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetConfiguration>
-                        {
-                            new TargetConfiguration(targetUrl.AbsoluteUri, targetLanguage, glossaries)
-                        })
+                    new TranslationJobConfiguration(source, targets)
+                    {
+                        StorageType = options.StorageType
+                    }
                 });
 
-            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(StartBatchTranslationAsync)}");
+            using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(CreateTranslationJobAsync)}");
             scope.Start();
 
             try
             {
-                ResponseWithHeaders<DocumentTranslationSubmitBatchRequestHeaders> response = await _serviceRestClient.SubmitBatchRequestAsync(request, cancellationToken).ConfigureAwait(false);
-                return Response.FromValue(response.Headers.OperationLocation, response.GetRawResponse());
+                ResponseWithHeaders<DocumentTranslationSubmitBatchRequestHeaders> job = await _serviceRestClient.SubmitBatchRequestAsync(request, cancellationToken).ConfigureAwait(false);
+                var id = job.Headers.OperationLocation.Split('/').Last();
+                return await _serviceRestClient.GetOperationStatusAsync(new Guid(id), cancellationToken).ConfigureAwait(false);
             }
             catch (Exception e)
             {

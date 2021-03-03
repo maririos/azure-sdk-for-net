@@ -18,29 +18,25 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
         {
             string endpoint = TestEnvironment.Endpoint;
             string apiKey = TestEnvironment.ApiKey;
-            string sourceUrl = TestEnvironment.SourceUrl;
-            string targetUrl = TestEnvironment.TargetUrl;
+            Uri sourceUrl = new Uri(TestEnvironment.SourceUrl);
+            Uri targetUrl = new Uri(TestEnvironment.TargetUrl);
+            Uri glossaryUrl = new Uri(TestEnvironment.GlossaryUrl);
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            var inputs = new List<TranslationJobConfiguration>()
-                {
-                    new TranslationJobConfiguration(new SourceConfiguration(sourceUrl)
-                        {
-                            Language = "en"
-                        },
-                    new List<TargetConfiguration>()
-                        {
-                            new TargetConfiguration(targetUrl, "it")
-                        })
-                    {
-                        StorageType = StorageInputType.Folder
-                    }
-                };
+            var glossaries = new List<TranslationGlossary>()
+            {
+                new TranslationGlossary(glossaryUrl)
+            };
 
-            Response<JobStatusDetail> job = client.CreateTranslationJob(inputs);
+            var options = new TranslationOperationOptions
+            {
+                StorageType = StorageType.Folder
+            };
 
-            var jobStatus = client.WaitForJobCompletion(job.Value.Id);
+            Response<JobStatusDetail> job = client.CreateTranslationJob(sourceUrl, targetUrl, "it", glossaries, options);
+
+            Response<JobStatusDetail> jobStatus = client.WaitForJobCompletion(job.Value.Id);
 
             Console.WriteLine($"  Status: {jobStatus.Value.Status}");
             Console.WriteLine($"  Created on: {jobStatus.Value.CreatedOn}");
