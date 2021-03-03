@@ -12,7 +12,7 @@ using System.Linq;
 namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary> Document Status Response. </summary>
-    public partial class DocumentStatusResponse
+    internal partial class DocumentStatusResponse
     {
         /// <summary> Initializes a new instance of DocumentStatusResponse. </summary>
         /// <param name="value"> The detail status of individual documents. </param>

@@ -12,7 +12,7 @@ using System.Linq;
 namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary> Job submission batch request. </summary>
-    public partial class BatchSubmissionRequest
+    internal partial class BatchSubmissionRequest
     {
         /// <summary> Initializes a new instance of BatchSubmissionRequest. </summary>
         /// <param name="inputs"> The input list of documents or folders containing documents. </param>

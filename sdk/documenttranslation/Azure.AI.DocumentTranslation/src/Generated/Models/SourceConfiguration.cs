@@ -27,6 +27,7 @@ namespace Azure.AI.DocumentTranslation.Models
 
         /// <summary> Location of the folder / container or single file with your documents. </summary>
         public string SourceUrl { get; }
+        /// <summary> filter documents in the source path for translation by prefix or suffix. </summary>
         public DocumentFilter Filter { get; set; }
         /// <summary>
         /// Language code

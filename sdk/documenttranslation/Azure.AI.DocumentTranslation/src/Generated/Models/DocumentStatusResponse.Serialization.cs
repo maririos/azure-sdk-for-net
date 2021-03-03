@@ -11,7 +11,7 @@ using Azure.Core;
 
 namespace Azure.AI.DocumentTranslation.Models
 {
-    public partial class DocumentStatusResponse
+    internal partial class DocumentStatusResponse
     {
         internal static DocumentStatusResponse DeserializeDocumentStatusResponse(JsonElement element)
         {

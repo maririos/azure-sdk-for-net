@@ -10,7 +10,7 @@ using Azure.Core;
 
 namespace Azure.AI.DocumentTranslation.Models
 {
-    public partial class StatusSummary
+    internal partial class StatusSummary
     {
         internal static StatusSummary DeserializeStatusSummary(JsonElement element)
         {
