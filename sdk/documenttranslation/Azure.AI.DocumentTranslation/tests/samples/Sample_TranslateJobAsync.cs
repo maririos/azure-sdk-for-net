@@ -25,13 +25,13 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var inputs = new List<TranslationJobConfiguration>()
                 {
-                    new TranslationJobConfiguration(new SourceInput(sourceUrl)
+                    new TranslationJobConfiguration(new SourceConfiguration(sourceUrl)
                         {
                             Language = "en"
                         },
-                    new List<TargetInput>()
+                    new List<TargetConfiguration>()
                         {
-                            new TargetInput(targetUrl, "it")
+                            new TargetConfiguration(targetUrl, "it")
                         })
                     {
                         StorageType = StorageInputType.Folder

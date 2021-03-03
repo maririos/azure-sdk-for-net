@@ -168,9 +168,9 @@ namespace Azure.AI.DocumentTranslation
         {
             var request = new BatchSubmissionRequest(new List<TranslationJobConfiguration>
                 {
-                    new TranslationJobConfiguration(new SourceInput(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetInput>
+                    new TranslationJobConfiguration(new SourceConfiguration(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetConfiguration>
                         {
-                            new TargetInput(targetUrl.AbsoluteUri, targetLanguage, glossaries)
+                            new TargetConfiguration(targetUrl.AbsoluteUri, targetLanguage, glossaries)
                         })
                 });
 
@@ -203,9 +203,9 @@ namespace Azure.AI.DocumentTranslation
         {
             var request = new BatchSubmissionRequest(new List<TranslationJobConfiguration>
                 {
-                    new TranslationJobConfiguration(new SourceInput(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetInput>
+                    new TranslationJobConfiguration(new SourceConfiguration(sourceUrl.AbsoluteUri) { Language = sourceLanguage }, new List<TargetConfiguration>
                         {
-                            new TargetInput(targetUrl.AbsoluteUri, targetLanguage, glossaries)
+                            new TargetConfiguration(targetUrl.AbsoluteUri, targetLanguage, glossaries)
                         })
                 });
 

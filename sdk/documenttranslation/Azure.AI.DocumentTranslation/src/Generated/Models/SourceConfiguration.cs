@@ -10,12 +10,12 @@ using System;
 namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary> Source of the input documents. </summary>
-    public partial class SourceInput
+    public partial class SourceConfiguration
     {
-        /// <summary> Initializes a new instance of SourceInput. </summary>
+        /// <summary> Initializes a new instance of SourceConfiguration. </summary>
         /// <param name="sourceUrl"> Location of the folder / container or single file with your documents. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="sourceUrl"/> is null. </exception>
-        public SourceInput(string sourceUrl)
+        public SourceConfiguration(string sourceUrl)
         {
             if (sourceUrl == null)
             {
