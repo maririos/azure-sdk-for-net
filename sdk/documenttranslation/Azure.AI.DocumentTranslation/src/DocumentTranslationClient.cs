@@ -152,24 +152,24 @@ namespace Azure.AI.DocumentTranslation
         /// <summary>
         /// a.
         /// </summary>
-        /// <param name="sourceUrl"></param>
-        /// <param name="targetUrl"></param>
+        /// <param name="sourceBlobContainerSas"></param>
+        /// <param name="targetBlobContainerSas"></param>
         /// <param name="targetLanguage"></param>
-        /// <param name="glossaries"></param>
+        /// <param name="glossary"></param>
         /// <param name="options"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual DocumentTranslationOperation StartTranslation(Uri sourceUrl, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries = default, TranslationOperationOptions options = default, CancellationToken cancellationToken = default)
+        public virtual DocumentTranslationOperation StartTranslationFromAzureBlobs(Uri sourceBlobContainerSas, Uri targetBlobContainerSas, string targetLanguage, TranslationGlossary glossary = default, TranslationOperationOptions options = default, CancellationToken cancellationToken = default)
         {
-            var source = new SourceConfiguration(sourceUrl.AbsoluteUri)
+            var source = new TranslationSource(sourceBlobContainerSas)
             {
                 Language = options.SourceLanguage,
                 Filter = options.Filter
             };
 
-            var targets = new List<TargetConfiguration>
+            var targets = new List<TranslationTarget>
             {
-                new TargetConfiguration(targetUrl.AbsoluteUri, targetLanguage, glossaries)
+                new TranslationTarget(targetBlobContainerSas, targetLanguage, new List<TranslationGlossary>{ glossary })
                 {
                     Category = options.Category
                 }
@@ -200,24 +200,24 @@ namespace Azure.AI.DocumentTranslation
         /// <summary>
         /// a.
         /// </summary>
-        /// <param name="sourceUrl"></param>
-        /// <param name="targetUrl"></param>
+        /// <param name="sourceBlobContainerSas"></param>
+        /// <param name="targetBlobContainerSas"></param>
         /// <param name="targetLanguage"></param>
-        /// <param name="glossaries"></param>
+        /// <param name="glossary"></param>
         /// <param name="options"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<DocumentTranslationOperation> StartTranslationAsync(Uri sourceUrl, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries = default, TranslationOperationOptions options = default, CancellationToken cancellationToken = default)
+        public virtual async Task<DocumentTranslationOperation> StartTranslationFromAzureBlobsAsync(Uri sourceBlobContainerSas, Uri targetBlobContainerSas, string targetLanguage, TranslationGlossary glossary = default, TranslationOperationOptions options = default, CancellationToken cancellationToken = default)
         {
-            var source = new SourceConfiguration(sourceUrl.AbsoluteUri)
+            var source = new TranslationSource(sourceBlobContainerSas)
             {
                 Language = options.SourceLanguage,
                 Filter = options.Filter
             };
 
-            var targets = new List<TargetConfiguration>
+            var targets = new List<TranslationTarget>
             {
-                new TargetConfiguration(targetUrl.AbsoluteUri, targetLanguage, glossaries)
+                new TranslationTarget(targetBlobContainerSas, targetLanguage, new List<TranslationGlossary>{ glossary })
                 {
                     Category = options.Category
                 }
@@ -250,11 +250,11 @@ namespace Azure.AI.DocumentTranslation
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual Pageable<OperationStatusDetail> GetOperationsStatus(CancellationToken cancellationToken = default)
+        public virtual Pageable<TranslationStatusDetail> GetSubmittedTranslations(CancellationToken cancellationToken = default)
         {
-            Page<OperationStatusDetail> FirstPageFunc(int? pageSizeHint)
+            Page<TranslationStatusDetail> FirstPageFunc(int? pageSizeHint)
             {
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetOperationsStatus)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSubmittedTranslations)}");
                 scope.Start();
 
                 try
@@ -269,9 +269,9 @@ namespace Azure.AI.DocumentTranslation
                 }
             }
 
-            Page<OperationStatusDetail> NextPageFunc(string nextLink, int? pageSizeHint)
+            Page<TranslationStatusDetail> NextPageFunc(string nextLink, int? pageSizeHint)
             {
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetOperationsStatus)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSubmittedTranslations)}");
                 scope.Start();
 
                 try
@@ -294,11 +294,11 @@ namespace Azure.AI.DocumentTranslation
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual AsyncPageable<OperationStatusDetail> GetOperationsStatusAsync(CancellationToken cancellationToken = default)
+        public virtual AsyncPageable<TranslationStatusDetail> GetSubmittedTranslationsAsync(CancellationToken cancellationToken = default)
         {
-            async Task<Page<OperationStatusDetail>> FirstPageFunc(int? pageSizeHint)
+            async Task<Page<TranslationStatusDetail>> FirstPageFunc(int? pageSizeHint)
             {
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetOperationsStatusAsync)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSubmittedTranslationsAsync)}");
                 scope.Start();
 
                 try
@@ -313,9 +313,9 @@ namespace Azure.AI.DocumentTranslation
                 }
             }
 
-            async Task<Page<OperationStatusDetail>> NextPageFunc(string nextLink, int? pageSizeHint)
+            async Task<Page<TranslationStatusDetail>> NextPageFunc(string nextLink, int? pageSizeHint)
             {
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetOperationsStatusAsync)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSubmittedTranslationsAsync)}");
                 scope.Start();
 
                 try

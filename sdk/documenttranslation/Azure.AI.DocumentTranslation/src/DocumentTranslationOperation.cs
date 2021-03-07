@@ -38,7 +38,7 @@ namespace Azure.AI.DocumentTranslation
         /// <summary>
         /// Total number of documents in the operation.
         /// </summary>
-        public int TotalDocuments => _totalDocuments;
+        public int DocumentsTotal => _documentsTotal;
 
         /// <summary>
         /// Number of documents failed to translate in the operation.
@@ -65,7 +65,7 @@ namespace Azure.AI.DocumentTranslation
         /// </summary>
         public int DocumentsCancelled => _documentsCancelled;
 
-        private int _totalDocuments;
+        private int _documentsTotal;
         private int _documentsFailed;
         private int _documentsSucceeded;
         private int _documentsInProgress;
@@ -217,7 +217,7 @@ namespace Azure.AI.DocumentTranslation
 
                 try
                 {
-                    Response<OperationStatusDetail> update = async
+                    Response<TranslationStatusDetail> update = async
                         ? await _serviceClient.GetOperationStatusAsync(new Guid(Id), cancellationToken).ConfigureAwait(false)
                         : _serviceClient.GetOperationStatus(new Guid(Id), cancellationToken);
 
@@ -226,7 +226,7 @@ namespace Azure.AI.DocumentTranslation
                     _createdOn = update.Value.CreatedOn;
                     _lastModified = update.Value.LastModified;
                     _status = update.Value.Status;
-                    _totalDocuments = update.Value.TotalDocuments;
+                    _documentsTotal = update.Value.DocumentsTotal;
                     _documentsFailed = update.Value.DocumentsFailed;
                     _documentsInProgress = update.Value.DocumentsInProgress;
                     _documentsSucceeded = update.Value.DocumentsSucceeded;
@@ -406,7 +406,7 @@ namespace Azure.AI.DocumentTranslation
 
             try
             {
-                Response<OperationStatusDetail> response = _serviceClient.CancelOperation(new Guid(Id), cancellationToken);
+                Response<TranslationStatusDetail> response = _serviceClient.CancelOperation(new Guid(Id), cancellationToken);
                 _response = response.GetRawResponse();
             }
             catch (Exception e)
@@ -428,7 +428,7 @@ namespace Azure.AI.DocumentTranslation
 
             try
             {
-                Response<OperationStatusDetail> response = await _serviceClient.CancelOperationAsync(new Guid(Id), cancellationToken).ConfigureAwait(false);
+                Response<TranslationStatusDetail> response = await _serviceClient.CancelOperationAsync(new Guid(Id), cancellationToken).ConfigureAwait(false);
                 _response = response.GetRawResponse();
             }
             catch (Exception e)

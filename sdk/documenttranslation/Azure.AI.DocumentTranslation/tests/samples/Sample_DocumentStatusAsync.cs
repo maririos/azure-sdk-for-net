@@ -23,7 +23,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            DocumentTranslationOperation operation = client.StartTranslation(sourceUrl, targetUrl, "it");
+            DocumentTranslationOperation operation = await client.StartTranslationFromAzureBlobsAsync(sourceUrl, targetUrl, "it");
 
             var documentscompleted = new HashSet<string>();
 

@@ -10,14 +10,14 @@ using Azure.Core;
 
 namespace Azure.AI.DocumentTranslation.Models
 {
-    public partial class InnerErrorV2
+    public partial class DocumentTranslationInnerError
     {
-        internal static InnerErrorV2 DeserializeInnerErrorV2(JsonElement element)
+        internal static DocumentTranslationInnerError DeserializeDocumentTranslationInnerError(JsonElement element)
         {
             string code = default;
             string message = default;
             Optional<string> target = default;
-            Optional<InnerErrorV2> innerError = default;
+            Optional<DocumentTranslationInnerError> innerError = default;
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("code"))
@@ -42,11 +42,11 @@ namespace Azure.AI.DocumentTranslation.Models
                         property.ThrowNonNullablePropertyIsNull();
                         continue;
                     }
-                    innerError = DeserializeInnerErrorV2(property.Value);
+                    innerError = DeserializeDocumentTranslationInnerError(property.Value);
                     continue;
                 }
             }
-            return new InnerErrorV2(code, message, target.Value, innerError.Value);
+            return new DocumentTranslationInnerError(code, message, target.Value, innerError.Value);
         }
     }
 }

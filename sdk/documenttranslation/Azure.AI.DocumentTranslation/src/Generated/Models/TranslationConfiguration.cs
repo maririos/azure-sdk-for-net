@@ -18,7 +18,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="source"> Source of the input documents. </param>
         /// <param name="targets"> Location of the destination for the output. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="source"/> or <paramref name="targets"/> is null. </exception>
-        public TranslationConfiguration(SourceConfiguration source, IEnumerable<TargetConfiguration> targets)
+        public TranslationConfiguration(TranslationSource source, IEnumerable<TranslationTarget> targets)
         {
             if (source == null)
             {
@@ -34,9 +34,9 @@ namespace Azure.AI.DocumentTranslation.Models
         }
 
         /// <summary> Source of the input documents. </summary>
-        public SourceConfiguration Source { get; }
+        public TranslationSource Source { get; }
         /// <summary> Location of the destination for the output. </summary>
-        public IList<TargetConfiguration> Targets { get; }
+        public IList<TranslationTarget> Targets { get; }
         /// <summary> Storage type of the input documents source string. </summary>
         public StorageType? StorageType { get; set; }
     }

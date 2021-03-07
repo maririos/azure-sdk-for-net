@@ -17,7 +17,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="targets"> Location of the destination for the output. </param>
         /// <param name="storageType"></param>
         /// <exception cref="ArgumentNullException"> <paramref name="source"/> or <paramref name="targets"/> is null. </exception>
-        public TranslationConfiguration(SourceConfiguration source, IEnumerable<TargetConfiguration> targets, StorageType storageType)
+        public TranslationConfiguration(TranslationSource source, IEnumerable<TranslationTarget> targets, StorageType storageType)
         {
             if (source == null)
             {

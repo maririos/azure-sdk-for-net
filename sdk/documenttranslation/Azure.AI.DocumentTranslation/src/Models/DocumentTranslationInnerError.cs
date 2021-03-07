@@ -5,10 +5,8 @@ using Azure.Core;
 
 namespace Azure.AI.DocumentTranslation.Models
 {
-    [CodeGenModel("SourceInput")]
-    public partial class SourceConfiguration
+    [CodeGenModel("InnerErrorV2")]
+    public partial class DocumentTranslationInnerError
     {
-        [CodeGenMember("StorageSource")]
-        internal string StorageSource { get; set; }
     }
 }

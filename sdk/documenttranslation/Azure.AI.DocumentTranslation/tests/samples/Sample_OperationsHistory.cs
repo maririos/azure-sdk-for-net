@@ -19,19 +19,19 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            Pageable<OperationStatusDetail> operationsStatus = client.GetOperationsStatus();
+            Pageable<TranslationStatusDetail> operationsStatus = client.GetSubmittedTranslations();
 
             int operationsCount = 0;
             int totalDocs = 0;
             int docsCancelled = 0;
             int docsSucceeded = 0;
             int maxDocs = 0;
-            OperationStatusDetail largestOperation = null;
+            TranslationStatusDetail largestOperation = null;
 
-            foreach (OperationStatusDetail operationStatus in operationsStatus)
+            foreach (TranslationStatusDetail operationStatus in operationsStatus)
             {
                 operationsCount++;
-                totalDocs += operationStatus.TotalDocuments;
+                totalDocs += operationStatus.DocumentsTotal;
                 docsCancelled += operationStatus.DocumentsCancelled;
                 docsSucceeded += operationStatus.DocumentsSucceeded;
                 if (totalDocs > maxDocs)

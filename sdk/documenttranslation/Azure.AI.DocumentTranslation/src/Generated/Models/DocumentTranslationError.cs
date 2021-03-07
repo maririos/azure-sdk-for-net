@@ -38,7 +38,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// 
         /// This contains required properties ErrorCode, message and optional properties target, details(key value pair), inner error(this can be nested).
         /// </param>
-        internal DocumentTranslationError(DocumentTranslationErrorCode? code, string message, string target, InnerErrorV2 innerError)
+        internal DocumentTranslationError(DocumentTranslationErrorCode? code, string message, string target, DocumentTranslationInnerError innerError)
         {
             Code = code;
             Message = message;
@@ -61,6 +61,6 @@ namespace Azure.AI.DocumentTranslation.Models
         /// 
         /// This contains required properties ErrorCode, message and optional properties target, details(key value pair), inner error(this can be nested).
         /// </summary>
-        public InnerErrorV2 InnerError { get; }
+        public DocumentTranslationInnerError InnerError { get; }
     }
 }

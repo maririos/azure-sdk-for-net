@@ -8,19 +8,21 @@ using Azure.Core;
 namespace Azure.AI.DocumentTranslation.Models
 {
     [CodeGenModel("TargetInput")]
-    public partial class TargetConfiguration
+    public partial class TranslationTarget
     {
         [CodeGenMember("StorageSource")]
         internal string StorageSource { get; set;}
+
+        /// <summary> Location of the folder / container with your documents. </summary>
+        [CodeGenMember("TargetUrl")]
+        public Uri TargetUrl { get; }
 
         /// <summary> Initializes a new instance of TargetInput. </summary>
         /// <param name="targetUrl"> Location of the folder / container with your documents. </param>
         /// <param name="language"> Target Language. </param>
         /// <param name="glossaries"></param>
         /// <exception cref="ArgumentNullException"> <paramref name="targetUrl"/> or <paramref name="language"/> is null. </exception>
-#pragma warning disable CA1054 // URI-like parameters should not be strings
-        public TargetConfiguration(string targetUrl, string language, IList<TranslationGlossary> glossaries)
-#pragma warning restore CA1054 // URI-like parameters should not be strings
+        public TranslationTarget(Uri targetUrl, string language, IList<TranslationGlossary> glossaries)
         {
             if (targetUrl == null)
             {

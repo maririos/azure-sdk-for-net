@@ -10,13 +10,13 @@ using Azure.Core;
 
 namespace Azure.AI.DocumentTranslation.Models
 {
-    public partial class SourceConfiguration : IUtf8JsonSerializable
+    public partial class TranslationSource : IUtf8JsonSerializable
     {
         void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
         {
             writer.WriteStartObject();
             writer.WritePropertyName("sourceUrl");
-            writer.WriteStringValue(SourceUrl);
+            writer.WriteStringValue(SourceUrl.AbsoluteUri);
             if (Optional.IsDefined(Filter))
             {
                 writer.WritePropertyName("filter");

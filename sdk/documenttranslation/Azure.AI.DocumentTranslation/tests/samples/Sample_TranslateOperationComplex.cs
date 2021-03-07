@@ -18,10 +18,10 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
         {
             string endpoint = TestEnvironment.Endpoint;
             string apiKey = TestEnvironment.ApiKey;
-            string sourceUrl1 = TestEnvironment.SourceUrl;
-            string sourceUrl2 = TestEnvironment.SourceUrl;
-            string targetUrl1 = TestEnvironment.TargetUrl;
-            string targetUrl2 = TestEnvironment.TargetUrl;
+            Uri sourceUrl1 = new Uri(TestEnvironment.SourceUrl);
+            Uri sourceUrl2 = new Uri(TestEnvironment.SourceUrl);
+            Uri targetUrl1 = new Uri(TestEnvironment.TargetUrl);
+            Uri targetUrl2 = new Uri(TestEnvironment.TargetUrl);
             Uri glossaryUrl = new Uri(TestEnvironment.GlossaryUrl);
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
@@ -29,13 +29,13 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
             var glossaries = new List<TranslationGlossary>() { new TranslationGlossary(glossaryUrl) };
 
             var configuration1 = new TranslationConfiguration(
-                source: new SourceConfiguration(sourceUrl1),
-                targets: new List<TargetConfiguration>() { new TargetConfiguration(targetUrl1, "it", glossaries) },
+                source: new TranslationSource(sourceUrl1),
+                targets: new List<TranslationTarget>() { new TranslationTarget(targetUrl1, "it", glossaries) },
                 storageType: StorageType.Folder);
 
             var configuration2 = new TranslationConfiguration(
-                source: new SourceConfiguration(sourceUrl2),
-                targets: new List<TargetConfiguration>() { new TargetConfiguration(targetUrl2, "it", glossaries) },
+                source: new TranslationSource(sourceUrl2),
+                targets: new List<TranslationTarget>() { new TranslationTarget(targetUrl2, "it", glossaries) },
                 storageType: StorageType.Folder);
 
             var inputs = new List<TranslationConfiguration>()
@@ -56,7 +56,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
                 Console.WriteLine($"  Status: {operation.Status}");
                 Console.WriteLine($"  Created on: {operation.CreatedOn}");
                 Console.WriteLine($"  Last modified: {operation.LastModified}");
-                Console.WriteLine($"  Total documents: {operation.TotalDocuments}");
+                Console.WriteLine($"  Total documents: {operation.DocumentsTotal}");
                 Console.WriteLine($"    Succeeded: {operation.DocumentsSucceeded}");
                 Console.WriteLine($"    Failed: {operation.DocumentsFailed}");
                 Console.WriteLine($"    In Progress: {operation.DocumentsInProgress}");

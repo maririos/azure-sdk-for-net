@@ -23,7 +23,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            DocumentTranslationOperation operation = client.StartTranslation(sourceUrl, targetUrl, "it");
+            DocumentTranslationOperation operation = client.StartTranslationFromAzureBlobs(sourceUrl, targetUrl, "it");
 
             TimeSpan pollingInterval = new TimeSpan(1000);
 
@@ -35,7 +35,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
                 Console.WriteLine($"  Status: {operation.Status}");
                 Console.WriteLine($"  Created on: {operation.CreatedOn}");
                 Console.WriteLine($"  Last modified: {operation.LastModified}");
-                Console.WriteLine($"  Total documents: {operation.TotalDocuments}");
+                Console.WriteLine($"  Total documents: {operation.DocumentsTotal}");
                 Console.WriteLine($"    Succeeded: {operation.DocumentsSucceeded}");
                 Console.WriteLine($"    Failed: {operation.DocumentsFailed}");
                 Console.WriteLine($"    In Progress: {operation.DocumentsInProgress}");
