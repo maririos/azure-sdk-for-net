@@ -123,8 +123,6 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="client">The client used to check for completion.</param>
         public DocumentTranslationOperation(string operationId, DocumentTranslationClient client)
         {
-            // TODO: Add argument validation here.
-
             Id = operationId;
             _serviceClient = client._serviceRestClient;
             _diagnostics = client._clientDiagnostics;
@@ -234,7 +232,8 @@ namespace Azure.AI.DocumentTranslation
                     _documentsCancelled = update.Value.DocumentsCancelled;
 
                     if (update.Value.Status == TranslationStatus.Succeeded
-                        || update.Value.Status == TranslationStatus.Cancelled)
+                        || update.Value.Status == TranslationStatus.Cancelled
+                        || update.Value.Status == TranslationStatus.Failed)
                     {
                         // we need to first assign a value and then mark the operation as completed to avoid race conditions
                         var response = async
@@ -243,9 +242,7 @@ namespace Azure.AI.DocumentTranslation
                         _firstPage = Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
                         _hasCompleted = true;
                     }
-                    // TODO: ValidationFailed Status handling
-                    // TODO: Failed operation handling?
-                    else if (update.Value.Status == TranslationStatus.Failed)
+                    else if (update.Value.Status == TranslationStatus.ValidationFailed)
                     {
                         _requestFailedException = _diagnostics.CreateRequestFailedException(_response);
                         _hasCompleted = true;
@@ -265,12 +262,10 @@ namespace Azure.AI.DocumentTranslation
         /// <summary>
         /// Get the status of a specific document in the batch.
         /// </summary>
-        /// <param name="documentId"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <param name="documentId">ID of the document</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> used for the service call.</param>
         public virtual Response<DocumentStatusDetail> GetDocumentStatus(string documentId, CancellationToken cancellationToken = default)
         {
-            // TODO: use string instead of Guid ?
             using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(GetDocumentStatus)}");
             scope.Start();
 
@@ -288,9 +283,8 @@ namespace Azure.AI.DocumentTranslation
         /// <summary>
         /// Get the status of a specific document in the batch.
         /// </summary>
-        /// <param name="documentId"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <param name="documentId">ID of the document</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> used for the service call.</param>
         public virtual async Task<Response<DocumentStatusDetail>> GetDocumentStatusAsync(string documentId, CancellationToken cancellationToken = default)
         {
             using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(GetDocumentStatusAsync)}");
@@ -310,8 +304,7 @@ namespace Azure.AI.DocumentTranslation
         /// <summary>
         /// Get the status of a all documents in the batch.
         /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> used for the service call.</param>
         public virtual Pageable<DocumentStatusDetail> GetDocumentsStatus(CancellationToken cancellationToken = default)
         {
             Page<DocumentStatusDetail> FirstPageFunc(int? pageSizeHint)
@@ -354,8 +347,7 @@ namespace Azure.AI.DocumentTranslation
         /// <summary>
         /// Get the status of a all documents in the batch.
         /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> used for the service call.</param>
         public virtual AsyncPageable<DocumentStatusDetail> GetDocumentsStatusAsync(CancellationToken cancellationToken = default)
         {
             async Task<Page<DocumentStatusDetail>> FirstPageFunc(int? pageSizeHint)
@@ -398,7 +390,7 @@ namespace Azure.AI.DocumentTranslation
         /// <summary>
         /// Cancel the batch translation operation.
         /// </summary>
-        /// <param name="cancellationToken"></param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> used for the service call.</param>
         public virtual void Cancel(CancellationToken cancellationToken)
         {
             using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(Cancel)}");
@@ -419,8 +411,7 @@ namespace Azure.AI.DocumentTranslation
         /// <summary>
         /// Cancel the batch translation operation.
         /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> used for the service call.</param>
         public virtual async Task CancelAsync(CancellationToken cancellationToken)
         {
             using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(DocumentTranslationOperation)}.{nameof(CancelAsync)}");

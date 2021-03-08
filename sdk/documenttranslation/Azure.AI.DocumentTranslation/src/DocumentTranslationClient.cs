@@ -49,7 +49,7 @@ namespace Azure.AI.DocumentTranslation
             _options = options;
             _clientDiagnostics = new ClientDiagnostics(options);
 
-            var pipeline = HttpPipelineBuilder.Build(options, new BearerTokenAuthenticationPolicy(credential, DefaultCognitiveScope));
+            HttpPipeline pipeline = HttpPipelineBuilder.Build(options, new BearerTokenAuthenticationPolicy(credential, DefaultCognitiveScope));
             _serviceRestClient = new DocumentTranslationRestClient(_clientDiagnostics, pipeline, endpoint.AbsoluteUri);
         }
 
@@ -84,7 +84,7 @@ namespace Azure.AI.DocumentTranslation
             _options = options;
             _clientDiagnostics = new ClientDiagnostics(options);
 
-            var pipeline = HttpPipelineBuilder.Build(options, new AzureKeyCredentialPolicy(credential, AuthorizationHeader));
+            HttpPipeline pipeline = HttpPipelineBuilder.Build(options, new AzureKeyCredentialPolicy(credential, AuthorizationHeader));
             _serviceRestClient = new DocumentTranslationRestClient(_clientDiagnostics, pipeline, endpoint.AbsoluteUri);
         }
 
@@ -102,11 +102,14 @@ namespace Azure.AI.DocumentTranslation
         }
 
         /// <summary>
-        /// a.
+        /// Starts a translation operation
+        /// For document length limits, maximum batch size, and supported document formats, see
+        /// TODO: Add link to documentation
         /// </summary>
-        /// <param name="configurations"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <param name="configurations">Sets the configurations for the translation operation
+        /// including source and target storage for documents to be translated. </param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
+        /// <exception cref="RequestFailedException">Service returned a non-success status code. </exception>
         public virtual DocumentTranslationOperation StartTranslation(List<TranslationConfiguration> configurations, CancellationToken cancellationToken = default)
         {
             var request = new BatchSubmissionRequest(configurations);
@@ -115,7 +118,7 @@ namespace Azure.AI.DocumentTranslation
 
             try
             {
-                var job = _serviceRestClient.SubmitBatchRequest(request, cancellationToken);
+                ResponseWithHeaders<DocumentTranslationSubmitBatchRequestHeaders> job = _serviceRestClient.SubmitBatchRequest(request, cancellationToken);
                 return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
             }
             catch (Exception e)
@@ -126,11 +129,14 @@ namespace Azure.AI.DocumentTranslation
         }
 
         /// <summary>
-        /// a.
+        /// Starts a translation operation
+        /// For document length limits, maximum batch size, and supported document formats, see
+        /// TODO: Add link to documentation
         /// </summary>
-        /// <param name="configurations"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <param name="configurations">Sets the configurations for the translation operation
+        /// including source and target storage for documents to be translated. </param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
+        /// <exception cref="RequestFailedException">Service returned a non-success status code. </exception>
         public virtual async Task<DocumentTranslationOperation> StartTranslationAsync(List<TranslationConfiguration> configurations, CancellationToken cancellationToken = default)
         {
             var request = new BatchSubmissionRequest(configurations);
@@ -139,7 +145,7 @@ namespace Azure.AI.DocumentTranslation
 
             try
             {
-                var job = await _serviceRestClient.SubmitBatchRequestAsync(request, cancellationToken).ConfigureAwait(false);
+                ResponseWithHeaders<DocumentTranslationSubmitBatchRequestHeaders> job = await _serviceRestClient.SubmitBatchRequestAsync(request, cancellationToken).ConfigureAwait(false);
                 return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
             }
             catch (Exception e)
@@ -150,15 +156,18 @@ namespace Azure.AI.DocumentTranslation
         }
 
         /// <summary>
-        /// a.
+        /// Starts a translation operation for documents in an Azure Blob Container.
+        /// For document length limits, maximum batch size, and supported document formats, see
+        /// TODO: Add link to documentation
         /// </summary>
-        /// <param name="sourceBlobContainerSas"></param>
-        /// <param name="targetBlobContainerSas"></param>
-        /// <param name="targetLanguage"></param>
-        /// <param name="glossary"></param>
-        /// <param name="options"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <param name="sourceBlobContainerSas">The SAS URL for the source container containing documents to be translated. </param>
+        /// <param name="targetBlobContainerSas">The SAS URL for the target container to which the translated documents will be written. </param>
+        /// <param name="targetLanguage">Language code to translate documents to. For supported documents see
+        /// TODO: Add link to documentation </param>
+        /// <param name="glossary">Custom translation glossary to be used in the translation operation. For supported file types see
+        /// TODO: Add link to documentation</param>
+        /// <param name="options">Set translation options including source language and custom translation category</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
         public virtual DocumentTranslationOperation StartTranslationFromAzureBlobs(Uri sourceBlobContainerSas, Uri targetBlobContainerSas, string targetLanguage, TranslationGlossary glossary = default, TranslationOperationOptions options = default, CancellationToken cancellationToken = default)
         {
             var source = new TranslationSource(sourceBlobContainerSas)
@@ -187,7 +196,7 @@ namespace Azure.AI.DocumentTranslation
 
             try
             {
-                var job = _serviceRestClient.SubmitBatchRequest(request, cancellationToken);
+                ResponseWithHeaders<DocumentTranslationSubmitBatchRequestHeaders> job = _serviceRestClient.SubmitBatchRequest(request, cancellationToken);
                 return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
             }
             catch (Exception e)
@@ -198,15 +207,18 @@ namespace Azure.AI.DocumentTranslation
         }
 
         /// <summary>
-        /// a.
+        /// Starts a translation operation for documents in an Azure Blob Container.
+        /// For document length limits, maximum batch size, and supported document formats, see
+        /// TODO: Add link to documentation
         /// </summary>
-        /// <param name="sourceBlobContainerSas"></param>
-        /// <param name="targetBlobContainerSas"></param>
-        /// <param name="targetLanguage"></param>
-        /// <param name="glossary"></param>
-        /// <param name="options"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <param name="sourceBlobContainerSas">The SAS URL for the source container containing documents to be translated. </param>
+        /// <param name="targetBlobContainerSas">The SAS URL for the target container to which the translated documents will be written. </param>
+        /// <param name="targetLanguage">Language code to translate documents to. For supported documents see
+        /// TODO: Add link to documentation </param>
+        /// <param name="glossary">Custom translation glossary to be used in the translation operation. For supported file types see
+        /// TODO: Add link to documentation</param>
+        /// <param name="options">Set translation options including source language and custom translation category</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
         public virtual async Task<DocumentTranslationOperation> StartTranslationFromAzureBlobsAsync(Uri sourceBlobContainerSas, Uri targetBlobContainerSas, string targetLanguage, TranslationGlossary glossary = default, TranslationOperationOptions options = default, CancellationToken cancellationToken = default)
         {
             var source = new TranslationSource(sourceBlobContainerSas)
@@ -235,7 +247,7 @@ namespace Azure.AI.DocumentTranslation
 
             try
             {
-                var job = await _serviceRestClient.SubmitBatchRequestAsync(request, cancellationToken).ConfigureAwait(false);
+                ResponseWithHeaders<DocumentTranslationSubmitBatchRequestHeaders> job = await _serviceRestClient.SubmitBatchRequestAsync(request, cancellationToken).ConfigureAwait(false);
                 return new DocumentTranslationOperation(_serviceRestClient, _clientDiagnostics, job.Headers.OperationLocation);
             }
             catch (Exception e)
@@ -246,10 +258,9 @@ namespace Azure.AI.DocumentTranslation
         }
 
         /// <summary>
-        /// a.
+        /// Get the status details for all submitted translation operations.
         /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
         public virtual Pageable<TranslationStatusDetail> GetSubmittedTranslations(CancellationToken cancellationToken = default)
         {
             Page<TranslationStatusDetail> FirstPageFunc(int? pageSizeHint)
@@ -259,7 +270,7 @@ namespace Azure.AI.DocumentTranslation
 
                 try
                 {
-                    var response = _serviceRestClient.GetOperations(cancellationToken: cancellationToken);
+                    ResponseWithHeaders<BatchStatusResponse, DocumentTranslationGetOperationsHeaders> response = _serviceRestClient.GetOperations(cancellationToken: cancellationToken);
                     return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
                 }
                 catch (Exception e)
@@ -290,10 +301,9 @@ namespace Azure.AI.DocumentTranslation
         }
 
         /// <summary>
-        /// a.
+        /// Get the status details for all submitted translation operations.
         /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
         public virtual AsyncPageable<TranslationStatusDetail> GetSubmittedTranslationsAsync(CancellationToken cancellationToken = default)
         {
             async Task<Page<TranslationStatusDetail>> FirstPageFunc(int? pageSizeHint)
@@ -303,7 +313,7 @@ namespace Azure.AI.DocumentTranslation
 
                 try
                 {
-                    var response = await _serviceRestClient.GetOperationsAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+                    ResponseWithHeaders<BatchStatusResponse, DocumentTranslationGetOperationsHeaders> response = await _serviceRestClient.GetOperationsAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
                     return Page.FromValues(response.Value.Value, response.Value.NextLink, response.GetRawResponse());
                 }
                 catch (Exception e)
