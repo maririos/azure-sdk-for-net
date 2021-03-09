@@ -12,13 +12,13 @@ using Azure.Core;
 namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary> Destination for the finished translated documents. </summary>
-    public partial class TargetConfiguration
+    public partial class TranslationTarget
     {
-        /// <summary> Initializes a new instance of TargetConfiguration. </summary>
+        /// <summary> Initializes a new instance of TranslationTarget. </summary>
         /// <param name="targetUrl"> Location of the folder / container with your documents. </param>
         /// <param name="language"> Target Language. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="targetUrl"/> or <paramref name="language"/> is null. </exception>
-        public TargetConfiguration(string targetUrl, string language)
+        public TranslationTarget(string targetUrl, string language)
         {
             if (targetUrl == null)
             {

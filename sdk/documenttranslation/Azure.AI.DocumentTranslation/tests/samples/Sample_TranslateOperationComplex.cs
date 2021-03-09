@@ -28,37 +28,44 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var glossaries = new List<TranslationGlossary>() { new TranslationGlossary(glossaryUrl) };
 
-            var configuration1 = new TranslationJobConfiguration(
-                source: new SourceConfiguration(sourceUrl1),
-                targets: new List<TargetConfiguration>() { new TargetConfiguration(targetUrl1, "it", glossaries) },
+            var configuration1 = new TranslationConfiguration(
+                source: new TranslationSource(sourceUrl1),
+                targets: new List<TranslationTarget>() { new TranslationTarget(targetUrl1, "it", glossaries) },
                 storageType: StorageType.Folder);
 
-            var configuration2 = new TranslationJobConfiguration(
-                source: new SourceConfiguration(sourceUrl2),
-                targets: new List<TargetConfiguration>() { new TargetConfiguration(targetUrl2, "it", glossaries) },
+            var configuration2 = new TranslationConfiguration(
+                source: new TranslationSource(sourceUrl2),
+                targets: new List<TranslationTarget>() { new TranslationTarget(targetUrl2, "it", glossaries) },
                 storageType: StorageType.Folder);
 
-            var inputs = new List<TranslationJobConfiguration>()
+            var inputs = new List<TranslationConfiguration>()
                 {
                     configuration1,
                     configuration2
                 };
 
-            Response<JobStatusDetail> job = client.CreateTranslationJob(inputs);
+            Response<JobStatusDetail> jobStatus = client.CreateTranslationJob(inputs);
 
-            Response<JobStatusDetail> jobStatus = client.WaitForJobCompletion(job.Value.Id);
+            TimeSpan pollingInterval = new TimeSpan(1000);
 
+            while (jobStatus.Value.Status != TranslationStatus.Failed
+                       || jobStatus.Value.Status != TranslationStatus.Succeeded
+                       || jobStatus.Value.Status != TranslationStatus.ValidationFailed)
+            {
+                Thread.Sleep(pollingInterval);
+                jobStatus = client.GetJobStatus(jobStatus.Value.Id);
+            }
             Console.WriteLine($"  Status: {jobStatus.Value.Status}");
             Console.WriteLine($"  Created on: {jobStatus.Value.CreatedOn}");
             Console.WriteLine($"  Last modified: {jobStatus.Value.LastModified}");
-            Console.WriteLine($"  Total documents: {jobStatus.Value.TotalDocuments}");
+            Console.WriteLine($"  Total documents: {jobStatus.Value.DocumentsTotal}");
             Console.WriteLine($"    Succeeded: {jobStatus.Value.DocumentsSucceeded}");
             Console.WriteLine($"    Failed: {jobStatus.Value.DocumentsFailed}");
             Console.WriteLine($"    In Progress: {jobStatus.Value.DocumentsInProgress}");
             Console.WriteLine($"    Not started: {jobStatus.Value.DocumentsNotStarted}");
 
             // Get Status of documents
-            Pageable<DocumentStatusDetail> documents = client.GetDocumentsStatus(job.Value.Id);
+            Pageable<DocumentStatusDetail> documents = client.GetDocumentsStatus(jobStatus.Value.Id);
 
             foreach (DocumentStatusDetail document in documents)
             {

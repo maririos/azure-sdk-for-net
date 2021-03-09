@@ -23,7 +23,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            Response<JobStatusDetail> job = client.CreateTranslationJob(sourceUrl, targetUrl, "it");
+            Response<JobStatusDetail> job = client.CreateTranslationJobForAzureBlobs(sourceUrl, targetUrl, "it");
 
             // get not finished documents
             List<string> documentIds = new List<string>();

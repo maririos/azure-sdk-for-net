@@ -111,7 +111,7 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="configurations"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual Response<JobStatusDetail> CreateTranslationJob(List<TranslationJobConfiguration> configurations, CancellationToken cancellationToken = default)
+        public virtual Response<JobStatusDetail> CreateTranslationJob(List<TranslationConfiguration> configurations, CancellationToken cancellationToken = default)
         {
             var request = new BatchSubmissionRequest(configurations);
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(CreateTranslationJob)}");
@@ -136,7 +136,7 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="configurations"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<Response<JobStatusDetail>> CreateTranslationJobAsync(List<TranslationJobConfiguration> configurations, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<JobStatusDetail>> CreateTranslationJobAsync(List<TranslationConfiguration> configurations, CancellationToken cancellationToken = default)
         {
             var request = new BatchSubmissionRequest(configurations);
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(CreateTranslationJobAsync)}");
@@ -158,31 +158,31 @@ namespace Azure.AI.DocumentTranslation
         /// <summary>
         /// a.
         /// </summary>
-        /// <param name="sourceUrl"></param>
-        /// <param name="targetUrl"></param>
+        /// <param name="sourceBlobContainerSas"></param>
+        /// <param name="targetBlobContainerSas"></param>
         /// <param name="targetLanguage"></param>
-        /// <param name="glossaries"></param>
+        /// <param name="glossary"></param>
         /// <param name="options"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual Response<JobStatusDetail> CreateTranslationJob(Uri sourceUrl, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries = default, TranslationOperationOptions options = default, CancellationToken cancellationToken = default)
+        public virtual Response<JobStatusDetail> CreateTranslationJobForAzureBlobs(Uri sourceBlobContainerSas, Uri targetBlobContainerSas, string targetLanguage, TranslationGlossary glossary = default, TranslationJobOptions options = default, CancellationToken cancellationToken = default)
         {
-            var source = new SourceConfiguration(sourceUrl.AbsoluteUri)
+            var source = new TranslationSource(sourceBlobContainerSas.AbsoluteUri)
             {
                 Language = options.SourceLanguage,
                 Filter = options.Filter
             };
 
-            var targets = new List<TargetConfiguration>
+            var targets = new List<TranslationTarget>
             {
-                new TargetConfiguration(targetUrl.AbsoluteUri, targetLanguage, glossaries)
+                new TranslationTarget(targetBlobContainerSas.AbsoluteUri, targetLanguage, new List<TranslationGlossary> { glossary })
                 {
                     Category = options.Category
                 }
             };
-            var request = new BatchSubmissionRequest(new List<TranslationJobConfiguration>
+            var request = new BatchSubmissionRequest(new List<TranslationConfiguration>
                 {
-                    new TranslationJobConfiguration(source, targets)
+                    new TranslationConfiguration(source, targets)
                     {
                         StorageType = options.StorageType
                     }
@@ -207,31 +207,31 @@ namespace Azure.AI.DocumentTranslation
         /// <summary>
         /// a.
         /// </summary>
-        /// <param name="sourceUrl"></param>
-        /// <param name="targetUrl"></param>
+        /// <param name="sourceBlobContainerSas"></param>
+        /// <param name="targetBlobContainerSas"></param>
         /// <param name="targetLanguage"></param>
-        /// <param name="glossaries"></param>
+        /// <param name="glossary"></param>
         /// <param name="options"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual async Task<Response<JobStatusDetail>> CreateTranslationJobAsync(Uri sourceUrl, Uri targetUrl, string targetLanguage, List<TranslationGlossary> glossaries = default, TranslationOperationOptions options = default, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<JobStatusDetail>> CreateTranslationJobForAzureBlobsAsync(Uri sourceBlobContainerSas, Uri targetBlobContainerSas, string targetLanguage, TranslationGlossary glossary = default, TranslationJobOptions options = default, CancellationToken cancellationToken = default)
         {
-            var source = new SourceConfiguration(sourceUrl.AbsoluteUri)
+            var source = new TranslationSource(sourceBlobContainerSas.AbsoluteUri)
             {
                 Language = options.SourceLanguage,
                 Filter = options.Filter
             };
 
-            var targets = new List<TargetConfiguration>
+            var targets = new List<TranslationTarget>
             {
-                new TargetConfiguration(targetUrl.AbsoluteUri, targetLanguage, glossaries)
+                new TranslationTarget(targetBlobContainerSas.AbsoluteUri, targetLanguage, new List<TranslationGlossary> { glossary })
                 {
                     Category = options.Category
                 }
             };
-            var request = new BatchSubmissionRequest(new List<TranslationJobConfiguration>
+            var request = new BatchSubmissionRequest(new List<TranslationConfiguration>
                 {
-                    new TranslationJobConfiguration(source, targets)
+                    new TranslationConfiguration(source, targets)
                     {
                         StorageType = options.StorageType
                     }
@@ -334,7 +334,7 @@ namespace Azure.AI.DocumentTranslation
         /// <param name="jobId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual Response<JobStatusDetail> WaitForJobCompletion(string jobId, CancellationToken cancellationToken = default)
+        internal virtual Response<JobStatusDetail> WaitForJobCompletion(string jobId, CancellationToken cancellationToken = default)
         {
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(WaitForJobCompletionAsync)}");
             scope.Start();
@@ -364,11 +364,11 @@ namespace Azure.AI.DocumentTranslation
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual Pageable<JobStatusDetail> GetJobsStatus(CancellationToken cancellationToken = default)
+        public virtual Pageable<JobStatusDetail> GetSubmittedJobs(CancellationToken cancellationToken = default)
         {
             Page<JobStatusDetail> FirstPageFunc(int? pageSizeHint)
             {
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetJobsStatus)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSubmittedJobs)}");
                 scope.Start();
 
                 try
@@ -385,7 +385,7 @@ namespace Azure.AI.DocumentTranslation
 
             Page<JobStatusDetail> NextPageFunc(string nextLink, int? pageSizeHint)
             {
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetJobsStatus)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSubmittedJobs)}");
                 scope.Start();
 
                 try
@@ -408,11 +408,11 @@ namespace Azure.AI.DocumentTranslation
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public virtual AsyncPageable<JobStatusDetail> GetJobsStatusAsync(CancellationToken cancellationToken = default)
+        public virtual AsyncPageable<JobStatusDetail> GetSubmittedJobsAsync(CancellationToken cancellationToken = default)
         {
             async Task<Page<JobStatusDetail>> FirstPageFunc(int? pageSizeHint)
             {
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetJobsStatusAsync)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSubmittedJobsAsync)}");
                 scope.Start();
 
                 try
@@ -429,7 +429,7 @@ namespace Azure.AI.DocumentTranslation
 
             async Task<Page<JobStatusDetail>> NextPageFunc(string nextLink, int? pageSizeHint)
             {
-                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetJobsStatusAsync)}");
+                using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(DocumentTranslationClient)}.{nameof(GetSubmittedJobsAsync)}");
                 scope.Start();
 
                 try

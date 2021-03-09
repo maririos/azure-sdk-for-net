@@ -26,7 +26,7 @@ namespace Azure.AI.DocumentTranslation.Models
         internal StatusSummary Summary { get; set; }
 
         /// <summary> Total count. </summary>
-        public int TotalDocuments => Summary.Total;
+        public int DocumentsTotal => Summary.Total;
 
         /// <summary> Failed count. </summary>
         public int DocumentsFailed => Summary.Failed;

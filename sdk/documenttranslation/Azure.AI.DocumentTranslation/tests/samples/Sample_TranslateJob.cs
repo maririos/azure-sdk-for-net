@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using Azure.AI.DocumentTranslation.Models;
 using Azure.Core.TestFramework;
@@ -23,21 +22,29 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            Response<JobStatusDetail> job = client.CreateTranslationJob(sourceUrl, targetUrl, "it");
+            Response<JobStatusDetail> jobStatus = client.CreateTranslationJobForAzureBlobs(sourceUrl, targetUrl, "it");
 
-            Response<JobStatusDetail> jobStatus = client.WaitForJobCompletion(job.Value.Id);
+            TimeSpan pollingInterval = new TimeSpan(1000);
+
+            while (jobStatus.Value.Status != TranslationStatus.Failed
+                       || jobStatus.Value.Status != TranslationStatus.Succeeded
+                       || jobStatus.Value.Status != TranslationStatus.ValidationFailed)
+            {
+                Thread.Sleep(pollingInterval);
+                jobStatus = client.GetJobStatus(jobStatus.Value.Id);
+            }
 
             Console.WriteLine($"  Status: {jobStatus.Value.Status}");
             Console.WriteLine($"  Created on: {jobStatus.Value.CreatedOn}");
             Console.WriteLine($"  Last modified: {jobStatus.Value.LastModified}");
-            Console.WriteLine($"  Total documents: {jobStatus.Value.TotalDocuments}");
+            Console.WriteLine($"  Total documents: {jobStatus.Value.DocumentsTotal}");
             Console.WriteLine($"    Succeeded: {jobStatus.Value.DocumentsSucceeded}");
             Console.WriteLine($"    Failed: {jobStatus.Value.DocumentsFailed}");
             Console.WriteLine($"    In Progress: {jobStatus.Value.DocumentsInProgress}");
             Console.WriteLine($"    Not started: {jobStatus.Value.DocumentsNotStarted}");
 
             // Get Status of documents
-            Pageable<DocumentStatusDetail> documents = client.GetDocumentsStatus(job.Value.Id);
+            Pageable<DocumentStatusDetail> documents = client.GetDocumentsStatus(jobStatus.Value.Id);
 
             foreach (DocumentStatusDetail document in documents)
             {

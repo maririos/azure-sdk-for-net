@@ -8,7 +8,7 @@ using Azure.Core;
 namespace Azure.AI.DocumentTranslation.Models
 {
     [CodeGenModel("TargetInput")]
-    public partial class TargetConfiguration
+    public partial class TranslationTarget
     {
         [CodeGenMember("StorageSource")]
         internal string StorageSource { get; set;}
@@ -20,7 +20,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <param name="language"></param>
         /// <param name="glossaries"></param>
 #pragma warning disable CA1054 // URI-like parameters should not be strings
-        public TargetConfiguration(string targetUrl, string language, List<TranslationGlossary> glossaries)
+        public TranslationTarget(string targetUrl, string language, List<TranslationGlossary> glossaries)
 #pragma warning restore CA1054 // URI-like parameters should not be strings
         {
             if (targetUrl == null)

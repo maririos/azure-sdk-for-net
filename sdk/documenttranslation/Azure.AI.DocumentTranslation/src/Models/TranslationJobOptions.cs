@@ -4,9 +4,9 @@
 namespace Azure.AI.DocumentTranslation.Models
 {
     /// <summary>
-    /// TranslationOperationOptions
+    /// TranslationJobOptions
     /// </summary>
-    public class TranslationOperationOptions
+    public class TranslationJobOptions
     {
         /// <summary>
         /// SourceLanguage

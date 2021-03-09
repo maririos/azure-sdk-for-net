@@ -23,14 +23,14 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            Response<JobStatusDetail> job = await client.CreateTranslationJobAsync(sourceUrl, targetUrl, "it");
+            Response<JobStatusDetail> job = await client.CreateTranslationJobForAzureBlobsAsync(sourceUrl, targetUrl, "it");
 
             Response<JobStatusDetail> jobStatus = await client.WaitForJobCompletionAsync(job.Value.Id);
 
             Console.WriteLine($"  Status: {jobStatus.Value.Status}");
             Console.WriteLine($"  Created on: {jobStatus.Value.CreatedOn}");
             Console.WriteLine($"  Last modified: {jobStatus.Value.LastModified}");
-            Console.WriteLine($"  Total documents: {jobStatus.Value.TotalDocuments}");
+            Console.WriteLine($"  Total documents: {jobStatus.Value.DocumentsTotal}");
             Console.WriteLine($"    Succeeded: {jobStatus.Value.DocumentsSucceeded}");
             Console.WriteLine($"    Failed: {jobStatus.Value.DocumentsFailed}");
             Console.WriteLine($"    In Progress: {jobStatus.Value.DocumentsInProgress}");
