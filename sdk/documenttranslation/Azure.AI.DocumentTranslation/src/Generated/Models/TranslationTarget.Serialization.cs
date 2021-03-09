@@ -16,7 +16,7 @@ namespace Azure.AI.DocumentTranslation.Models
         {
             writer.WriteStartObject();
             writer.WritePropertyName("targetUrl");
-            writer.WriteStringValue(TargetUrl);
+            writer.WriteStringValue(TargetUrl.AbsoluteUri);
             if (Optional.IsDefined(Category))
             {
                 writer.WritePropertyName("category");

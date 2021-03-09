@@ -16,7 +16,7 @@ namespace Azure.AI.DocumentTranslation.Models
         {
             writer.WriteStartObject();
             writer.WritePropertyName("sourceUrl");
-            writer.WriteStringValue(SourceUrl);
+            writer.WriteStringValue(SourceUrl.AbsoluteUri);
             if (Optional.IsDefined(Filter))
             {
                 writer.WritePropertyName("filter");

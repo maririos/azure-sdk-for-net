@@ -18,10 +18,10 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
         {
             string endpoint = TestEnvironment.Endpoint;
             string apiKey = TestEnvironment.ApiKey;
-            string sourceUrl1 = TestEnvironment.SourceUrl;
-            string sourceUrl2 = TestEnvironment.SourceUrl;
-            string targetUrl1 = TestEnvironment.TargetUrl;
-            string targetUrl2 = TestEnvironment.TargetUrl;
+            Uri sourceUrl1 = new Uri(TestEnvironment.SourceUrl);
+            Uri sourceUrl2 = new Uri(TestEnvironment.SourceUrl);
+            Uri targetUrl1 = new Uri(TestEnvironment.TargetUrl);
+            Uri targetUrl2 = new Uri(TestEnvironment.TargetUrl);
             Uri glossaryUrl = new Uri(TestEnvironment.GlossaryUrl);
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));

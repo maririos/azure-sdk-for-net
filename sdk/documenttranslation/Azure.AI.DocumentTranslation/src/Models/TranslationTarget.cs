@@ -13,15 +13,16 @@ namespace Azure.AI.DocumentTranslation.Models
         [CodeGenMember("StorageSource")]
         internal string StorageSource { get; set;}
 
+        /// <summary> Location of the folder / container with your documents. </summary>
+        public Uri TargetUrl { get; }
+
         /// <summary>
         /// Initializes a new instance of TargetInput.
         /// </summary>
         /// <param name="targetUrl"></param>
         /// <param name="language"></param>
         /// <param name="glossaries"></param>
-#pragma warning disable CA1054 // URI-like parameters should not be strings
-        public TranslationTarget(string targetUrl, string language, List<TranslationGlossary> glossaries)
-#pragma warning restore CA1054 // URI-like parameters should not be strings
+        public TranslationTarget(Uri targetUrl, string language, List<TranslationGlossary> glossaries)
         {
             if (targetUrl == null)
             {

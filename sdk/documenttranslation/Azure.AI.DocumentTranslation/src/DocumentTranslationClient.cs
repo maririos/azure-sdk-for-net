@@ -167,7 +167,7 @@ namespace Azure.AI.DocumentTranslation
         /// <returns></returns>
         public virtual Response<JobStatusDetail> CreateTranslationJobForAzureBlobs(Uri sourceBlobContainerSas, Uri targetBlobContainerSas, string targetLanguage, TranslationGlossary glossary = default, TranslationJobOptions options = default, CancellationToken cancellationToken = default)
         {
-            var source = new TranslationSource(sourceBlobContainerSas.AbsoluteUri)
+            var source = new TranslationSource(sourceBlobContainerSas)
             {
                 Language = options.SourceLanguage,
                 Filter = options.Filter
@@ -175,7 +175,7 @@ namespace Azure.AI.DocumentTranslation
 
             var targets = new List<TranslationTarget>
             {
-                new TranslationTarget(targetBlobContainerSas.AbsoluteUri, targetLanguage, new List<TranslationGlossary> { glossary })
+                new TranslationTarget(targetBlobContainerSas, targetLanguage, new List<TranslationGlossary> { glossary })
                 {
                     Category = options.Category
                 }
@@ -216,7 +216,7 @@ namespace Azure.AI.DocumentTranslation
         /// <returns></returns>
         public virtual async Task<Response<JobStatusDetail>> CreateTranslationJobForAzureBlobsAsync(Uri sourceBlobContainerSas, Uri targetBlobContainerSas, string targetLanguage, TranslationGlossary glossary = default, TranslationJobOptions options = default, CancellationToken cancellationToken = default)
         {
-            var source = new TranslationSource(sourceBlobContainerSas.AbsoluteUri)
+            var source = new TranslationSource(sourceBlobContainerSas)
             {
                 Language = options.SourceLanguage,
                 Filter = options.Filter
@@ -224,7 +224,7 @@ namespace Azure.AI.DocumentTranslation
 
             var targets = new List<TranslationTarget>
             {
-                new TranslationTarget(targetBlobContainerSas.AbsoluteUri, targetLanguage, new List<TranslationGlossary> { glossary })
+                new TranslationTarget(targetBlobContainerSas, targetLanguage, new List<TranslationGlossary> { glossary })
                 {
                     Category = options.Category
                 }

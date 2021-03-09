@@ -15,7 +15,7 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <summary> Initializes a new instance of TranslationSource. </summary>
         /// <param name="sourceUrl"> Location of the folder / container or single file with your documents. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="sourceUrl"/> is null. </exception>
-        public TranslationSource(string sourceUrl)
+        public TranslationSource(Uri sourceUrl)
         {
             if (sourceUrl == null)
             {
@@ -24,9 +24,6 @@ namespace Azure.AI.DocumentTranslation.Models
 
             SourceUrl = sourceUrl;
         }
-
-        /// <summary> Location of the folder / container or single file with your documents. </summary>
-        public string SourceUrl { get; }
         /// <summary>
         /// Language code
         /// 
