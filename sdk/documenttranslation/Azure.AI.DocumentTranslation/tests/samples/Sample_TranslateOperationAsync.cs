@@ -17,8 +17,8 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
         {
             string endpoint = TestEnvironment.Endpoint;
             string apiKey = TestEnvironment.ApiKey;
-            Uri sourceUrl = new Uri(TestEnvironment.SourceUrl);
-            Uri targetUrl = new Uri(TestEnvironment.TargetUrl);
+            Uri sourceUrl = new Uri(TestEnvironment.SourceBlobContainerSas);
+            Uri targetUrl = new Uri(TestEnvironment.TargetBlobContainerSas);
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 

@@ -31,5 +31,10 @@ namespace Azure.AI.DocumentTranslation.Models
         /// <summary> Date time in which the Document's status has been updated. </summary>
         [CodeGenMember("LastActionDateTimeUtc")]
         public DateTimeOffset LastModified { get; }
+
+        /// <summary>
+        /// .
+        /// </summary>
+        public bool HasCompleted => Status == TranslationStatus.Failed || Status == TranslationStatus.Succeeded;
     }
 }

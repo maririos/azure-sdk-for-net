@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Threading;
 using Azure.AI.DocumentTranslation.Models;
 using Azure.Core.TestFramework;
 using NUnit.Framework;
@@ -19,45 +20,40 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            Pageable<TranslationStatusDetail> operationsStatus = client.GetSubmittedTranslations();
+            TimeSpan pollingInterval = new TimeSpan(1000);
 
             int operationsCount = 0;
             int totalDocs = 0;
             int docsCancelled = 0;
             int docsSucceeded = 0;
-            int maxDocs = 0;
-            TranslationStatusDetail largestOperation = null;
+            int docsFailed = 0;
 
-            foreach (TranslationStatusDetail operationStatus in operationsStatus)
+            foreach (TranslationStatusDetail translationStatus in client.GetSubmittedTranslations())
             {
-                operationsCount++;
-                totalDocs += operationStatus.DocumentsTotal;
-                docsCancelled += operationStatus.DocumentsCancelled;
-                docsSucceeded += operationStatus.DocumentsSucceeded;
-                if (totalDocs > maxDocs)
+                if (!translationStatus.HasCompleted)
                 {
-                    maxDocs = totalDocs;
-                    largestOperation = operationStatus;
+                    // After user studies we can do this if needed
+                    // DocumentTranslationOperation operation = translationStatus.GetOperation(client);
+                    DocumentTranslationOperation operation = new (translationStatus.Id, client);
+                    while (!operation.HasCompleted)
+                    {
+                        Thread.Sleep(pollingInterval);
+                        operation.UpdateStatus();
+                    }
                 }
+
+                operationsCount++;
+                totalDocs += translationStatus.DocumentsTotal;
+                docsCancelled += translationStatus.DocumentsCancelled;
+                docsSucceeded += translationStatus.DocumentsSucceeded;
+                docsFailed += translationStatus.DocumentsFailed;
             }
 
             Console.WriteLine($"# of operations: {operationsCount}");
             Console.WriteLine($"Total Documents: {totalDocs}");
-            Console.WriteLine($"DocumentsSucceeded: {docsSucceeded}");
+            Console.WriteLine($"Succeeded Document: {docsSucceeded}");
+            Console.WriteLine($"Failed Document: {docsFailed}");
             Console.WriteLine($"Cancelled Documents: {docsCancelled}");
-
-            Console.WriteLine($"Largest operation is {largestOperation.Id} and has the documents:");
-
-            // After user studies we can do this if needed
-            // DocumentTranslationOperation operation = largestOperation.GetOperation(client);
-            DocumentTranslationOperation operation = new DocumentTranslationOperation(largestOperation.Id, client);
-
-            Pageable<DocumentStatusDetail> docs = operation.GetDocumentsStatus();
-
-            foreach (DocumentStatusDetail docStatus in docs)
-            {
-                Console.WriteLine($"Document {docStatus.Url} has status {docStatus.Status}");
-            }
         }
     }
 }

@@ -18,25 +18,25 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
         {
             string endpoint = TestEnvironment.Endpoint;
             string apiKey = TestEnvironment.ApiKey;
-            Uri sourceUrl = new Uri(TestEnvironment.SourceUrl);
-            Uri targetUrl = new Uri(TestEnvironment.TargetUrl);
+            Uri sourceUrl = new Uri(TestEnvironment.SourceBlobContainerSas);
+            Uri targetUrl = new Uri(TestEnvironment.TargetBlobContainerSas);
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
             DocumentTranslationOperation operation = await client.StartTranslationFromAzureBlobsAsync(sourceUrl, targetUrl, "it");
 
             var documentscompleted = new HashSet<string>();
-
+            TimeSpan pollingInterval = new TimeSpan(1000);
             while (!operation.HasCompleted)
             {
+                await Task.Delay(pollingInterval);
                 await operation.UpdateStatusAsync();
 
-                AsyncPageable<DocumentStatusDetail> documentsStatus = operation.GetDocumentsStatusAsync();
-                await foreach (DocumentStatusDetail docStatus in documentsStatus)
+                await foreach (DocumentStatusDetail docStatus in operation.GetDocumentsStatusAsync())
                 {
                     if (documentscompleted.Contains(docStatus.Id))
                         continue;
-                    if (docStatus.Status == TranslationStatus.Succeeded || docStatus.Status == TranslationStatus.Failed)
+                    if (docStatus.HasCompleted)
                     {
                         documentscompleted.Add(docStatus.Id);
                         Console.WriteLine($"Document {docStatus.Url} completed with status ${docStatus.Status}");

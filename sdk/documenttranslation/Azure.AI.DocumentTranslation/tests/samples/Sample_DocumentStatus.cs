@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Azure.AI.DocumentTranslation.Models;
 using Azure.Core.TestFramework;
 using NUnit.Framework;
@@ -17,25 +18,25 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
         {
             string endpoint = TestEnvironment.Endpoint;
             string apiKey = TestEnvironment.ApiKey;
-            Uri sourceUrl = new Uri(TestEnvironment.SourceUrl);
-            Uri targetUrl = new Uri(TestEnvironment.TargetUrl);
+            Uri sourceUrl = new Uri(TestEnvironment.SourceBlobContainerSas);
+            Uri targetUrl = new Uri(TestEnvironment.TargetBlobContainerSas);
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
             DocumentTranslationOperation operation = client.StartTranslationFromAzureBlobs(sourceUrl, targetUrl, "it");
 
             var documentscompleted = new HashSet<string>();
-
+            TimeSpan pollingInterval = new TimeSpan(1000);
             while (!operation.HasCompleted)
             {
+                Thread.Sleep(pollingInterval);
                 operation.UpdateStatus();
 
-                Pageable<DocumentStatusDetail> documentsStatus = operation.GetDocumentsStatus();
-                foreach (DocumentStatusDetail docStatus in documentsStatus)
+                foreach (DocumentStatusDetail docStatus in operation.GetDocumentsStatus())
                 {
                     if (documentscompleted.Contains(docStatus.Id))
                         continue;
-                    if (docStatus.Status == TranslationStatus.Succeeded || docStatus.Status == TranslationStatus.Failed)
+                    if (docStatus.HasCompleted)
                     {
                         documentscompleted.Add(docStatus.Id);
                         Console.WriteLine($"Document {docStatus.Url} completed with status ${docStatus.Status}");
