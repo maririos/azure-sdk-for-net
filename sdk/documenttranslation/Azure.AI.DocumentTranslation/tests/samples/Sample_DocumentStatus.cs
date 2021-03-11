@@ -32,6 +32,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
                 Thread.Sleep(pollingInterval);
                 operation.UpdateStatus();
 
+                // foreach (DocumentStatusDetail docStatus in client.GetDocumentsStatus(operation.Id))
                 foreach (DocumentStatusDetail docStatus in operation.GetDocumentsStatus())
                 {
                     if (documentscompleted.Contains(docStatus.Id))

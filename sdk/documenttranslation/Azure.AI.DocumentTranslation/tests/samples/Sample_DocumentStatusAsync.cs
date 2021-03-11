@@ -32,6 +32,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
                 await Task.Delay(pollingInterval);
                 await operation.UpdateStatusAsync();
 
+                // await foreach(DocumentStatusDetail docStatus in client.GetDocumentsStatusAsync(operation.Id))
                 await foreach (DocumentStatusDetail docStatus in operation.GetDocumentsStatusAsync())
                 {
                     if (documentscompleted.Contains(docStatus.Id))
