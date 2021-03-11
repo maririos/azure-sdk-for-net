@@ -19,40 +19,34 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            AsyncPageable<JobStatusDetail> jobs = client.GetSubmittedJobsAsync();
+            TimeSpan pollingInterval = new TimeSpan(1000);
 
             int jobsCount = 0;
             int docsTotal = 0;
             int docsCancelled = 0;
             int docsSucceeded = 0;
-            int maxDocs = 0;
-            string largestJobId = "";
+            int docsFailed = 0;
 
-            await foreach (JobStatusDetail job in jobs)
+            await foreach (JobStatusDetail job in client.GetSubmittedJobsAsync())
             {
+                if (!job.HasCompleted)
+                {
+                    await Task.Delay(pollingInterval);
+                    await client.GetJobStatusAsync(job.Id);
+                }
+
                 jobsCount++;
                 docsTotal += job.DocumentsTotal;
                 docsCancelled += job.DocumentsCancelled;
                 docsSucceeded += job.DocumentsSucceeded;
-                if (docsTotal > maxDocs)
-                {
-                    maxDocs = docsTotal;
-                    largestJobId = job.Id;
-                }
+                docsFailed += job.DocumentsFailed;
             }
 
             Console.WriteLine($"# of jobs: {jobsCount}");
             Console.WriteLine($"Total Documents: {docsTotal}");
-            Console.WriteLine($"DocumentsSucceeded: {docsSucceeded}");
+            Console.WriteLine($"Succeeded Document: {docsSucceeded}");
+            Console.WriteLine($"Failed Document: {docsFailed}");
             Console.WriteLine($"Cancelled Documents: {docsCancelled}");
-
-            Console.WriteLine($"Largest job is {largestJobId} and has the documents:");
-            AsyncPageable<DocumentStatusDetail> docs = client.GetDocumentsStatusAsync(largestJobId);
-
-            await foreach (DocumentStatusDetail docStatus in docs)
-            {
-                Console.WriteLine($"Document {docStatus.Url} has status {docStatus.Status}");
-            }
         }
     }
 }

@@ -18,10 +18,10 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
         {
             string endpoint = TestEnvironment.Endpoint;
             string apiKey = TestEnvironment.ApiKey;
-            Uri sourceUrl1 = new Uri(TestEnvironment.SourceUrl);
-            Uri sourceUrl2 = new Uri(TestEnvironment.SourceUrl);
-            Uri targetUrl1 = new Uri(TestEnvironment.TargetUrl);
-            Uri targetUrl2 = new Uri(TestEnvironment.TargetUrl);
+            Uri sourceUrl1 = new Uri(TestEnvironment.SourceBlobContainerSas);
+            Uri sourceUrl2 = new Uri(TestEnvironment.SourceBlobContainerSas);
+            Uri targetUrl1 = new Uri(TestEnvironment.TargetBlobContainerSas);
+            Uri targetUrl2 = new Uri(TestEnvironment.TargetBlobContainerSas);
             Uri glossaryUrl = new Uri(TestEnvironment.GlossaryUrl);
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
@@ -48,9 +48,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             TimeSpan pollingInterval = new TimeSpan(1000);
 
-            while (jobStatus.Value.Status != TranslationStatus.Failed
-                       || jobStatus.Value.Status != TranslationStatus.Succeeded
-                       || jobStatus.Value.Status != TranslationStatus.ValidationFailed)
+            while (!jobStatus.Value.HasCompleted)
             {
                 Thread.Sleep(pollingInterval);
                 jobStatus = client.GetJobStatus(jobStatus.Value.Id);

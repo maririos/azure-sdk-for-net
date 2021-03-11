@@ -18,44 +18,31 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
         {
             string endpoint = TestEnvironment.Endpoint;
             string apiKey = TestEnvironment.ApiKey;
-            Uri sourceUrl = new Uri(TestEnvironment.SourceUrl);
-            Uri targetUrl = new Uri(TestEnvironment.TargetUrl);
+            Uri sourceUrl = new Uri(TestEnvironment.SourceBlobContainerSas);
+            Uri targetUrl = new Uri(TestEnvironment.TargetBlobContainerSas);
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            Response<JobStatusDetail> job = client.CreateTranslationJobForAzureBlobs(sourceUrl, targetUrl, "it");
+            JobStatusDetail job = client.CreateTranslationJobForAzureBlobs(sourceUrl, targetUrl, "it");
 
-            // get not finished documents
-            List<string> documentIds = new List<string>();
-            Pageable<DocumentStatusDetail> documents = client.GetDocumentsStatus(job.Value.Id);
-
-            foreach (DocumentStatusDetail docStatus in documents)
-            {
-                if (docStatus.Status ==TranslationStatus.NotStarted || docStatus.Status == TranslationStatus.Running)
-                {
-                    documentIds.Add(docStatus.Id);
-                }
-                else
-                {
-                    Console.WriteLine($"Document {docStatus.Url} completed with status ${docStatus.Status}");
-                }
-            }
-
+            var documentscompleted = new HashSet<string>();
             TimeSpan pollingInterval = new TimeSpan(1000);
 
-            while (documentIds.Count > 0)
+            do
             {
-                Thread.Sleep(pollingInterval);
-                for (int i = documentIds.Count - 1; i >= 0; i--)
+                foreach (DocumentStatusDetail docStatus in client.GetDocumentsStatus(job.Id))
                 {
-                    Response<DocumentStatusDetail> status = client.GetDocumentStatus(job.Value.Id, documentIds[i]);
-                    if (status.Value.Status != TranslationStatus.NotStarted && status.Value.Status != TranslationStatus.Running)
+                    if (documentscompleted.Contains(docStatus.Id))
+                        continue;
+                    if (docStatus.HasCompleted)
                     {
-                        Console.WriteLine($"Document {status.Value.Url} completed with status ${status.Value.Status}");
-                        documentIds.RemoveAt(i);
+                        documentscompleted.Add(docStatus.Id);
+                        Console.WriteLine($"Document {docStatus.Url} completed with status ${docStatus.Status}");
                     }
                 }
-            }
+
+                Thread.Sleep(pollingInterval);
+            } while (job.DocumentsTotal != documentscompleted.Count);
         }
     }
 }

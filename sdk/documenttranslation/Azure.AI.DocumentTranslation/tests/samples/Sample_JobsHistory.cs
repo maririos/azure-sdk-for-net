@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Threading;
 using Azure.AI.DocumentTranslation.Models;
 using Azure.Core.TestFramework;
 using NUnit.Framework;
@@ -19,40 +20,34 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            Pageable<JobStatusDetail> jobs = client.GetSubmittedJobs();
+            TimeSpan pollingInterval = new TimeSpan(1000);
 
             int jobsCount = 0;
             int docsTotal = 0;
             int docsCancelled = 0;
             int docsSucceeded = 0;
-            int maxDocs = 0;
-            string largestJobId = "";
+            int docsFailed = 0;
 
-            foreach (JobStatusDetail job in jobs)
+            foreach (JobStatusDetail job in client.GetSubmittedJobs())
             {
+                if (!job.HasCompleted)
+                {
+                    Thread.Sleep(pollingInterval);
+                    client.GetJobStatus(job.Id);
+                }
+
                 jobsCount++;
                 docsTotal += job.DocumentsTotal;
                 docsCancelled += job.DocumentsCancelled;
                 docsSucceeded += job.DocumentsSucceeded;
-                if (docsTotal > maxDocs)
-                {
-                    maxDocs = docsTotal;
-                    largestJobId = job.Id;
-                }
+                docsFailed += job.DocumentsFailed;
             }
 
             Console.WriteLine($"# of jobs: {jobsCount}");
             Console.WriteLine($"Total Documents: {docsTotal}");
-            Console.WriteLine($"DocumentsSucceeded: {docsSucceeded}");
+            Console.WriteLine($"Succeeded Document: {docsSucceeded}");
+            Console.WriteLine($"Failed Document: {docsFailed}");
             Console.WriteLine($"Cancelled Documents: {docsCancelled}");
-
-            Console.WriteLine($"Largest job is {largestJobId} and has the documents:");
-            Pageable<DocumentStatusDetail> docs = client.GetDocumentsStatus(largestJobId);
-
-            foreach (DocumentStatusDetail docStatus in docs)
-            {
-                Console.WriteLine($"Document {docStatus.Url} has status {docStatus.Status}");
-            }
         }
     }
 }

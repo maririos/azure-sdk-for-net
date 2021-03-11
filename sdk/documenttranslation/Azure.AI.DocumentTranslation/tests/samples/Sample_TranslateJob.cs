@@ -17,36 +17,31 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
         {
             string endpoint = TestEnvironment.Endpoint;
             string apiKey = TestEnvironment.ApiKey;
-            Uri sourceUrl = new Uri(TestEnvironment.SourceUrl);
-            Uri targetUrl = new Uri(TestEnvironment.TargetUrl);
+            Uri sourceUrl = new Uri(TestEnvironment.SourceBlobContainerSas);
+            Uri targetUrl = new Uri(TestEnvironment.TargetBlobContainerSas);
 
             var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
 
-            Response<JobStatusDetail> jobStatus = client.CreateTranslationJobForAzureBlobs(sourceUrl, targetUrl, "it");
+            JobStatusDetail jobStatus = client.CreateTranslationJobForAzureBlobs(sourceUrl, targetUrl, "it");
 
             TimeSpan pollingInterval = new TimeSpan(1000);
 
-            while (jobStatus.Value.Status != TranslationStatus.Failed
-                       || jobStatus.Value.Status != TranslationStatus.Succeeded
-                       || jobStatus.Value.Status != TranslationStatus.ValidationFailed)
+            while (!jobStatus.HasCompleted)
             {
                 Thread.Sleep(pollingInterval);
-                jobStatus = client.GetJobStatus(jobStatus.Value.Id);
+                jobStatus = client.GetJobStatus(jobStatus.Id);
             }
 
-            Console.WriteLine($"  Status: {jobStatus.Value.Status}");
-            Console.WriteLine($"  Created on: {jobStatus.Value.CreatedOn}");
-            Console.WriteLine($"  Last modified: {jobStatus.Value.LastModified}");
-            Console.WriteLine($"  Total documents: {jobStatus.Value.DocumentsTotal}");
-            Console.WriteLine($"    Succeeded: {jobStatus.Value.DocumentsSucceeded}");
-            Console.WriteLine($"    Failed: {jobStatus.Value.DocumentsFailed}");
-            Console.WriteLine($"    In Progress: {jobStatus.Value.DocumentsInProgress}");
-            Console.WriteLine($"    Not started: {jobStatus.Value.DocumentsNotStarted}");
+            Console.WriteLine($"  Status: {jobStatus.Status}");
+            Console.WriteLine($"  Created on: {jobStatus.CreatedOn}");
+            Console.WriteLine($"  Last modified: {jobStatus.LastModified}");
+            Console.WriteLine($"  Total documents: {jobStatus.DocumentsTotal}");
+            Console.WriteLine($"    Succeeded: {jobStatus.DocumentsSucceeded}");
+            Console.WriteLine($"    Failed: {jobStatus.DocumentsFailed}");
+            Console.WriteLine($"    In Progress: {jobStatus.DocumentsInProgress}");
+            Console.WriteLine($"    Not started: {jobStatus.DocumentsNotStarted}");
 
-            // Get Status of documents
-            Pageable<DocumentStatusDetail> documents = client.GetDocumentsStatus(jobStatus.Value.Id);
-
-            foreach (DocumentStatusDetail document in documents)
+            foreach (DocumentStatusDetail document in client.GetDocumentsStatus(jobStatus.Id))
             {
                 Console.WriteLine($"Document with Id: {document.Id}");
                 Console.WriteLine($"  Status:{document.Status}");
