@@ -47,6 +47,12 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
             Console.WriteLine($"Succeeded Document: {docsSucceeded}");
             Console.WriteLine($"Failed Document: {docsFailed}");
             Console.WriteLine($"Cancelled Documents: {docsCancelled}");
+
+            //GetDocuments for a job
+            await foreach (DocumentStatusDetail docStatus in client.GetDocumentsStatusAsync(jobId))
+            {
+                Console.WriteLine($"Document {docStatus.Url} has status {docStatus.Status}");
+            }
         }
     }
 }
