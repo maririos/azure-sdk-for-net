@@ -24,7 +24,7 @@ namespace Azure.AI.DocumentTranslation.Tests.Samples
 
             DocumentTranslationOperation operation = client.StartTranslationFromAzureBlobs(sourceUrl, targetUrl, "it");
 
-            Response<AsyncPageable<DocumentStatusDetail>> operationResult = await operation.WaitForCompletionAsync();
+            await operation.WaitForCompletionAsync();
 
             Console.WriteLine($"  Status: {operation.Status}");
             Console.WriteLine($"  Created on: {operation.CreatedOn}");
