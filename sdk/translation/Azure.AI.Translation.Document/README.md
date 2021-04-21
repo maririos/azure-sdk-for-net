@@ -125,43 +125,6 @@ We guarantee that all client instance methods are thread-safe and independent of
 ### General
 When you interact with the Cognitive Services Document Translation client library using the .NET SDK, errors returned by the service correspond to the same HTTP status codes returned for [REST API][documenttranslation_rest_api] requests.
 
-For example, if you submit a request with an empty targets list, a `400` error is returned, indicating "Bad Request".
-
-```C# Snippet:BadRequest
-var invalidInput = new DocumentTranslationInput(new TranslationSource(sourceSasUri, new List<TranslationTarget>());
-
-try
-{
-    DocumentTranslationOperation operation = client.StartTranslation(invalidInput);
-}
-catch (RequestFailedException e)
-{
-    Console.WriteLine(e.ToString());
-}
-```
-
-You will notice that additional information is logged, like the client request ID of the operation.
-
-```
-Message:
-    Azure.RequestFailedException: Service request failed.
-    Status: 400 (Bad Request)
-
-Content:
-    {"error":{"code":"InvalidRequest","message":"No translation target found.","target":"TargetInput","innerError":{"code":"NoTranslationTargetFound","message":"No translation target found."}}}
-
-Headers:
-    Transfer-Encoding: chunked
-    X-RequestId: REDACTED
-    Content-Type: application/json; charset=utf-8
-    Set-Cookie: REDACTED
-    X-Powered-By: REDACTED
-    apim-request-id: REDACTED
-    Strict-Transport-Security: REDACTED
-    x-content-type-options: REDACTED
-    Date: Mon, 22 Mar 2021 11:54:58 GMT
-```
-
 ### Setting up console logging
 The simplest way to see the logs is to enable the console logging.
 To create an Azure SDK log listener that outputs messages to console use AzureEventSourceListener.CreateConsoleLogger method.
