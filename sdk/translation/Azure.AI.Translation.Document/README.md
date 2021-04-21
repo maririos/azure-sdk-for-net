@@ -6,7 +6,7 @@ Azure Cognitive Services Document Translation is a cloud service that translates
 * Check the translation status and progress of each document in the translation operation.
 * Apply a custom translation model or glossaries to tailor translation to your specific case.
 
-[Source code][documenttranslation_client_src] | [Package (NuGet)][documenttranslation_nuget_package] | [API reference documentation][documenttranslation_refdocs] | [Product documentation][documenttranslation_docs] | [Samples][documenttranslation_samples]
+[Source code][documenttranslation_client_src] | [Package (NuGet)][documenttranslation_nuget_package] | [API reference documentation][documenttranslation_refdocs] | [Product documentation][documenttranslation_docs]
 
 ## Getting started
 
@@ -88,46 +88,23 @@ A `DocumentTranslationClient` is the primary interface for developers using the 
  - Enumerating all past and current translation operations.
  - Identifying supported glossary and document formats.
 
+```C# Snippet:CreateDocumentTranslationClient
+string endpoint = "<endpoint>";
+string apiKey = "<apiKey>";
+var client = new DocumentTranslationClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
+```
+
 ### Translation Input
 To start a translation operation you need to create one instance or a list of `DocumentTranslationInput`. 
 
-A single source URL to documents can be translated to many different languages:
-
-```C# Snippet:DocumentTranslationSingleInput
-Uri sourceSasUri = <source SAS URI>;
-Uri frenchTargetSasUri = <french target SAS URI>;
-
-var input = new DocumentTranslationInput(sourceSasUri, frenchTargetSasUri, "fr");
-```
-
-Or multiple different sources can be provided each with their own targets.
-
-```C# Snippet:DocumentTranslationMultipleInputs
-Uri source1SasUri = <source1 SAS URI>;
-Uri source2SasUri = <source2 SAS URI>;
-Uri frenchTargetSasUri = <french target SAS URI>;
-Uri spanishTargetSasUri = <spanish target SAS URI>;
-
-var inputs = new List<DocumentTranslationInput>
-{
-    new DocumentTranslationInput(source1SasUri, spanishTargetSasUri, "es"),
-    new DocumentTranslationInput(
-        source: new TranslationSource(source2SasUri),
-        targets: new List<TranslationTarget>
-        {
-            new TranslationTarget(frenchTargetSasUri, "fr"),
-            new TranslationTarget(spanishTargetSasUri, "es")
-        }),
-};
-```
-
+A single source URL to documents can be translated to many different languages.
 Note that documents written to a target container must have unique names. So you can't translate a source container into a target container twice or have sources with the same documents translated into the same target container.
 
 ### Long-Running Operations
 
 Document Translation is implemented as a [**long-running operation**][dotnet_lro_guidelines].  Long-running operations consist of an initial request sent to the service to start an operation, followed by polling the service at intervals to determine whether the operation has completed successfully or failed.
 
-For long running operations in the Azure SDK, the client exposes a `Start<operation-name>` method that returns a `PageableOperation<T>`.  You can use the extension method `WaitForCompletionAsync()` to wait for the operation to complete and obtain its result.  A sample code snippet is provided to illustrate using long-running operations [below](#start-translation-asynchronously).
+For long running operations in the Azure SDK, the client exposes a `Start<operation-name>` method that returns a `PageableOperation<T>`.  You can use the extension method `WaitForCompletionAsync()` to wait for the operation to complete and obtain its result.
 
 ### Thread safety
 We guarantee that all client instance methods are thread-safe and independent of each other ([guideline](https://azure.github.io/azure-sdk/dotnet_introduction.html#dotnet-service-methods-thread-safety)). This ensures that the recommendation of reusing client instances is always safe, even across threads.
@@ -142,197 +119,6 @@ We guarantee that all client instance methods are thread-safe and independent of
 [Mocking](https://github.com/Azure/azure-sdk-for-net/blob/master/sdk/core/Azure.Core/README.md#mocking) |
 [Client lifetime](https://devblogs.microsoft.com/azure-sdk/lifetime-management-and-thread-safety-guarantees-of-azure-sdk-net-clients/)
 <!-- CLIENT COMMON BAR -->
-
-## Examples
-The following section provides several code snippets using the `client` [created above](#create-documenttranslationclient-with-api-key-credential), and covers the main functions of Document Translation.
-Note: our `DocumentTranslationClient` provides both synchronous and asynchronous methods.
-
-### Async Examples
-* [Start Translation Asynchronously](#start-translation-asynchronously)
-* [Operations History Asynchronously](#get-operations-history-asynchronously)
-* [Multiple Inputs Asynchronously](#start-translation-with-multiple-inputs-asynchronously)
-
-### Sync Examples
-Note: our `DocumentTranslationClient` provides both synchronous and asynchronous methods.
-* [Start Translation](#start-translation)
-
-### Start Translation Asynchronously
-Start a translation operation to translate documents in the source container and write the translated files to the target container. `DocumentTranslationOperation` allows you to poll the status of the translation operation and get the status of the individual documents.
-
-```C# Snippet:StartTranslationAsync
-Uri sourceUri = <source SAS URI>;
-Uri targetUri = <target SAS URI>;
-
-var input = new DocumentTranslationInput(sourceUri, targetUri, "es");
-
-DocumentTranslationOperation operation = await client.StartTranslationAsync(input);
-
-await operation.WaitForCompletionAsync();
-
-Console.WriteLine($"  Status: {operation.Status}");
-Console.WriteLine($"  Created on: {operation.CreatedOn}");
-Console.WriteLine($"  Last modified: {operation.LastModified}");
-Console.WriteLine($"  Total documents: {operation.DocumentsTotal}");
-Console.WriteLine($"    Succeeded: {operation.DocumentsSucceeded}");
-Console.WriteLine($"    Failed: {operation.DocumentsFailed}");
-Console.WriteLine($"    In Progress: {operation.DocumentsInProgress}");
-Console.WriteLine($"    Not started: {operation.DocumentsNotStarted}");
-
-await foreach (DocumentStatusResult document in operation.Value)
-{
-    Console.WriteLine($"Document with Id: {document.DocumentId}");
-    Console.WriteLine($"  Status:{document.Status}");
-    if (document.Status == TranslationStatus.Succeeded)
-    {
-        Console.WriteLine($"  Translated Document Uri: {document.TranslatedDocumentUri}");
-        Console.WriteLine($"  Translated to language: {document.TranslateTo}.");
-        Console.WriteLine($"  Document source Uri: {document.SourceDocumentUri}");
-    }
-    else
-    {
-        Console.WriteLine($"  Error Code: {document.Error.ErrorCode}");
-        Console.WriteLine($"  Message: {document.Error.Message}");
-    }
-}
-```
-
-### Get Operations History Asynchronously
-Get History of all submitted translation operations
-
-```C# Snippet:OperationsHistoryAsync
-int operationsCount = 0;
-int totalDocs = 0;
-int docsCancelled = 0;
-int docsSucceeded = 0;
-int docsFailed = 0;
-
-await foreach (TranslationStatusResult translationStatus in client.GetTranslationsAsync())
-{
-    if (!translationStatus.HasCompleted)
-    {
-        DocumentTranslationOperation operation = new DocumentTranslationOperation(translationStatus.TranslationId, client);
-        await operation.WaitForCompletionAsync();
-    }
-
-    operationsCount++;
-    totalDocs += translationStatus.DocumentsTotal;
-    docsCancelled += translationStatus.DocumentsCancelled;
-    docsSucceeded += translationStatus.DocumentsSucceeded;
-    docsFailed += translationStatus.DocumentsFailed;
-}
-
-Console.WriteLine($"# of operations: {operationsCount}");
-Console.WriteLine($"Total Documents: {totalDocs}");
-Console.WriteLine($"Succeeded Document: {docsSucceeded}");
-Console.WriteLine($"Failed Document: {docsFailed}");
-Console.WriteLine($"Cancelled Documents: {docsCancelled}");
-```
-
-### Start Translation with Multiple Inputs Asynchronously
-Start a translation operation to translate documents in multiple source containers to multiple target containers in different languages. `DocumentTranslationOperation` allows you to poll the status of the translation operation and get the status of the individual documents.
-
-```C# Snippet:MultipleInputsAsync
-Uri source1SasUriUri = <source1 SAS URI>;
-Uri source2SasUri = <source2 SAS URI>;
-Uri frenchTargetSasUri = <french target SAS URI>;
-Uri arabicTargetSasUri = <arabic target SAS URI>;
-Uri spanishTargetSasUri = <spanish target SAS URI>;
-Uri frenchGlossarySasUri = <french glossary SAS URI>;
-var glossaryFormat = "TSV";
-
-var input1 = new DocumentTranslationInput(source1SasUriUri, frenchTargetSasUri, "fr", new TranslationGlossary(frenchGlossarySasUri, glossaryFormat));
-input1.AddTarget(spanishTargetSasUri, "es");
-
-var input2 = new DocumentTranslationInput(source2SasUri, arabicTargetSasUri, "ar");
-input2.AddTarget(frenchTargetSasUri, "fr", new TranslationGlossary(frenchGlossarySasUri, glossaryFormat));
-
-var inputs = new List<DocumentTranslationInput>()
-    {
-        input1,
-        input2
-    };
-
-DocumentTranslationOperation operation = await client.StartTranslationAsync(inputs);
-
-await operation.WaitForCompletionAsync();
-
-await foreach (DocumentStatusResult document in operation.GetValuesAsync())
-{
-    Console.WriteLine($"Document with Id: {document.DocumentId}");
-    Console.WriteLine($"  Status:{document.Status}");
-    if (document.Status == TranslationStatus.Succeeded)
-    {
-        Console.WriteLine($"  Translated Document Uri: {document.TranslatedDocumentUri}");
-        Console.WriteLine($"  Translated to language: {document.TranslateTo}.");
-        Console.WriteLine($"  Document source Uri: {document.SourceDocumentUri}");
-    }
-    else
-    {
-        Console.WriteLine($"  Document source Uri: {document.SourceDocumentUri}");
-        Console.WriteLine($"  Error Code: {document.Error.ErrorCode}");
-        Console.WriteLine($"  Message: {document.Error.Message}");
-    }
-}
-```
-
-### Start Translation
-Start a translation operation to translate documents in the source container and write the translated files to the target container. `DocumentTranslationOperation` allows you to poll the status of the translation operation and get the status of the individual documents.
-
-```C# Snippet:StartTranslation
-Uri sourceUri = <source SAS URI>;
-Uri targetUri = <target SAS URI>;
-
-var input = new DocumentTranslationInput(sourceUri, targetUri, "es");
-
-DocumentTranslationOperation operation = client.StartTranslation(input);
-
-TimeSpan pollingInterval = new(1000);
-
-while (true)
-{
-    operation.UpdateStatus();
-
-    Console.WriteLine($"  Status: {operation.Status}");
-    Console.WriteLine($"  Created on: {operation.CreatedOn}");
-    Console.WriteLine($"  Last modified: {operation.LastModified}");
-    Console.WriteLine($"  Total documents: {operation.DocumentsTotal}");
-    Console.WriteLine($"    Succeeded: {operation.DocumentsSucceeded}");
-    Console.WriteLine($"    Failed: {operation.DocumentsFailed}");
-    Console.WriteLine($"    In Progress: {operation.DocumentsInProgress}");
-    Console.WriteLine($"    Not started: {operation.DocumentsNotStarted}");
-
-    if (operation.HasCompleted)
-    {
-        break;
-    }
-    else
-    {
-        if (operation.GetRawResponse().Headers.TryGetValue("Retry-After", out string value))
-        {
-            pollingInterval = TimeSpan.FromSeconds(Convert.ToInt32(value));
-        }
-        Thread.Sleep(pollingInterval);
-    }
-}
-
-foreach (DocumentStatusResult document in operation.GetValues())
-{
-    Console.WriteLine($"Document with Id: {document.DocumentId}");
-    Console.WriteLine($"  Status:{document.Status}");
-    if (document.Status == TranslationStatus.Succeeded)
-    {
-        Console.WriteLine($"  Translated Document Uri: {document.TranslatedDocumentUri}");
-        Console.WriteLine($"  Translated to language: {document.TranslateTo}.");
-        Console.WriteLine($"  Document source Uri: {document.SourceDocumentUri}");
-    }
-    else
-    {
-        Console.WriteLine($"  Document source Uri: {document.SourceDocumentUri}");
-        Console.WriteLine($"  Error Code: {document.Error.ErrorCode}");
-        Console.WriteLine($"  Message: {document.Error.Message}");
-    }
-}
-```
 
 ## Troubleshooting
 
@@ -387,17 +173,6 @@ using AzureEventSourceListener listener = AzureEventSourceListener.CreateConsole
 
 To learn more about other logging mechanisms see [here][logging].
 
-## Next steps
-
-Samples showing how to use the Cognitive Services Document Translation library are available in this GitHub repository.
-
-- [Start Translation][start_translation_sample]
-- [Poll Documents Status][documents_status_sample]
-- [Operations History][operations_history_sample]
-
-### Advanced samples
-- [Multiple Inputs][multiple_Inputs_sample]
-
 ## Contributing
 See the [CONTRIBUTING.md][contributing] for details on building, testing, and contributing to this library.
 
@@ -415,9 +190,9 @@ This project has adopted the [Microsoft Open Source Code of Conduct][code_of_con
 <!--TODO: remove /overview -->
 [documenttranslation_docs]: https://docs.microsoft.com/azure/cognitive-services/translator/document-translation/overview
 <!-- TODO: Add correct link when available -->
-[documenttranslation_refdocs]: https://aka.ms/azsdk/net/translation/docs
+[documenttranslation_refdocs]: azsdk/net/documenttranslation/docs
 <!-- TODO: Add correct link when available -->
-[documenttranslation_nuget_package]: https://www.nuget.org/
+[documenttranslation_nuget_package]: https://www.nuget.org/packages/Azure.AI.Translation.Document
 [documenttranslation_samples]: https://github.com/Azure/azure-sdk-for-net/tree/master/sdk/translation/Azure.AI.Translation.Document/samples/README.md
 <!-- TODO: Add correct link when available -->
 [documenttranslation_rest_api]: https://github.com/Azure/azure-rest-api-specs/blob/master/specification/cognitiveservices/data-plane/TranslatorText/preview/v1.0-preview.1/TranslatorBatch.json
