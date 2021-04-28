@@ -151,7 +151,7 @@ namespace Azure.AI.FormRecognizer.Tests.Models
                 operation.UpdateStatus();
             }
 
-            testListener.AssertScope($"{nameof(RecognizeBusinessCardsOperation)}.{nameof(RecognizeBusinessCardsOperation.UpdateStatus)}");
+            testListener.AssertScope($"{nameof(RecognizePrebuiltModelOperation)}.{nameof(RecognizePrebuiltModelOperation.UpdateStatus)}");
         }
 
         [Test]
