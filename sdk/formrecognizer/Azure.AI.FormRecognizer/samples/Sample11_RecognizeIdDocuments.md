@@ -26,7 +26,7 @@ For simplicity, we are not showing all the fields that the service returns. To s
 ```C# Snippet:FormRecognizerSampleRecognizeIdDocumentsUri
 Uri sourceUri = "<sourceUri>";
 
-RecognizeIdDocumentsOperation operation = await client.StartRecognizeIdDocumentsFromUriAsync(sourceUri);
+RecognizePrebuiltModelOperation operation = await client.StartRecognizeIdDocumentsFromUriAsync(sourceUri);
 Response<RecognizedFormCollection> operationResponse = await operation.WaitForCompletionAsync();
 RecognizedFormCollection idDocuments = operationResponse.Value;
 
@@ -119,7 +119,7 @@ string sourcePath = "<sourcePath>";
 
 using var stream = new FileStream(sourcePath, FileMode.Open);
 
-RecognizeIdDocumentsOperation operation = await client.StartRecognizeIdDocumentsAsync(stream);
+RecognizePrebuiltModelOperation operation = await client.StartRecognizeIdDocumentsAsync(stream);
 Response<RecognizedFormCollection> operationResponse = await operation.WaitForCompletionAsync();
 RecognizedFormCollection idDocuments = operationResponse.Value;
 

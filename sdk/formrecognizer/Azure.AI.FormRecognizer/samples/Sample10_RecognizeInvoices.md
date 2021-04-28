@@ -27,7 +27,7 @@ For simplicity, we are not showing all the fields that the service returns. To s
     Uri invoiceUri = <invoiceUri>;
     var options = new RecognizeInvoicesOptions() { Locale = "en-US" };
 
-    RecognizeInvoicesOperation operation = await client.StartRecognizeInvoicesFromUriAsync(invoiceUri, options);
+    RecognizePrebuiltModelOperation operation = await client.StartRecognizeInvoicesFromUriAsync(invoiceUri, options);
     Response<RecognizedFormCollection> operationResponse = await operation.WaitForCompletionAsync();
     RecognizedFormCollection invoices = operationResponse.Value;
 
@@ -160,7 +160,7 @@ string invoicePath = "<invoicePath>";
 using var stream = new FileStream(invoicePath, FileMode.Open);
 var options = new RecognizeInvoicesOptions() { Locale = "en-US" };
 
-RecognizeInvoicesOperation operation = await client.StartRecognizeInvoicesAsync(stream, options);
+RecognizePrebuiltModelOperation operation = await client.StartRecognizeInvoicesAsync(stream, options);
 Response<RecognizedFormCollection> operationResponse = await operation.WaitForCompletionAsync();
 RecognizedFormCollection invoices = operationResponse.Value;
 

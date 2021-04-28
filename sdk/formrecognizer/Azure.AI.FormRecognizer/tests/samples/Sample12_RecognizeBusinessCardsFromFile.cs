@@ -32,7 +32,7 @@ namespace Azure.AI.FormRecognizer.Samples
             using var stream = new FileStream(businessCardsPath, FileMode.Open);
             var options = new RecognizeBusinessCardsOptions() { Locale = "en-US" };
 
-            RecognizeBusinessCardsOperation operation = await client.StartRecognizeBusinessCardsAsync(stream, options);
+            RecognizePrebuiltModelOperation operation = await client.StartRecognizeBusinessCardsAsync(stream, options);
             Response<RecognizedFormCollection> operationResponse = await operation.WaitForCompletionAsync();
             RecognizedFormCollection businessCards = operationResponse.Value;
 

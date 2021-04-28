@@ -140,7 +140,7 @@ namespace Azure.AI.FormRecognizer.Tests.Models
             var options = new FormRecognizerClientOptions() { Transport = mockTransport };
             var client = CreateFormRecognizerClient(options);
 
-            var operation = new RecognizeBusinessCardsOperation("00000000-0000-0000-0000-000000000000", client);
+            var operation = new RecognizePrebuiltModelOperation("00000000-0000-0000-0000-000000000000", FormRecognizerPrebuiltModel.BusinessCard, client);
 
             if (IsAsync)
             {
@@ -151,17 +151,17 @@ namespace Azure.AI.FormRecognizer.Tests.Models
                 operation.UpdateStatus();
             }
 
-            testListener.AssertScope($"{nameof(RecognizeBusinessCardsOperation)}.{nameof(RecognizeBusinessCardsOperation.UpdateStatus)}");
+            testListener.AssertScope($"{nameof(RecognizePrebuiltModelOperation)}.{nameof(RecognizePrebuiltModelOperation.UpdateStatus)}");
         }
 
         [Test]
-        public void RecognizeBusinessCardsOperationRequiredParameters()
+        public void RecognizePrebuiltModelOperationRequiredParameters()
         {
             FormRecognizerClient client = CreateFormRecognizerClient();
 
-            Assert.Throws<ArgumentNullException>(() => new RecognizeBusinessCardsOperation(null, client));
-            Assert.Throws<ArgumentException>(() => new RecognizeBusinessCardsOperation(string.Empty, client));
-            Assert.Throws<ArgumentNullException>(() => new RecognizeBusinessCardsOperation("00000000 - 0000 - 0000 - 0000 - 000000000000", null));
+            Assert.Throws<ArgumentNullException>(() => new RecognizePrebuiltModelOperation(null, FormRecognizerPrebuiltModel.BusinessCard, client));
+            Assert.Throws<ArgumentException>(() => new RecognizePrebuiltModelOperation(string.Empty, FormRecognizerPrebuiltModel.BusinessCard, client));
+            Assert.Throws<ArgumentNullException>(() => new RecognizePrebuiltModelOperation("00000000 - 0000 - 0000 - 0000 - 000000000000", FormRecognizerPrebuiltModel.BusinessCard, null));
         }
 
         [Test]
@@ -177,7 +177,7 @@ namespace Azure.AI.FormRecognizer.Tests.Models
             var options = new FormRecognizerClientOptions() { Transport = mockTransport };
             var client = CreateFormRecognizerClient(options);
 
-            var operation = new RecognizeInvoicesOperation("00000000-0000-0000-0000-000000000000", client);
+            var operation = new RecognizePrebuiltModelOperation("00000000-0000-0000-0000-000000000000", FormRecognizerPrebuiltModel.Invoice, client);
 
             if (IsAsync)
             {
@@ -188,17 +188,7 @@ namespace Azure.AI.FormRecognizer.Tests.Models
                 operation.UpdateStatus();
             }
 
-            testListener.AssertScope($"{nameof(RecognizeInvoicesOperation)}.{nameof(RecognizeInvoicesOperation.UpdateStatus)}");
-        }
-
-        [Test]
-        public void RecognizeInvoicesOperationRequiredParameters()
-        {
-            FormRecognizerClient client = CreateFormRecognizerClient();
-
-            Assert.Throws<ArgumentNullException>(() => new RecognizeInvoicesOperation(null, client));
-            Assert.Throws<ArgumentException>(() => new RecognizeInvoicesOperation(string.Empty, client));
-            Assert.Throws<ArgumentNullException>(() => new RecognizeInvoicesOperation("00000000 - 0000 - 0000 - 0000 - 000000000000", null));
+            testListener.AssertScope($"{nameof(RecognizePrebuiltModelOperation)}.{nameof(RecognizePrebuiltModelOperation.UpdateStatus)}");
         }
 
         [Test]
@@ -214,7 +204,7 @@ namespace Azure.AI.FormRecognizer.Tests.Models
             var options = new FormRecognizerClientOptions() { Transport = mockTransport };
             var client = CreateFormRecognizerClient(options);
 
-            var operation = new RecognizeIdDocumentsOperation("00000000-0000-0000-0000-000000000000", client);
+            var operation = new RecognizePrebuiltModelOperation("00000000-0000-0000-0000-000000000000", FormRecognizerPrebuiltModel.IdentityDocuments, client);
 
             if (IsAsync)
             {
@@ -225,15 +215,7 @@ namespace Azure.AI.FormRecognizer.Tests.Models
                 operation.UpdateStatus();
             }
 
-            testListener.AssertScope($"{nameof(RecognizeIdDocumentsOperation)}.{nameof(RecognizeIdDocumentsOperation.UpdateStatus)}");
-        }
-
-        [Test]
-        public void RecognizeIdDocumentsOperationRequiredParameters()
-        {
-            FormRecognizerClient client = CreateFormRecognizerClient();
-
-            Assert.Throws<ArgumentNullException>(() => new RecognizeIdDocumentsOperation("00000000 - 0000 - 0000 - 0000 - 000000000000", null));
+            testListener.AssertScope($"{nameof(RecognizePrebuiltModelOperation)}.{nameof(RecognizePrebuiltModelOperation.UpdateStatus)}");
         }
 
         [Test]

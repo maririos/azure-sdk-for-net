@@ -26,7 +26,7 @@ For simplicity, we are not showing all the fields that the service returns. To s
 ```C# Snippet:FormRecognizerSampleRecognizeBusinessCardsFromUri
 Uri businessCardUri = <businessCardUri>;
 
-RecognizeBusinessCardsOperation operation = await client.StartRecognizeBusinessCardsFromUriAsync(businessCardUri);
+RecognizePrebuiltModelOperation operation = await client.StartRecognizeBusinessCardsFromUriAsync(businessCardUri);
 Response<RecognizedFormCollection> operationResponse = await operation.WaitForCompletionAsync();
 RecognizedFormCollection businessCards = operationResponse.Value;
 
@@ -229,7 +229,7 @@ string businessCardsPath = "<businessCardsPath>";
 using var stream = new FileStream(businessCardsPath, FileMode.Open);
 var options = new RecognizeBusinessCardsOptions() { Locale = "en-US" };
 
-RecognizeBusinessCardsOperation operation = await client.StartRecognizeBusinessCardsAsync(stream, options);
+RecognizePrebuiltModelOperation operation = await client.StartRecognizeBusinessCardsAsync(stream, options);
 Response<RecognizedFormCollection> operationResponse = await operation.WaitForCompletionAsync();
 RecognizedFormCollection businessCards = operationResponse.Value;
 

@@ -28,7 +28,7 @@ namespace Azure.AI.FormRecognizer.Samples
             Uri sourceUri = FormRecognizerTestEnvironment.CreateUri("license.jpg");
 #endif
 
-            RecognizeIdDocumentsOperation operation = await client.StartRecognizeIdDocumentsFromUriAsync(sourceUri);
+            RecognizePrebuiltModelOperation operation = await client.StartRecognizeIdDocumentsFromUriAsync(sourceUri);
             Response<RecognizedFormCollection> operationResponse = await operation.WaitForCompletionAsync();
             RecognizedFormCollection idDocuments = operationResponse.Value;
 

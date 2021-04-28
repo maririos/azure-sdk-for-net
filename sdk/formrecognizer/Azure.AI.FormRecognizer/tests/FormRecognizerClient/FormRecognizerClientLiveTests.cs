@@ -1067,7 +1067,7 @@ namespace Azure.AI.FormRecognizer.Tests
         public async Task StartRecognizeBusinessCardsCanAuthenticateWithTokenCredential()
         {
             var client = CreateFormRecognizerClient(useTokenCredential: true);
-            RecognizeBusinessCardsOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             using var stream = FormRecognizerTestEnvironment.CreateStream(TestFile.BusinessCardJpg);
             using (Recording.DisableRequestBodyRecording())
@@ -1095,7 +1095,7 @@ namespace Azure.AI.FormRecognizer.Tests
         public async Task StartRecognizeBusinessCardsPopulatesExtractedJpg(bool useStream)
         {
             var client = CreateFormRecognizerClient();
-            RecognizeBusinessCardsOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             if (useStream)
             {
@@ -1202,7 +1202,7 @@ namespace Azure.AI.FormRecognizer.Tests
         public async Task StartRecognizeBusinessCardsPopulatesExtractedPng(bool useStream)
         {
             var client = CreateFormRecognizerClient();
-            RecognizeBusinessCardsOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             if (useStream)
             {
@@ -1308,7 +1308,7 @@ namespace Azure.AI.FormRecognizer.Tests
         {
             var client = CreateFormRecognizerClient();
             var options = new RecognizeBusinessCardsOptions() { IncludeFieldElements = true };
-            RecognizeBusinessCardsOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             using var stream = FormRecognizerTestEnvironment.CreateStream(TestFile.BusinessCardJpg);
             using (Recording.DisableRequestBodyRecording())
@@ -1332,7 +1332,7 @@ namespace Azure.AI.FormRecognizer.Tests
         {
             var client = CreateFormRecognizerClient();
             var options = new RecognizeBusinessCardsOptions() { IncludeFieldElements = true };
-            RecognizeBusinessCardsOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             using var stream = FormRecognizerTestEnvironment.CreateStream(TestFile.Blank);
             using (Recording.DisableRequestBodyRecording())
@@ -1394,7 +1394,7 @@ namespace Azure.AI.FormRecognizer.Tests
         {
             var client = CreateFormRecognizerClient();
             var options = new RecognizeBusinessCardsOptions() { IncludeFieldElements = true };
-            RecognizeBusinessCardsOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             if (useStream)
             {
@@ -1458,7 +1458,7 @@ namespace Azure.AI.FormRecognizer.Tests
                 IncludeFieldElements = true,
                 Locale = FormRecognizerLocale.EnUS
             };
-            RecognizeBusinessCardsOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             using var stream = FormRecognizerTestEnvironment.CreateStream(TestFile.BusinessCardJpg);
             using (Recording.DisableRequestBodyRecording())
@@ -1506,7 +1506,7 @@ namespace Azure.AI.FormRecognizer.Tests
         public async Task StartRecognizeBusinessCardsWithOnePageArgument(string pages, int expected)
         {
             var client = CreateFormRecognizerClient();
-            RecognizeBusinessCardsOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             using var stream = FormRecognizerTestEnvironment.CreateStream(TestFile.InvoiceMultipageBlank);
             using (Recording.DisableRequestBodyRecording())
@@ -1525,7 +1525,7 @@ namespace Azure.AI.FormRecognizer.Tests
         public async Task StartRecognizeBusinessCardsWithMultiplePageArgument(string page1, string page2, int expected)
         {
             var client = CreateFormRecognizerClient();
-            RecognizeBusinessCardsOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             using var stream = FormRecognizerTestEnvironment.CreateStream(TestFile.InvoiceMultipageBlank);
             using (Recording.DisableRequestBodyRecording())
@@ -1546,7 +1546,7 @@ namespace Azure.AI.FormRecognizer.Tests
         public async Task StartRecognizeInvoicesCanAuthenticateWithTokenCredential()
         {
             var client = CreateFormRecognizerClient(useTokenCredential: true);
-            RecognizeInvoicesOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             using var stream = FormRecognizerTestEnvironment.CreateStream(TestFile.InvoiceJpg);
             using (Recording.DisableRequestBodyRecording())
@@ -1574,7 +1574,7 @@ namespace Azure.AI.FormRecognizer.Tests
         public async Task StartRecognizeInvoicesPopulatesExtractedJpg(bool useStream)
         {
             var client = CreateFormRecognizerClient();
-            RecognizeInvoicesOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             if (useStream)
             {
@@ -1733,7 +1733,7 @@ namespace Azure.AI.FormRecognizer.Tests
         {
             var client = CreateFormRecognizerClient();
             var options = new RecognizeInvoicesOptions() { IncludeFieldElements = true };
-            RecognizeInvoicesOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             using var stream = FormRecognizerTestEnvironment.CreateStream(TestFile.InvoiceJpg);
             using (Recording.DisableRequestBodyRecording())
@@ -1756,7 +1756,7 @@ namespace Azure.AI.FormRecognizer.Tests
         public async Task StartRecognizeInvoicesCanParseBlankPage()
         {
             var client = CreateFormRecognizerClient();
-            RecognizeInvoicesOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             using var stream = FormRecognizerTestEnvironment.CreateStream(TestFile.Blank);
             using (Recording.DisableRequestBodyRecording())
@@ -1790,7 +1790,7 @@ namespace Azure.AI.FormRecognizer.Tests
         {
             var client = CreateFormRecognizerClient();
             var options = new RecognizeInvoicesOptions() { IncludeFieldElements = true };
-            RecognizeInvoicesOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             if (useStream)
             {
@@ -1881,7 +1881,7 @@ namespace Azure.AI.FormRecognizer.Tests
                 IncludeFieldElements = true,
                 Locale = FormRecognizerLocale.EnUS
             };
-            RecognizeInvoicesOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             using var stream = FormRecognizerTestEnvironment.CreateStream(TestFile.InvoiceJpg);
             using (Recording.DisableRequestBodyRecording())
@@ -1929,7 +1929,7 @@ namespace Azure.AI.FormRecognizer.Tests
         public async Task StartRecognizeInvoicesWithOnePageArgument(string pages, int expected)
         {
             var client = CreateFormRecognizerClient();
-            RecognizeInvoicesOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             using var stream = FormRecognizerTestEnvironment.CreateStream(TestFile.InvoiceMultipageBlank);
             using (Recording.DisableRequestBodyRecording())
@@ -1949,7 +1949,7 @@ namespace Azure.AI.FormRecognizer.Tests
         public async Task StartRecognizeInvoicesWithMultiplePageArgument(string page1, string page2, int expected)
         {
             var client = CreateFormRecognizerClient();
-            RecognizeInvoicesOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             using var stream = FormRecognizerTestEnvironment.CreateStream(TestFile.InvoiceMultipageBlank);
             using (Recording.DisableRequestBodyRecording())
@@ -1971,7 +1971,7 @@ namespace Azure.AI.FormRecognizer.Tests
         public async Task StartRecognizeIdDocumentsCanAuthenticateWithTokenCredential()
         {
             var client = CreateFormRecognizerClient(useTokenCredential: true);
-            RecognizeIdDocumentsOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             using var stream = FormRecognizerTestEnvironment.CreateStream(TestFile.DriverLicenseJpg);
             using (Recording.DisableRequestBodyRecording())
@@ -1999,7 +1999,7 @@ namespace Azure.AI.FormRecognizer.Tests
         public async Task StartRecognizeIdDocumentsPopulatesExtractedIdDocumentJpg(bool useStream)
         {
             var client = CreateFormRecognizerClient();
-            RecognizeIdDocumentsOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             if (useStream)
             {
@@ -2067,7 +2067,7 @@ namespace Azure.AI.FormRecognizer.Tests
         {
             var client = CreateFormRecognizerClient();
             var options = new RecognizeIdDocumentsOptions() { IncludeFieldElements = true };
-            RecognizeIdDocumentsOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             using var stream = FormRecognizerTestEnvironment.CreateStream(TestFile.DriverLicenseJpg);
             using (Recording.DisableRequestBodyRecording())
@@ -2090,7 +2090,7 @@ namespace Azure.AI.FormRecognizer.Tests
         public async Task StartRecognizeIdDocumentsCanParseBlankPage()
         {
             var client = CreateFormRecognizerClient();
-            RecognizeIdDocumentsOperation operation;
+            RecognizePrebuiltModelOperation operation;
 
             using var stream = FormRecognizerTestEnvironment.CreateStream(TestFile.Blank);
             using (Recording.DisableRequestBodyRecording())

@@ -448,9 +448,9 @@ namespace Azure.AI.FormRecognizer
         /// <param name="recognizeBusinessCardsOptions">A set of options available for configuring the recognize request. For example, specify the content type of the
         /// form, the locale of the form, or whether or not to include form elements.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
-        /// <returns>A <see cref="RecognizeBusinessCardsOperation"/> to wait on this long-running operation.  Its <see cref="RecognizeBusinessCardsOperation.Value"/> upon successful
+        /// <returns>A <see cref="RecognizePrebuiltModelOperation"/> to wait on this long-running operation.  Its <see cref="RecognizePrebuiltModelOperation.Value"/> upon successful
         /// completion will contain the extracted business cards.</returns>
-        public virtual async Task<RecognizeBusinessCardsOperation> StartRecognizeBusinessCardsAsync(Stream businessCard, RecognizeBusinessCardsOptions recognizeBusinessCardsOptions = default, CancellationToken cancellationToken = default)
+        public virtual async Task<RecognizePrebuiltModelOperation> StartRecognizeBusinessCardsAsync(Stream businessCard, RecognizeBusinessCardsOptions recognizeBusinessCardsOptions = default, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(businessCard, nameof(businessCard));
 
@@ -472,7 +472,7 @@ namespace Azure.AI.FormRecognizer
                     cancellationToken).ConfigureAwait(false);
                 string location = ClientCommon.GetResponseHeader(response.Headers, Constants.OperationLocationHeader);
 
-                return new RecognizeBusinessCardsOperation(ServiceClient, Diagnostics, location);
+                return new RecognizePrebuiltModelOperation(ServiceClient, Diagnostics, location, FormRecognizerPrebuiltModel.BusinessCard);
             }
             catch (Exception e)
             {
@@ -489,9 +489,9 @@ namespace Azure.AI.FormRecognizer
         /// <param name="recognizeBusinessCardsOptions">A set of options available for configuring the recognize request. For example, specify the content type of the
         /// form, the locale of the form, or whether or not to include form elements.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
-        /// <returns>A <see cref="RecognizeBusinessCardsOperation"/> to wait on this long-running operation.  Its <see cref="RecognizeBusinessCardsOperation.Value"/> upon successful
+        /// <returns>A <see cref="RecognizePrebuiltModelOperation"/> to wait on this long-running operation.  Its <see cref="RecognizePrebuiltModelOperation.Value"/> upon successful
         /// completion will contain the extracted business cards.</returns>
-        public virtual RecognizeBusinessCardsOperation StartRecognizeBusinessCards(Stream businessCard, RecognizeBusinessCardsOptions recognizeBusinessCardsOptions = default, CancellationToken cancellationToken = default)
+        public virtual RecognizePrebuiltModelOperation StartRecognizeBusinessCards(Stream businessCard, RecognizeBusinessCardsOptions recognizeBusinessCardsOptions = default, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(businessCard, nameof(businessCard));
 
@@ -513,7 +513,7 @@ namespace Azure.AI.FormRecognizer
                     cancellationToken);
                 string location = ClientCommon.GetResponseHeader(response.Headers, Constants.OperationLocationHeader);
 
-                return new RecognizeBusinessCardsOperation(ServiceClient, Diagnostics, location);
+                return new RecognizePrebuiltModelOperation(ServiceClient, Diagnostics, location, FormRecognizerPrebuiltModel.BusinessCard);
             }
             catch (Exception e)
             {
@@ -530,9 +530,9 @@ namespace Azure.AI.FormRecognizer
         /// <param name="recognizeBusinessCardsOptions">A set of options available for configuring the recognize request. For example, specify the content type of the
         /// form, the locale of the form, or whether or not to include form elements.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
-        /// <returns>A <see cref="RecognizeBusinessCardsOperation"/> to wait on this long-running operation.  Its <see cref="RecognizeBusinessCardsOperation.Value"/> upon successful
+        /// <returns>A <see cref="RecognizePrebuiltModelOperation"/> to wait on this long-running operation.  Its <see cref="RecognizePrebuiltModelOperation.Value"/> upon successful
         /// completion will contain the extracted business cards.</returns>
-        public virtual async Task<RecognizeBusinessCardsOperation> StartRecognizeBusinessCardsFromUriAsync(Uri businessCardUri, RecognizeBusinessCardsOptions recognizeBusinessCardsOptions = default, CancellationToken cancellationToken = default)
+        public virtual async Task<RecognizePrebuiltModelOperation> StartRecognizeBusinessCardsFromUriAsync(Uri businessCardUri, RecognizeBusinessCardsOptions recognizeBusinessCardsOptions = default, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(businessCardUri, nameof(businessCardUri));
 
@@ -552,7 +552,7 @@ namespace Azure.AI.FormRecognizer
                     cancellationToken).ConfigureAwait(false);
                 string location = ClientCommon.GetResponseHeader(response.Headers, Constants.OperationLocationHeader);
 
-                return new RecognizeBusinessCardsOperation(ServiceClient, Diagnostics, location);
+                return new RecognizePrebuiltModelOperation(ServiceClient, Diagnostics, location, FormRecognizerPrebuiltModel.BusinessCard);
             }
             catch (Exception e)
             {
@@ -569,9 +569,9 @@ namespace Azure.AI.FormRecognizer
         /// <param name="recognizeBusinessCardsOptions">A set of options available for configuring the recognize request. For example, specify the content type of the
         /// form, the locale of the form, or whether or not to include form elements.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
-        /// <returns>A <see cref="RecognizeBusinessCardsOperation"/> to wait on this long-running operation.  Its <see cref="RecognizeBusinessCardsOperation.Value"/> upon successful
+        /// <returns>A <see cref="RecognizePrebuiltModelOperation"/> to wait on this long-running operation.  Its <see cref="RecognizePrebuiltModelOperation.Value"/> upon successful
         /// completion will contain the extracted business cards.</returns>
-        public virtual RecognizeBusinessCardsOperation StartRecognizeBusinessCardsFromUri(Uri businessCardUri, RecognizeBusinessCardsOptions recognizeBusinessCardsOptions = default, CancellationToken cancellationToken = default)
+        public virtual RecognizePrebuiltModelOperation StartRecognizeBusinessCardsFromUri(Uri businessCardUri, RecognizeBusinessCardsOptions recognizeBusinessCardsOptions = default, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(businessCardUri, nameof(businessCardUri));
 
@@ -591,7 +591,7 @@ namespace Azure.AI.FormRecognizer
                     cancellationToken);
                 string location = ClientCommon.GetResponseHeader(response.Headers, Constants.OperationLocationHeader);
 
-                return new RecognizeBusinessCardsOperation(ServiceClient, Diagnostics, location);
+                return new RecognizePrebuiltModelOperation(ServiceClient, Diagnostics, location, FormRecognizerPrebuiltModel.BusinessCard);
             }
             catch (Exception e)
             {
@@ -612,9 +612,9 @@ namespace Azure.AI.FormRecognizer
         /// <param name="recognizeInvoicesOptions">A set of options available for configuring the recognize request. For example, specify the content type of the
         /// form, the locale of the form, or whether or not to include form elements.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
-        /// <returns>A <see cref="RecognizeInvoicesOperation"/> to wait on this long-running operation.  Its <see cref="RecognizeInvoicesOperation.Value"/> upon successful
+        /// <returns>A <see cref="RecognizePrebuiltModelOperation"/> to wait on this long-running operation.  Its <see cref="RecognizePrebuiltModelOperation.Value"/> upon successful
         /// completion will contain the extracted invoices.</returns>
-        public virtual async Task<RecognizeInvoicesOperation> StartRecognizeInvoicesAsync(Stream invoice, RecognizeInvoicesOptions recognizeInvoicesOptions = default, CancellationToken cancellationToken = default)
+        public virtual async Task<RecognizePrebuiltModelOperation> StartRecognizeInvoicesAsync(Stream invoice, RecognizeInvoicesOptions recognizeInvoicesOptions = default, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(invoice, nameof(invoice));
 
@@ -636,7 +636,7 @@ namespace Azure.AI.FormRecognizer
                     cancellationToken).ConfigureAwait(false);
                 string location = ClientCommon.GetResponseHeader(response.Headers, Constants.OperationLocationHeader);
 
-                return new RecognizeInvoicesOperation(ServiceClient, Diagnostics, location);
+                return new RecognizePrebuiltModelOperation(ServiceClient, Diagnostics, location, FormRecognizerPrebuiltModel.Invoice);
             }
             catch (Exception e)
             {
@@ -653,9 +653,9 @@ namespace Azure.AI.FormRecognizer
         /// <param name="recognizeInvoicesOptions">A set of options available for configuring the recognize request. For example, specify the content type of the
         /// form, the locale of the form, or whether or not to include form elements.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
-        /// <returns>A <see cref="RecognizeInvoicesOperation"/> to wait on this long-running operation.  Its <see cref="RecognizeInvoicesOperation.Value"/> upon successful
+        /// <returns>A <see cref="RecognizePrebuiltModelOperation"/> to wait on this long-running operation.  Its <see cref="RecognizePrebuiltModelOperation.Value"/> upon successful
         /// completion will contain the extracted invoices.</returns>
-        public virtual RecognizeInvoicesOperation StartRecognizeInvoices(Stream invoice, RecognizeInvoicesOptions recognizeInvoicesOptions = default, CancellationToken cancellationToken = default)
+        public virtual RecognizePrebuiltModelOperation StartRecognizeInvoices(Stream invoice, RecognizeInvoicesOptions recognizeInvoicesOptions = default, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(invoice, nameof(invoice));
 
@@ -677,7 +677,7 @@ namespace Azure.AI.FormRecognizer
                     cancellationToken);
                 string location = ClientCommon.GetResponseHeader(response.Headers, Constants.OperationLocationHeader);
 
-                return new RecognizeInvoicesOperation(ServiceClient, Diagnostics, location);
+                return new RecognizePrebuiltModelOperation(ServiceClient, Diagnostics, location, FormRecognizerPrebuiltModel.Invoice);
             }
             catch (Exception e)
             {
@@ -694,9 +694,9 @@ namespace Azure.AI.FormRecognizer
         /// <param name="recognizeInvoicesOptions">A set of options available for configuring the recognize request. For example, specify the content type of the
         /// form, the locale of the form, or whether or not to include form elements.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
-        /// <returns>A <see cref="RecognizeInvoicesOperation"/> to wait on this long-running operation.  Its <see cref="RecognizeInvoicesOperation.Value"/> upon successful
+        /// <returns>A <see cref="RecognizePrebuiltModelOperation"/> to wait on this long-running operation.  Its <see cref="RecognizePrebuiltModelOperation.Value"/> upon successful
         /// completion will contain the extracted invoices.</returns>
-        public virtual async Task<RecognizeInvoicesOperation> StartRecognizeInvoicesFromUriAsync(Uri invoiceUri, RecognizeInvoicesOptions recognizeInvoicesOptions = default, CancellationToken cancellationToken = default)
+        public virtual async Task<RecognizePrebuiltModelOperation> StartRecognizeInvoicesFromUriAsync(Uri invoiceUri, RecognizeInvoicesOptions recognizeInvoicesOptions = default, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(invoiceUri, nameof(invoiceUri));
 
@@ -716,7 +716,7 @@ namespace Azure.AI.FormRecognizer
                     cancellationToken).ConfigureAwait(false);
                 string location = ClientCommon.GetResponseHeader(response.Headers, Constants.OperationLocationHeader);
 
-                return new RecognizeInvoicesOperation(ServiceClient, Diagnostics, location);
+                return new RecognizePrebuiltModelOperation(ServiceClient, Diagnostics, location, FormRecognizerPrebuiltModel.Invoice);
             }
             catch (Exception e)
             {
@@ -733,9 +733,9 @@ namespace Azure.AI.FormRecognizer
         /// <param name="recognizeInvoicesOptions">A set of options available for configuring the recognize request. For example, specify the content type of the
         /// form, the locale of the form, or whether or not to include form elements.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
-        /// <returns>A <see cref="RecognizeInvoicesOperation"/> to wait on this long-running operation.  Its <see cref="RecognizeInvoicesOperation.Value"/> upon successful
+        /// <returns>A <see cref="RecognizePrebuiltModelOperation"/> to wait on this long-running operation.  Its <see cref="RecognizePrebuiltModelOperation.Value"/> upon successful
         /// completion will contain the extracted invoices.</returns>
-        public virtual RecognizeInvoicesOperation StartRecognizeInvoicesFromUri(Uri invoiceUri, RecognizeInvoicesOptions recognizeInvoicesOptions = default, CancellationToken cancellationToken = default)
+        public virtual RecognizePrebuiltModelOperation StartRecognizeInvoicesFromUri(Uri invoiceUri, RecognizeInvoicesOptions recognizeInvoicesOptions = default, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(invoiceUri, nameof(invoiceUri));
 
@@ -755,7 +755,7 @@ namespace Azure.AI.FormRecognizer
                     cancellationToken);
                 string location = ClientCommon.GetResponseHeader(response.Headers, Constants.OperationLocationHeader);
 
-                return new RecognizeInvoicesOperation(ServiceClient, Diagnostics, location);
+                return new RecognizePrebuiltModelOperation(ServiceClient, Diagnostics, location, FormRecognizerPrebuiltModel.Invoice);
             }
             catch (Exception e)
             {
@@ -776,9 +776,9 @@ namespace Azure.AI.FormRecognizer
         /// <param name="recognizeIdDocumentsOptions">A set of options available for configuring the recognize request. For example, specify the content type of the
         /// form, or whether or not to include form elements.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
-        /// <returns>A <see cref="RecognizeIdDocumentsOperation"/> to wait on this long-running operation.  Its <see cref="RecognizeIdDocumentsOperation.Value"/> upon successful
+        /// <returns>A <see cref="RecognizePrebuiltModelOperation"/> to wait on this long-running operation.  Its <see cref="RecognizePrebuiltModelOperation.Value"/> upon successful
         /// completion will contain the extracted ID document information.</returns>
-        public virtual async Task<RecognizeIdDocumentsOperation> StartRecognizeIdDocumentsAsync(Stream idDocument, RecognizeIdDocumentsOptions recognizeIdDocumentsOptions = default, CancellationToken cancellationToken = default)
+        public virtual async Task<RecognizePrebuiltModelOperation> StartRecognizeIdDocumentsAsync(Stream idDocument, RecognizeIdDocumentsOptions recognizeIdDocumentsOptions = default, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(idDocument, nameof(idDocument));
 
@@ -799,7 +799,7 @@ namespace Azure.AI.FormRecognizer
                     cancellationToken).ConfigureAwait(false);
                 string location = ClientCommon.GetResponseHeader(response.Headers, Constants.OperationLocationHeader);
 
-                return new RecognizeIdDocumentsOperation(ServiceClient, Diagnostics, location);
+                return new RecognizePrebuiltModelOperation(ServiceClient, Diagnostics, location, FormRecognizerPrebuiltModel.IdentityDocuments);
             }
             catch (Exception e)
             {
@@ -817,9 +817,9 @@ namespace Azure.AI.FormRecognizer
         /// <param name="recognizeIdDocumentsOptions">A set of options available for configuring the recognize request. For example, specify the content type of the
         /// form, or whether or not to include form elements.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
-        /// <returns>A <see cref="RecognizeIdDocumentsOperation"/> to wait on this long-running operation.  Its <see cref="RecognizeIdDocumentsOperation.Value"/> upon successful
+        /// <returns>A <see cref="RecognizePrebuiltModelOperation"/> to wait on this long-running operation.  Its <see cref="RecognizePrebuiltModelOperation.Value"/> upon successful
         /// completion will contain the extracted ID document information.</returns>
-        public virtual RecognizeIdDocumentsOperation StartRecognizeIdDocuments(Stream idDocument, RecognizeIdDocumentsOptions recognizeIdDocumentsOptions = default, CancellationToken cancellationToken = default)
+        public virtual RecognizePrebuiltModelOperation StartRecognizeIdDocuments(Stream idDocument, RecognizeIdDocumentsOptions recognizeIdDocumentsOptions = default, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(idDocument, nameof(idDocument));
 
@@ -840,7 +840,7 @@ namespace Azure.AI.FormRecognizer
                     cancellationToken);
                 string location = ClientCommon.GetResponseHeader(response.Headers, Constants.OperationLocationHeader);
 
-                return new RecognizeIdDocumentsOperation(ServiceClient, Diagnostics, location);
+                return new RecognizePrebuiltModelOperation(ServiceClient, Diagnostics, location, FormRecognizerPrebuiltModel.IdentityDocuments);
             }
             catch (Exception e)
             {
@@ -858,9 +858,9 @@ namespace Azure.AI.FormRecognizer
         /// <param name="recognizeIdDocumentsOptions">A set of options available for configuring the recognize request. For example, specify the content type of the
         /// form, or whether or not to include form elements.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
-        /// <returns>A <see cref="RecognizeIdDocumentsOperation"/> to wait on this long-running operation.  Its <see cref="RecognizeIdDocumentsOperation.Value"/> upon successful
+        /// <returns>A <see cref="RecognizePrebuiltModelOperation"/> to wait on this long-running operation.  Its <see cref="RecognizePrebuiltModelOperation.Value"/> upon successful
         /// completion will contain the extracted ID document information.</returns>
-        public virtual async Task<RecognizeIdDocumentsOperation> StartRecognizeIdDocumentsFromUriAsync(Uri idDocumentUri, RecognizeIdDocumentsOptions recognizeIdDocumentsOptions = default, CancellationToken cancellationToken = default)
+        public virtual async Task<RecognizePrebuiltModelOperation> StartRecognizeIdDocumentsFromUriAsync(Uri idDocumentUri, RecognizeIdDocumentsOptions recognizeIdDocumentsOptions = default, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(idDocumentUri, nameof(idDocumentUri));
 
@@ -879,7 +879,7 @@ namespace Azure.AI.FormRecognizer
                     cancellationToken).ConfigureAwait(false);
                 string location = ClientCommon.GetResponseHeader(response.Headers, Constants.OperationLocationHeader);
 
-                return new RecognizeIdDocumentsOperation(ServiceClient, Diagnostics, location);
+                return new RecognizePrebuiltModelOperation(ServiceClient, Diagnostics, location, FormRecognizerPrebuiltModel.IdentityDocuments);
             }
             catch (Exception e)
             {
@@ -897,9 +897,9 @@ namespace Azure.AI.FormRecognizer
         /// <param name="recognizeIdDocumentsOptions">A set of options available for configuring the recognize request. For example, specify the content type of the
         /// form, or whether or not to include form elements.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> controlling the request lifetime.</param>
-        /// <returns>A <see cref="RecognizeIdDocumentsOperation"/> to wait on this long-running operation.  Its <see cref="RecognizeIdDocumentsOperation.Value"/> upon successful
+        /// <returns>A <see cref="RecognizePrebuiltModelOperation"/> to wait on this long-running operation.  Its <see cref="RecognizePrebuiltModelOperation.Value"/> upon successful
         /// completion will contain the extracted ID document information.</returns>
-        public virtual RecognizeIdDocumentsOperation StartRecognizeIdDocumentsFromUri(Uri idDocumentUri, RecognizeIdDocumentsOptions recognizeIdDocumentsOptions = default, CancellationToken cancellationToken = default)
+        public virtual RecognizePrebuiltModelOperation StartRecognizeIdDocumentsFromUri(Uri idDocumentUri, RecognizeIdDocumentsOptions recognizeIdDocumentsOptions = default, CancellationToken cancellationToken = default)
         {
             Argument.AssertNotNull(idDocumentUri, nameof(idDocumentUri));
 
@@ -918,7 +918,7 @@ namespace Azure.AI.FormRecognizer
                     cancellationToken);
                 string location = ClientCommon.GetResponseHeader(response.Headers, Constants.OperationLocationHeader);
 
-                return new RecognizeIdDocumentsOperation(ServiceClient, Diagnostics, location);
+                return new RecognizePrebuiltModelOperation(ServiceClient, Diagnostics, location, FormRecognizerPrebuiltModel.IdentityDocuments);
             }
             catch (Exception e)
             {

@@ -11,15 +11,17 @@ using Azure.Core.Pipeline;
 namespace Azure.AI.FormRecognizer.Models
 {
     /// <summary>
-    /// Tracks the status of a long-running operation for recognizing values from invoices.
+    /// Tracks the status of a long-running operation for recognizing values from prebuilt models.
     /// </summary>
-    public class RecognizeInvoicesOperation : Operation<RecognizedFormCollection>
+    public class RecognizePrebuiltModelOperation : Operation<RecognizedFormCollection>
     {
         /// <summary>Provides communication with the Form Recognizer Azure Cognitive Service through its REST API.</summary>
         private readonly FormRecognizerRestClient _serviceClient;
 
         /// <summary>Provides tools for exception creation in case of failure.</summary>
         private readonly ClientDiagnostics _diagnostics;
+
+        private readonly FormRecognizerPrebuiltModel _prebuiltModel;
 
         private RequestFailedException _requestFailedException;
 
@@ -72,18 +74,19 @@ namespace Azure.AI.FormRecognizer.Models
         /// </summary>
         /// <remarks>
         /// The last response returned from the server during the lifecycle of this instance.
-        /// An instance of <see cref="RecognizeInvoicesOperation"/> sends requests to a server in UpdateStatusAsync, UpdateStatus, and other methods.
+        /// An instance of <see cref="RecognizePrebuiltModelOperation"/> sends requests to a server in UpdateStatusAsync, UpdateStatus, and other methods.
         /// Responses from these requests can be accessed using GetRawResponse.
         /// </remarks>
         public override Response GetRawResponse() => _response;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RecognizeInvoicesOperation"/> class which
-        /// tracks the status of a long-running operation for recognizing values from invoices.
+        /// Initializes a new instance of the <see cref="RecognizePrebuiltModelOperation"/> class which
+        /// tracks the status of a long-running operation for recognizing values from receipts.
         /// </summary>
         /// <param name="operationId">The ID of this operation.</param>
+        /// <param name="prebuiltModel">.</param>
         /// <param name="client">The client used to check for completion.</param>
-        public RecognizeInvoicesOperation(string operationId, FormRecognizerClient client)
+        public RecognizePrebuiltModelOperation(string operationId, FormRecognizerPrebuiltModel prebuiltModel, FormRecognizerClient client)
         {
             Argument.AssertNotNullOrEmpty(operationId, nameof(operationId));
             Argument.AssertNotNull(client, nameof(client));
@@ -91,18 +94,21 @@ namespace Azure.AI.FormRecognizer.Models
             Id = operationId;
             _serviceClient = client.ServiceClient;
             _diagnostics = client.Diagnostics;
+            _prebuiltModel = prebuiltModel;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RecognizeInvoicesOperation"/> class.
+        /// Initializes a new instance of the <see cref="RecognizePrebuiltModelOperation"/> class.
         /// </summary>
         /// <param name="serviceClient">The client for communicating with the Form Recognizer Azure Cognitive Service through its REST API.</param>
         /// <param name="diagnostics">The client diagnostics for exception creation in case of failure.</param>
         /// <param name="operationLocation">The address of the long-running operation. It can be obtained from the response headers upon starting the operation.</param>
-        internal RecognizeInvoicesOperation(FormRecognizerRestClient serviceClient, ClientDiagnostics diagnostics, string operationLocation)
+        /// <param name="prebuiltModel">.</param>
+        internal RecognizePrebuiltModelOperation(FormRecognizerRestClient serviceClient, ClientDiagnostics diagnostics, string operationLocation, FormRecognizerPrebuiltModel prebuiltModel)
         {
             _serviceClient = serviceClient;
             _diagnostics = diagnostics;
+            _prebuiltModel = prebuiltModel;
 
             // TODO: Add validation here
             // https://github.com/Azure/azure-sdk-for-net/issues/10385
@@ -110,10 +116,10 @@ namespace Azure.AI.FormRecognizer.Models
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RecognizeInvoicesOperation"/> class. This constructor
+        /// Initializes a new instance of the <see cref="RecognizePrebuiltModelOperation"/> class. This constructor
         /// is intended to be used for mocking only.
         /// </summary>
-        protected RecognizeInvoicesOperation()
+        protected RecognizePrebuiltModelOperation()
         {
         }
 
@@ -176,14 +182,38 @@ namespace Azure.AI.FormRecognizer.Models
         {
             if (!_hasCompleted)
             {
-                using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(RecognizeInvoicesOperation)}.{nameof(UpdateStatus)}");
+                using DiagnosticScope scope = _diagnostics.CreateScope($"{nameof(RecognizePrebuiltModelOperation)}.{nameof(UpdateStatus)}");
                 scope.Start();
 
                 try
                 {
-                    Response<AnalyzeOperationResult> update = async
-                        ? await _serviceClient.GetAnalyzeInvoiceResultAsync(new Guid(Id), cancellationToken).ConfigureAwait(false)
-                        : _serviceClient.GetAnalyzeInvoiceResult(new Guid(Id), cancellationToken);
+                    Response<AnalyzeOperationResult> update = default;
+
+                    switch (_prebuiltModel)
+                    {
+                        case FormRecognizerPrebuiltModel.BusinessCard:
+                            update = async
+                                ? await _serviceClient.GetAnalyzeBusinessCardResultAsync(new Guid(Id), cancellationToken).ConfigureAwait(false)
+                                : _serviceClient.GetAnalyzeBusinessCardResult(new Guid(Id), cancellationToken);
+                            break;
+                        case FormRecognizerPrebuiltModel.IdentityDocuments:
+                            update = async
+                                ? await _serviceClient.GetAnalyzeIdDocumentResultAsync(new Guid(Id), cancellationToken).ConfigureAwait(false)
+                                : _serviceClient.GetAnalyzeIdDocumentResult(new Guid(Id), cancellationToken);
+                            break;
+                        case FormRecognizerPrebuiltModel.Invoice:
+                            update = async
+                                ? await _serviceClient.GetAnalyzeInvoiceResultAsync(new Guid(Id), cancellationToken).ConfigureAwait(false)
+                                : _serviceClient.GetAnalyzeInvoiceResult(new Guid(Id), cancellationToken);
+                            break;
+                        case FormRecognizerPrebuiltModel.Receipt:
+                            update = async
+                                ? await _serviceClient.GetAnalyzeReceiptResultAsync(new Guid(Id), cancellationToken).ConfigureAwait(false)
+                                : _serviceClient.GetAnalyzeReceiptResult(new Guid(Id), cancellationToken);
+                            break;
+                        default:
+                            throw new InvalidOperationException($"Invalid {_prebuiltModel} prebuilt model");
+                    }
 
                     _response = update.GetRawResponse();
 

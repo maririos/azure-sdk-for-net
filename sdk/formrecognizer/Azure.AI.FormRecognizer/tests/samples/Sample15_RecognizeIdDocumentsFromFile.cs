@@ -31,7 +31,7 @@ namespace Azure.AI.FormRecognizer.Samples
 
             using var stream = new FileStream(sourcePath, FileMode.Open);
 
-            RecognizeIdDocumentsOperation operation = await client.StartRecognizeIdDocumentsAsync(stream);
+            RecognizePrebuiltModelOperation operation = await client.StartRecognizeIdDocumentsAsync(stream);
             Response<RecognizedFormCollection> operationResponse = await operation.WaitForCompletionAsync();
             RecognizedFormCollection idDocuments = operationResponse.Value;
 

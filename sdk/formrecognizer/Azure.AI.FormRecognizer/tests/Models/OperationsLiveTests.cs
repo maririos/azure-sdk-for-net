@@ -67,7 +67,22 @@ namespace Azure.AI.FormRecognizer.Tests
             var uri = FormRecognizerTestEnvironment.CreateUri(TestFile.Blank);
             var operation = await client.StartRecognizeInvoicesFromUriAsync(uri);
 
-            var sameOperation = InstrumentOperation(new RecognizeInvoicesOperation(operation.Id, nonInstrumentedClient));
+            var sameOperation = InstrumentOperation(new RecognizePrebuiltModelOperation(operation.Id, FormRecognizerPrebuiltModel.Invoice, nonInstrumentedClient));
+            await sameOperation.WaitForCompletionAsync();
+
+            Assert.IsTrue(sameOperation.HasValue);
+            Assert.AreEqual(1, sameOperation.Value.Count);
+        }
+
+        [RecordedTest]
+        public async Task RecognizeBusinessCardsOperationCanPollFromNewObject()
+        {
+            var client = CreateFormRecognizerClient(out var nonInstrumentedClient);
+
+            var uri = FormRecognizerTestEnvironment.CreateUri(TestFile.Blank);
+            var operation = await client.StartRecognizeBusinessCardsFromUriAsync(uri);
+
+            var sameOperation = InstrumentOperation(new RecognizePrebuiltModelOperation(operation.Id, FormRecognizerPrebuiltModel.BusinessCard, nonInstrumentedClient));
             await sameOperation.WaitForCompletionAsync();
 
             Assert.IsTrue(sameOperation.HasValue);
@@ -82,7 +97,7 @@ namespace Azure.AI.FormRecognizer.Tests
             var uri = FormRecognizerTestEnvironment.CreateUri(TestFile.Blank);
             var operation = await client.StartRecognizeIdDocumentsFromUriAsync(uri);
 
-            var sameOperation = InstrumentOperation(new RecognizeIdDocumentsOperation(operation.Id, nonInstrumentedClient));
+            var sameOperation = InstrumentOperation(new RecognizePrebuiltModelOperation(operation.Id, FormRecognizerPrebuiltModel.IdentityDocuments, nonInstrumentedClient));
             await sameOperation.WaitForCompletionAsync();
 
             Assert.IsTrue(sameOperation.HasValue);

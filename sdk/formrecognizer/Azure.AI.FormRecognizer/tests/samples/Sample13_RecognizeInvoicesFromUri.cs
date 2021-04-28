@@ -30,7 +30,7 @@ namespace Azure.AI.FormRecognizer.Samples
 #endif
             var options = new RecognizeInvoicesOptions() { Locale = "en-US" };
 
-            RecognizeInvoicesOperation operation = await client.StartRecognizeInvoicesFromUriAsync(invoiceUri, options);
+            RecognizePrebuiltModelOperation operation = await client.StartRecognizeInvoicesFromUriAsync(invoiceUri, options);
             Response<RecognizedFormCollection> operationResponse = await operation.WaitForCompletionAsync();
             RecognizedFormCollection invoices = operationResponse.Value;
 

@@ -28,7 +28,7 @@ namespace Azure.AI.FormRecognizer.Samples
             Uri businessCardUri = FormRecognizerTestEnvironment.CreateUri("businessCard.jpg");
 #endif
 
-            RecognizeBusinessCardsOperation operation = await client.StartRecognizeBusinessCardsFromUriAsync(businessCardUri);
+            RecognizePrebuiltModelOperation operation = await client.StartRecognizeBusinessCardsFromUriAsync(businessCardUri);
             Response<RecognizedFormCollection> operationResponse = await operation.WaitForCompletionAsync();
             RecognizedFormCollection businessCards = operationResponse.Value;
 
