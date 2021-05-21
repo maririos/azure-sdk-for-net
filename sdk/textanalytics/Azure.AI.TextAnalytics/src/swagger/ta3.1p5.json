@@ -1116,14 +1116,6 @@
       "properties": {
         "tasks": {
           "properties": {
-            "details": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/TaskState"
-                }
-              ],
-              "type": "object"
-            },
             "completed": {
               "type": "integer"
             },
