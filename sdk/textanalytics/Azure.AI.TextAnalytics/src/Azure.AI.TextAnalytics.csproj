@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Description>This is the Microsoft Azure Cognitive Services Text Analytics Service client library</Description>
     <AssemblyTitle>Microsoft Azure.AI.TextAnalytics client library</AssemblyTitle>
-    <Version>5.0.0</Version>
+    <Version>5.0.1</Version>
     <ApiCompatVersion>1.0.1</ApiCompatVersion>
     <PackageTags>Microsoft Azure Text Analytics</PackageTags>
     <TargetFrameworks>$(RequiredTargetFrameworks)</TargetFrameworks>
@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" />
     <PackageReference Include="System.Text.Json" />
+    <PackageReference Include="System.Text.Encodings.Web" />
   </ItemGroup>
   <!-- Import the Azure.Core project -->
   <Import Project="$(MSBuildThisFileDirectory)..\..\..\core\Azure.Core\src\Azure.Core.props" />

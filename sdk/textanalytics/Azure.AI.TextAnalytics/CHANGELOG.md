@@ -1,5 +1,9 @@
 # Release History
 
+## 5.0.1 (2021-07-06)
+### Key Bug Fixes
+- Updated dependency versions.
+
 ## 5.0.0 (2020-07-27)
 - Re-release of version `1.0.1` with updated version `5.0.0`.
 

@@ -16,7 +16,9 @@ namespace Azure.Core.Tests
         public Queue<(string Key, object Value, DiagnosticListener Listener)> Events { get; } =
             new Queue<(string Key, object Value, DiagnosticListener Listener)>();
 
+#pragma warning disable SA1414 // Tuple types in signatures should have element names
         public Queue<(string, object, object)> IsEnabledCalls { get; } = new Queue<(string, object, object)>();
+#pragma warning restore SA1414 // Tuple types in signatures should have element names
 
         public TestDiagnosticListener(string name) : this(source => source.Name == name)
         {
@@ -89,7 +91,9 @@ namespace Azure.Core.Tests
             private DiagnosticListener _listener;
 
             public InternalListener(
+#pragma warning disable SA1414 // Tuple types in signatures should have element names
                 Queue<(string, object, DiagnosticListener)> queue,
+#pragma warning restore SA1414 // Tuple types in signatures should have element names
                 DiagnosticListener listener)
             {
                 _queue = queue;
